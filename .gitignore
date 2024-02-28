@@ -104,6 +104,10 @@ dist
 .temp
 .cache
 
+# macOS
+.DS_Store
+*.pem
+
 # Docusaurus cache and generated files
 .docusaurus
 
