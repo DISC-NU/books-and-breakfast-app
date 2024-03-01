@@ -1,34 +1,86 @@
-import React, { useState } from 'react'; // Import React and the useState hook from the 'react' package.
-import {View, Text} from 'react-native' // Import View and Text components from the 'react-native' library.
-import { SelectList } from 'react-native-dropdown-select-list'; // Import the SelectList component from the 'react-native-dropdown-select-list' package.
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SelectList } from 'react-native-dropdown-select-list';
 
-const App = () => { // Define a functional component named App.
-  const [selected, setSelected] = useState<string>(""); // Initialize state named 'selected' with an empty string, using the useState hook. This state will store the current selection from the dropdown.
+const App = () => {
+  const [selected, setSelected] = useState<string>("");
 
-  const data = [ // Define an array named 'data' containing objects with 'key' and 'value' properties. These objects represent the options in the dropdown list.
-    { key: '1', value: 'Willard Elementary'},
-    { key: '2', value: 'Dewey Elementary' },
-    { key: '3', value: 'Haven Middle' },
-    { key: '4', value: 'Kingsley Elementary'},
-    { key: '5', value: 'Lincoln Elementary' },
-    { key: '6', value: 'Walker Elementary' },
-    { key: '7', value: 'Washington Elementary' },
-    { key: '8', value: 'Lincolnwood Elementary' },
+  const data = [
+    { key: '1', value: 'Willard Elementary School' },
+    { key: '2', value: 'Dewey Elementary School' },
+    { key: '3', value: 'Haven Middle School' },
+    { key: '4', value: 'Kingsley Elementary School' },
+    { key: '5', value: 'Lincoln Elementary School' },
+    { key: '6', value: 'Walker Elementary School' },
+    { key: '7', value: 'Washington Elementary School' },
+    { key: '8', value: 'Lincolnwood Elementary School' },
   ];
 
-  return ( // The component's return statement.
-    <View style = {{paddingHorizontal:20,paddingVertical:50,flex:1}}> 
-      {/* Render a View component with padding around it. This View acts as a container for the SelectList component. */}
-      
+  // Function to handle button press
+  const handleButtonPress = (buttonIndex: number) => {
+    console.log(`Button ${buttonIndex} pressed`);
+    // Add your button press handling logic here
+  };
+
+  return (
+    <View style={styles.container}>
       <SelectList 
-        setSelected={(val: string) => setSelected(val)} // Pass a function to the setSelected prop that updates the 'selected' state with the value chosen from the dropdown.
-        data={data} // Pass the 'data' array to the SelectList component to render the dropdown options.
-        inputStyles={{fontSize:14}} // Apply custom styles to the input element of the SelectList, setting the font size to 14.
-        save="value" // Specify that the 'value' property of the data objects should be used to track the selected item.
-        dropdownStyles={{backgroundColor:'#ADD8E6'}} // Apply custom styles to the dropdown list, setting the background color to a light blue.
-    />
+        setSelected={(val: string) => setSelected(val)}
+        data={data}
+        inputStyles={{
+          fontSize:14,
+          width: '83%'
+        }}
+        save="value"
+        dropdownStyles={{backgroundColor:'#ADD8E6'}}
+        placeholder="Select school"
+        maxHeight={275}
+        search={false}
+        boxStyles={{borderRadius:0}} //override default styles
+      />
+      {/* Buttons grid */}
+      <View style={styles.buttonsGrid}>
+        {Array.from({ length: 6 }, (_, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.button}
+            onPress={() => handleButtonPress(index + 1)}>
+            <Text style={styles.buttonText}>Button {index + 1}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
 
-export default App; // Export the App component to make it available for use in other parts of the application.
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+    paddingVertical: 50,
+    flex: 1,
+    alignItems: 'center',
+  },
+  buttonsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around', // Space buttons evenly in the container
+    marginTop: 20,
+  },
+  button: {
+    borderWidth: 1,
+    borderColor: '#ABCDEF', // Red border color
+    paddingHorizontal: 30,
+    paddingVertical: 15,
+    margin: 5,
+    width: '40%', // Adjust button width to fit 2 in a row
+    alignItems: 'center', // Center text horizontally
+    justifyContent: 'center', // Center text vertically
+    backgroundColor: 'transparent', // Transparent background
+  },
+  buttonText: {
+    color: 'red', // Red text color
+    fontSize: 16, // Font size for the button text
+  },
+});
+
+export default App;
