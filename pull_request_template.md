@@ -2,7 +2,7 @@
 Please explain the changes you made here.
 
 ### QA
-Please explain how the reviewer can test your changes.
+Please explain in detailed steps how the reviewer can test your changes and what the expected behaivors are (visual would help!). Consider different test cases/scenarios. 
 
 ### Checklist
 - [ ] Code compiles correctly
