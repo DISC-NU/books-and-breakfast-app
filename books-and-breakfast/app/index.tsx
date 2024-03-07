@@ -36,7 +36,7 @@ const App = () => {
         placeholder="Select school"
         maxHeight={275}
         search={false}
-        boxStyles={{borderRadius:0}} //override default styles
+        boxStyles={styles.boxStyles}
       />
       {/* Buttons grid */}
       <View style={styles.buttonsGrid}>
@@ -60,6 +60,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  boxStyles: {
+    // Your existing box styles
+    borderRadius: 0, // Example existing style
+
+    // Shadow properties for iOS
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: { height: 2, width: 0 },
+
+    // Shadow for Android
+    elevation: 3,
+  },
   buttonsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -68,7 +81,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderWidth: 1,
-    borderColor: '#ABCDEF', // Red border color
+    borderColor: '#ABCDEF', // Border color
     paddingHorizontal: 30,
     paddingVertical: 15,
     margin: 5,
@@ -76,6 +89,15 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center text horizontally
     justifyContent: 'center', // Center text vertically
     backgroundColor: 'transparent', // Transparent background
+
+    // Shadow properties for iOS
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: { height: 2, width: 0 },
+
+    // Shadow for Android
+    elevation: 5,
   },
   buttonText: {
     color: 'red', // Red text color
