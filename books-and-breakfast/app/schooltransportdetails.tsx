@@ -11,14 +11,6 @@ interface TransportDetailsProps {
   };
 }
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <SchoolTransportDetails schoolName={''} />
-    </View>
-  );
-}
-
 const TRANSPORT_DETAILS: TransportDetailsProps = {
   willard: {
     schoolName: 'Willard Elementary Transportation',
@@ -44,7 +36,7 @@ const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
   />
 );
 
-const SchoolTransportDetails = ({ schoolName = 'willard' }: { schoolName: string }) => {
+export const SchoolTransportDetails = ({ schoolName = 'willard' }: { schoolName: string }) => {
   const transportDetails = TRANSPORT_DETAILS[schoolName];
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
