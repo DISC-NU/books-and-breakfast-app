@@ -1,5 +1,5 @@
 ### Description
-Please explain the changes you made here.
+I created two interfaces. One for the information for each individual school and one for the dictionary that collects all this information in one spot. The interface for each individual school is similar to what Grace implemented in her code. I just added a few more features. 
 
 ### QA
 Please explain in detailed steps how the reviewer can test your changes and what the expected behaivors are (visual would help!). Consider different test cases/scenarios. 
