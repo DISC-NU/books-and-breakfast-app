@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
 const App = () => {
-  const [selected, setSelected] = useState<string>("");
+  const [selected, setSelected] = useState<string>('');
+
+  // Enhance feedback by changing the style of the dropdown based on selection
+  const [dropdownStyle, setDropdownStyle] = useState(styles.dropdownUnselected);
+
+  useEffect(() => {
+    if (selected !== '') {
+      // Change the dropdown style when an item is selected
+      setDropdownStyle(styles.dropdownSelected);
+    } else {
+      setDropdownStyle(styles.dropdownUnselected);
+    }
+  }, [selected]);
 
   const data = [
     { key: '1', value: 'Willard Elementary School' },
@@ -24,19 +36,19 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <SelectList 
+      <SelectList /* Dropdown List */
         setSelected={(val: string) => setSelected(val)}
         data={data}
         inputStyles={{
-          fontSize:14,
-          width: '83%'
+          fontSize: 14,
+          width: '83%',
         }}
         save="value"
-        dropdownStyles={{backgroundColor:'#ADD8E6'}}
-        placeholder="Select school"
+        dropdownStyles={{ backgroundColor: '#ADD8E6' }}
+        placeholder="Select School"
         maxHeight={275}
         search={false}
-        boxStyles={styles.boxStyles}
+        boxStyles={dropdownStyle}
       />
       {/* Buttons grid */}
       <View style={styles.buttonsGrid}>
@@ -59,49 +71,55 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#F5F5F5',
   },
   boxStyles: {
-    // Your existing box styles
-    borderRadius: 0, // Example existing style
-
-    // Shadow properties for iOS
+    borderRadius: 8, // Applying rounded corners here
     shadowOpacity: 0.1,
     shadowRadius: 5,
     shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
-
-    // Shadow for Android
     elevation: 3,
+  },
+  dropdownUnselected: {
+    borderWidth: 1,
+    borderColor: '#999', // Unselected state border color
+    // Keeping the borderRadius for consistency
+    borderRadius: 8,
+  },
+  dropdownSelected: {
+    borderWidth: 2,
+    borderColor: '#007BFF', // Highlight color for selected state
+    // Ensuring rounded corners are applied here as well
+    borderRadius: 8,
   },
   buttonsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around', // Space buttons evenly in the container
+    justifyContent: 'space-around',
     marginTop: 20,
   },
   button: {
     borderWidth: 1,
-    borderColor: '#ABCDEF', // Border color
+    borderColor: '#4A90E2',
     paddingHorizontal: 30,
     paddingVertical: 15,
     margin: 5,
-    width: '40%', // Adjust button width to fit 2 in a row
-    alignItems: 'center', // Center text horizontally
-    justifyContent: 'center', // Center text vertically
-    backgroundColor: 'transparent', // Transparent background
-
-    // Shadow properties for iOS
+    width: '40%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4A90E2',
+    borderRadius: 12, // More pronounced rounded corners for buttons
     shadowOpacity: 0.5,
     shadowRadius: 5,
     shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
-
-    // Shadow for Android
     elevation: 5,
   },
   buttonText: {
-    color: 'red', // Red text color
-    fontSize: 16, // Font size for the button text
+    color: '#FFFFFF',
+    fontSize: 16,
+    // fontFamily: custom font tbd???
   },
 });
 
