@@ -2,8 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
+const SCHOOLS = [
+  { key: '1', value: 'Willard Elementary School' },
+  { key: '2', value: 'Dewey Elementary School' },
+  { key: '3', value: 'Haven Middle School' },
+  { key: '4', value: 'Kingsley Elementary School' },
+  { key: '5', value: 'Lincoln Elementary School' },
+  { key: '6', value: 'Walker Elementary School' },
+  { key: '7', value: 'Washington Elementary School' },
+  { key: '8', value: 'Lincolnwood Elementary School' },
+];
+
 const App = () => {
-  const [selected, setSelected] = useState<string>('');
+  const [selected, setSelected] = useState<string>(''); // Initial state of 'selected'
 
   // Enhance feedback by changing the style of the dropdown based on selection
   const [dropdownStyle, setDropdownStyle] = useState(styles.dropdownUnselected);
@@ -17,17 +28,6 @@ const App = () => {
     }
   }, [selected]);
 
-  const data = [
-    { key: '1', value: 'Willard Elementary School' },
-    { key: '2', value: 'Dewey Elementary School' },
-    { key: '3', value: 'Haven Middle School' },
-    { key: '4', value: 'Kingsley Elementary School' },
-    { key: '5', value: 'Lincoln Elementary School' },
-    { key: '6', value: 'Walker Elementary School' },
-    { key: '7', value: 'Washington Elementary School' },
-    { key: '8', value: 'Lincolnwood Elementary School' },
-  ];
-
   // Function to handle button press
   const handleButtonPress = (buttonIndex: number) => {
     console.log(`Button ${buttonIndex} pressed`);
@@ -38,7 +38,7 @@ const App = () => {
     <View style={styles.container}>
       <SelectList /* Dropdown List */
         setSelected={(val: string) => setSelected(val)}
-        data={data}
+        data={SCHOOLS}
         inputStyles={{
           fontSize: 14,
           width: '83%',
