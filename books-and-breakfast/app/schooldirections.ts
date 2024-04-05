@@ -1,20 +1,20 @@
 interface SchoolDirections {
-  schoolname: String;
-  address: String;
-  specifics: String;
-  publictransport?: String;
-  driving?: String;
-  rideshare?: String;
-  contact?: String;
-  geoLat?: String;
-  geoLong?: String;
+  schoolname: string;
+  address: string;
+  specifics: string;
+  publictransport?: string;
+  driving?: string;
+  rideshare?: string;
+  contact?: string;
+  geoLat?: string;
+  geoLong?: string;
 }
 
 interface DirectionsDictionary {
   [key: string]: SchoolDirections;
 }
 
-var WillardDirections: SchoolDirections = {
+const WillardDirections: SchoolDirections = {
   schoolname: 'Willard Elementary School',
   address: '2700 Hurd Ave., Evanston, IL 60201',
   specifics:
@@ -26,7 +26,7 @@ var WillardDirections: SchoolDirections = {
   geoLat: '42.06653207492189',
   geoLong: '-87.71703059565027',
 };
-var DeweyDirections: SchoolDirections = {
+const DeweyDirections: SchoolDirections = {
   schoolname: 'Dewey Elementary School',
   address: '1551 Wesley Ave, Evanston, IL 60201',
   specifics:
@@ -35,7 +35,7 @@ var DeweyDirections: SchoolDirections = {
   geoLat: '42.046142838456795',
   geoLong: '-87.69150908049619',
 };
-var HavenDirections: SchoolDirections = {
+const HavenDirections: SchoolDirections = {
   schoolname: 'Haven Middle School',
   address: '2417 Prairie Ave, Evanston, IL 60201',
   specifics:
@@ -45,7 +45,7 @@ var HavenDirections: SchoolDirections = {
   geoLat: '42.06158542233899',
   geoLong: '-87.69825834361463',
 };
-var KingleyDirections: SchoolDirections = {
+const KingleyDirections: SchoolDirections = {
   schoolname: 'Kingsley Elementary School',
   address: '2300 Green Bay Rd, Evanston, IL 60201',
   specifics:
@@ -55,7 +55,7 @@ var KingleyDirections: SchoolDirections = {
   geoLat: '42.06029083267393',
   geoLong: '-87.69609852376988',
 };
-var LincolnDirections: SchoolDirections = {
+const LincolnDirections: SchoolDirections = {
   schoolname: 'Lincoln Elementary School',
   address: '910 Forest Ave, Evanston, IL 60202',
   specifics: 'Please ring the doorbell at entrance A1-off the playground on Main St.',
@@ -63,7 +63,7 @@ var LincolnDirections: SchoolDirections = {
   geoLat: '42.03418264201512',
   geoLong: '-87.67562534273824',
 };
-var LincolnwoodDirections: SchoolDirections = {
+const LincolnwoodDirections: SchoolDirections = {
   schoolname: 'Lincolnwood Elementary School',
   address: '2600 Colfax St, Evanston, IL 60201',
   specifics:
@@ -73,7 +73,7 @@ var LincolnwoodDirections: SchoolDirections = {
   geoLat: '42.06023940294461',
   geoLong: '-87.7093222693812',
 };
-var WalkerDirections: SchoolDirections = {
+const WalkerDirections: SchoolDirections = {
   schoolname: 'Walker Elementary School',
   address: '3601 Church St, Skokie, IL 60076',
   specifics:
@@ -84,7 +84,7 @@ var WalkerDirections: SchoolDirections = {
   geoLat: '42.04752291137184',
   geoLong: '-87.71911821724765',
 };
-var WashingtonDirections: SchoolDirections = {
+const WashingtonDirections: SchoolDirections = {
   schoolname: 'Washington Elementary School',
   address: '914 Ashland Ave, Evanston, IL 60201',
   specifics:
