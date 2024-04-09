@@ -14,7 +14,7 @@ export interface DirectionsDictionary {
   [key: string]: SchoolDirections;
 }
 
-export const WillardDirections: SchoolDirections = {
+const WillardDirections: SchoolDirections = {
   schoolname: 'Willard Elementary School',
   address: '2700 Hurd Ave., Evanston, IL 60201',
   specifics:
@@ -27,7 +27,7 @@ export const WillardDirections: SchoolDirections = {
   geoLong: '-87.71703059565027',
 };
 
-export const DeweyDirections: SchoolDirections = {
+const DeweyDirections: SchoolDirections = {
   schoolname: 'Dewey Elementary School',
   address: '1551 Wesley Ave, Evanston, IL 60201',
   specifics:
@@ -37,7 +37,7 @@ export const DeweyDirections: SchoolDirections = {
   geoLong: '-87.69150908049619',
 };
 
-export const HavenDirections: SchoolDirections = {
+const HavenDirections: SchoolDirections = {
   schoolname: 'Haven Middle School',
   address: '2417 Prairie Ave, Evanston, IL 60201',
   specifics:
@@ -48,7 +48,7 @@ export const HavenDirections: SchoolDirections = {
   geoLong: '-87.69825834361463',
 };
 
-export const KingsleyDirections: SchoolDirections = {
+const KingsleyDirections: SchoolDirections = {
   schoolname: 'Kingsley Elementary School',
   address: '2300 Green Bay Rd, Evanston, IL 60201',
   specifics:
@@ -59,7 +59,7 @@ export const KingsleyDirections: SchoolDirections = {
   geoLong: '-87.69609852376988',
 };
 
-export const LincolnDirections: SchoolDirections = {
+const LincolnDirections: SchoolDirections = {
   schoolname: 'Lincoln Elementary School',
   address: '910 Forest Ave, Evanston, IL 60202',
   specifics: 'Please ring the doorbell at entrance A1-off the playground on Main St.',
@@ -68,7 +68,7 @@ export const LincolnDirections: SchoolDirections = {
   geoLong: '-87.67562534273824',
 };
 
-export const LincolnwoodDirections: SchoolDirections = {
+const LincolnwoodDirections: SchoolDirections = {
   schoolname: 'Lincolnwood Elementary School',
   address: '2600 Colfax St, Evanston, IL 60201',
   specifics:
@@ -79,7 +79,7 @@ export const LincolnwoodDirections: SchoolDirections = {
   geoLong: '-87.7093222693812',
 };
 
-export const WalkerDirections: SchoolDirections = {
+const WalkerDirections: SchoolDirections = {
   schoolname: 'Walker Elementary School',
   address: '3601 Church St, Skokie, IL 60076',
   specifics:
@@ -91,7 +91,7 @@ export const WalkerDirections: SchoolDirections = {
   geoLong: '-87.71911821724765',
 };
 
-export const WashingtonDirections: SchoolDirections = {
+const WashingtonDirections: SchoolDirections = {
   schoolname: 'Washington Elementary School',
   address: '914 Ashland Ave, Evanston, IL 60201',
   specifics:
