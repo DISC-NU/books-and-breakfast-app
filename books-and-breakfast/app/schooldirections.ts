@@ -1,4 +1,4 @@
-interface SchoolDirections {
+export interface SchoolDirections {
   schoolname: string;
   address: string;
   specifics: string;
@@ -10,7 +10,7 @@ interface SchoolDirections {
   geoLong?: string;
 }
 
-interface DirectionsDictionary {
+export interface DirectionsDictionary {
   [key: string]: SchoolDirections;
 }
 
