@@ -26,6 +26,7 @@ export const WillardDirections: SchoolDirections = {
   geoLat: '42.06653207492189',
   geoLong: '-87.71703059565027',
 };
+
 export const DeweyDirections: SchoolDirections = {
   schoolname: 'Dewey Elementary School',
   address: '1551 Wesley Ave, Evanston, IL 60201',
@@ -35,6 +36,7 @@ export const DeweyDirections: SchoolDirections = {
   geoLat: '42.046142838456795',
   geoLong: '-87.69150908049619',
 };
+
 export const HavenDirections: SchoolDirections = {
   schoolname: 'Haven Middle School',
   address: '2417 Prairie Ave, Evanston, IL 60201',
@@ -45,7 +47,8 @@ export const HavenDirections: SchoolDirections = {
   geoLat: '42.06158542233899',
   geoLong: '-87.69825834361463',
 };
-export const KingleyDirections: SchoolDirections = {
+
+export const KingsleyDirections: SchoolDirections = {
   schoolname: 'Kingsley Elementary School',
   address: '2300 Green Bay Rd, Evanston, IL 60201',
   specifics:
@@ -55,6 +58,7 @@ export const KingleyDirections: SchoolDirections = {
   geoLat: '42.06029083267393',
   geoLong: '-87.69609852376988',
 };
+
 export const LincolnDirections: SchoolDirections = {
   schoolname: 'Lincoln Elementary School',
   address: '910 Forest Ave, Evanston, IL 60202',
@@ -63,6 +67,7 @@ export const LincolnDirections: SchoolDirections = {
   geoLat: '42.03418264201512',
   geoLong: '-87.67562534273824',
 };
+
 export const LincolnwoodDirections: SchoolDirections = {
   schoolname: 'Lincolnwood Elementary School',
   address: '2600 Colfax St, Evanston, IL 60201',
@@ -73,6 +78,7 @@ export const LincolnwoodDirections: SchoolDirections = {
   geoLat: '42.06023940294461',
   geoLong: '-87.7093222693812',
 };
+
 export const WalkerDirections: SchoolDirections = {
   schoolname: 'Walker Elementary School',
   address: '3601 Church St, Skokie, IL 60076',
@@ -84,6 +90,7 @@ export const WalkerDirections: SchoolDirections = {
   geoLat: '42.04752291137184',
   geoLong: '-87.71911821724765',
 };
+
 export const WashingtonDirections: SchoolDirections = {
   schoolname: 'Washington Elementary School',
   address: '914 Ashland Ave, Evanston, IL 60201',
@@ -95,13 +102,13 @@ export const WashingtonDirections: SchoolDirections = {
   geoLong: '-87.69353514262588',
 };
 
-export const DIRECTIONS_INFO: DirectionsDictionary = {};
-
-DIRECTIONS_INFO['willard'] = WillardDirections;
-DIRECTIONS_INFO['dewey'] = DeweyDirections;
-DIRECTIONS_INFO['haven'] = HavenDirections;
-DIRECTIONS_INFO['kingsley'] = KingleyDirections;
-DIRECTIONS_INFO['lincoln'] = LincolnDirections;
-DIRECTIONS_INFO['lincolnwood'] = LincolnwoodDirections;
-DIRECTIONS_INFO['walker'] = WalkerDirections;
-DIRECTIONS_INFO['washington'] = WashingtonDirections;
+export const DIRECTIONS_INFO: DirectionsDictionary = {
+  willard: WillardDirections,
+  dewey: HavenDirections,
+  haven: HavenDirections,
+  kingsley: KingsleyDirections,
+  lincoln: LincolnDirections,
+  lincolnwood: LincolnwoodDirections,
+  walker: WalkerDirections,
+  washington: WashingtonDirections,
+};
