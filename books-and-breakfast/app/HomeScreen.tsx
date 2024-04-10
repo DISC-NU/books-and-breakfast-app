@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
 
@@ -19,8 +19,18 @@ const SMALLBUTTONS = [
   { index: 2, label: 'Mission Statement' },
   { index: 3, label: 'Evanston History' },
   { index: 4, label: 'B&B Team' },
-  { index: 5, label: 'Day in the Life' },
+  { index: 5, label: 'Link to GroupMe' },
 ];
+
+// code to open urls
+const attemptOpenURL = async (url: string, failureMessage: string): Promise<void> => {
+  const canOpen = await Linking.canOpenURL(url);
+  if (canOpen) {
+    await Linking.openURL(url);
+  } else {
+    Alert.alert('Error', failureMessage);
+  }
+};
 
 function HomeScreen() {
   const [selected, setSelected] = useState<string>('');
@@ -37,12 +47,23 @@ function HomeScreen() {
   const navigation = useNavigation();
 
   const handleButtonPress = (buttonIndex: number) => {
-    if (buttonIndex == 1) {
-      navigation.navigate('Navigation');
-    } else if (buttonIndex == 2) {
-      navigation.navigate('Tracker');
+    switch (buttonIndex) {
+      case 1:
+        navigation.navigate('Navigation');
+        break;
+      case 2:
+        navigation.navigate('Tracker');
+        break;
+      case 6:
+        // Directly using the URL opening logic here
+        attemptOpenURL(
+          'https://groupme.com/join_group/58634493/LJyTEs7U',
+          'Sorry, it looks like GroupMe cannot be opened.'
+        );
+        break;
+      default:
+        console.log(`Button ${buttonIndex} pressed`);
     }
-    console.log(`Button ${buttonIndex} pressed`);
   };
 
   return (
