@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
 
@@ -15,14 +15,18 @@ const SCHOOLS = [
   { key: '8', value: 'Lincolnwood Elementary School' },
 ];
 
-const SMALLBUTTONS = [
-  { index: 2, label: 'Mission Statement' },
-  { index: 3, label: 'Evanston History' },
-  { index: 4, label: 'B&B Team' },
-  { index: 5, label: 'Day in the Life' },
-];
+// code to open urls
+const attemptOpenURL = async (url: string, failureMessage: string): Promise<void> => {
+  const canOpen = await Linking.canOpenURL(url);
+  if (canOpen) {
+    await Linking.openURL(url);
+  } else {
+    Alert.alert('Error', failureMessage);
+  }
+};
 
 function HomeScreen() {
+  const navigation = useNavigation();
   const [selected, setSelected] = useState<string>('');
   const [dropdownStyle, setDropdownStyle] = useState(styles.dropdownUnselected);
 
@@ -34,16 +38,19 @@ function HomeScreen() {
     }
   }, [selected]);
 
-  const navigation = useNavigation();
-
-  const handleButtonPress = (buttonIndex: number) => {
-    if (buttonIndex == 1) {
-      navigation.navigate('Navigation');
-    } else if (buttonIndex == 2) {
-      navigation.navigate('Tracker');
-    }
-    console.log(`Button ${buttonIndex} pressed`);
-  };
+  const SMALL_BUTTONS = [
+    { label: 'Mission Statement', action: () => console.log('Mission Statement') },
+    { label: 'Evanston History', action: () => console.log('Evanston History') },
+    { label: 'B&B Team', action: () => console.log('B&B Team') },
+    {
+      label: 'Link to GroupMe',
+      action: () =>
+        attemptOpenURL(
+          'https://groupme.com/join_group/58634493/LJyTEs7U',
+          'Sorry, it looks like GroupMe cannot be opened.'
+        ),
+    },
+  ];
 
   return (
     <ScreenWrapper>
@@ -63,23 +70,17 @@ function HomeScreen() {
         />
         <View style={styles.buttonsGrid}>
           <TouchableOpacity
-            style={styles.bigButton} // Use the specific style for button 1
-            onPress={() => handleButtonPress(1)}>
+            style={styles.bigButton}
+            onPress={() => navigation.navigate('Navigation')}>
             <Text style={styles.trackerNavText}>Navigation</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.bigButton} // Use the specific style for button 2
-            onPress={() => handleButtonPress(2)}>
+          <TouchableOpacity style={styles.bigButton} onPress={() => navigation.navigate('Tracker')}>
             <Text style={styles.trackerNavText}>Tracker</Text>
           </TouchableOpacity>
         </View>
-
-        <View style={styles.buttonsGrid}>
-          {SMALLBUTTONS.map((button) => (
-            <TouchableOpacity
-              key={button.index}
-              style={styles.button}
-              onPress={() => handleButtonPress(button.index + 1)}>
+        <View style={styles.buttonsGridSmall}>
+          {SMALL_BUTTONS.map((button, index) => (
+            <TouchableOpacity key={index} style={styles.smallButton} onPress={button.action}>
               <Text style={styles.buttonText}>{button.label}</Text>
             </TouchableOpacity>
           ))}
@@ -146,13 +147,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 10,
   },
-  button: {
+  buttonsGridSmall: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  smallButton: {
+    // Define styles for smaller buttons here
     borderWidth: 0.5,
     borderColor: '#e73e5f',
     backgroundColor: '#FFFFFF',
     margin: 5,
-    width: '95%',
-    height: 72,
+    width: '100%', // Adjust width for smaller buttons
+    height: 72, // Keep or adjust the height as needed
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,
