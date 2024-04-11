@@ -4,6 +4,7 @@ import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 
 import { SelectList } from 'react-native-dropdown-select-list';
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
 
+// Static data for school selection dropdown
 const SCHOOLS = [
   { key: '1', value: 'Willard Elementary School' },
   { key: '2', value: 'Dewey Elementary School' },
@@ -15,6 +16,7 @@ const SCHOOLS = [
   { key: '8', value: 'Lincolnwood Elementary School' },
 ];
 
+// Button configuration for smaller action buttons
 const SMALLBUTTONS = [
   { index: 2, label: 'Mission Statement' },
   { index: 3, label: 'Evanston History' },
@@ -22,7 +24,7 @@ const SMALLBUTTONS = [
   { index: 5, label: 'Link to GroupMe' },
 ];
 
-// code to open urls
+// Utility function to handle URL opening with error management
 const attemptOpenURL = async (url: string, failureMessage: string): Promise<void> => {
   const canOpen = await Linking.canOpenURL(url);
   if (canOpen) {
@@ -33,19 +35,16 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 };
 
 function HomeScreen() {
+  const navigation = useNavigation<any>();
   const [selected, setSelected] = useState<string>('');
-  const [dropdownStyle, setDropdownStyle] = useState(styles.dropdownUnselected);
+  const [dropdownStyle, setDropdownStyle] = useState<{}>(styles.dropdownUnselected);
 
+  // Update dropdown styling based on selection state
   useEffect(() => {
-    if (selected !== '') {
-      setDropdownStyle(styles.dropdownSelected);
-    } else {
-      setDropdownStyle(styles.dropdownUnselected);
-    }
+    setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [selected]);
 
-  const navigation = useNavigation();
-
+  // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
     switch (buttonIndex) {
       case 1:
@@ -83,14 +82,12 @@ function HomeScreen() {
           boxStyles={dropdownStyle}
         />
         <View style={styles.buttonsGrid}>
-          <TouchableOpacity
-            style={styles.bigButton} // Use the specific style for button 1
-            onPress={() => handleButtonPress(1)}>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
+            <Image source={require('../assets/navicon.jpg')} style={styles.buttonIcon} />
             <Text style={styles.trackerNavText}>Navigation</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.bigButton} // Use the specific style for button 2
-            onPress={() => handleButtonPress(2)}>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
+            <Image source={require('../assets/trackericon.jpg')} style={styles.buttonIcon} />
             <Text style={styles.trackerNavText}>Tracker</Text>
           </TouchableOpacity>
         </View>
@@ -138,6 +135,11 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
     elevation: 5,
+  },
+  buttonIcon: {
+    width: 50, // Adjust size as needed
+    height: 50, // Adjust size as needed
+    marginBottom: 10, // Space between the icon and text
   },
   logo: {
     width: 300,
