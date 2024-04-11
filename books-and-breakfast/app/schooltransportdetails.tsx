@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { DIRECTIONS_INFO } from './schooldirections';
 
 interface TransportDetailsProps {
   [key: string]: {
@@ -25,34 +26,45 @@ const TRANSPORT_DETAILS: TransportDetailsProps = {
   },
 };
 
+const ArticleHeader = ({ schoolName, location }: { schoolName: string; location: string }) => (
+  <View style={styles.headerContainer}>
+    <Text style={styles.headerTitle}>{schoolName}</Text>
+    <Text style={styles.headerLocation}>{location}</Text>
+  </View>
+);
+
 const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
   <View
     style={{
       height: thickness,
       width: '100%',
       backgroundColor: color,
-      marginVertical: marginVertical,
+      marginVertical,
     }}
   />
 );
 
-export const SchoolTransportDetails = ({ schoolName = 'willard' }: { schoolName: string }) => {
-  const transportDetails = TRANSPORT_DETAILS[schoolName];
+export const SchoolTransportDetails = ({ schoolname }: { schoolname: string }) => {
+  const transportDetails = DIRECTIONS_INFO[schoolname];
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+      <ArticleHeader
+        schoolName={transportDetails.schoolname}
+        location={transportDetails.address}
+      />
       <View style={styles.section}>
         <Text style={styles.header}>Directions</Text>
-        <Text style={styles.text}>{transportDetails.directions}</Text>
+        <Text style={styles.text}>{transportDetails.specifics}</Text>
         <Divider />
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>Parking</Text>
-        <Text style={styles.text}>{transportDetails.parkingInfo}</Text>
+        <Text style={styles.text}>{transportDetails.driving}</Text>
         <Divider />
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>Public Transportation</Text>
-        <Text style={styles.text}>{transportDetails.publicTransportInfo}</Text>
+        <Text style={styles.text}>{transportDetails.publictransport}</Text>
       </View>
     </ScrollView>
   );
@@ -79,6 +91,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'left',
+  },
+  headerContainer: {
+    borderRadius: 20,
+    padding: 20,
+    width: '95%',
+    backgroundColor: 'rgba(255,228,181, 0.2)',
+    marginBottom: 25,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  headerLocation: {
+    fontSize: 12,
   },
   text: {
     fontSize: 16,
