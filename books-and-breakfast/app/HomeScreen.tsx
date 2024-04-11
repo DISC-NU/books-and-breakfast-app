@@ -54,6 +54,7 @@ function HomeScreen() {
         navigation.navigate('Tracker');
         break;
       case 6:
+        // Directly using the URL opening logic here
         attemptOpenURL(
           'https://groupme.com/join_group/58634493/LJyTEs7U',
           'Sorry, it looks like GroupMe cannot be opened.'
