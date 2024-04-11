@@ -4,6 +4,7 @@ import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 
 import { SelectList } from 'react-native-dropdown-select-list';
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
 
+// Static data for school selection dropdown
 const SCHOOLS = [
   { key: '1', value: 'Willard Elementary School' },
   { key: '2', value: 'Dewey Elementary School' },
@@ -15,7 +16,15 @@ const SCHOOLS = [
   { key: '8', value: 'Lincolnwood Elementary School' },
 ];
 
-// code to open urls
+// Button configuration for smaller action buttons
+const SMALLBUTTONS = [
+  { index: 2, label: 'Mission Statement' },
+  { index: 3, label: 'Evanston History' },
+  { index: 4, label: 'B&B Team' },
+  { index: 5, label: 'Link to GroupMe' },
+];
+
+// Utility function to handle URL opening with error management
 const attemptOpenURL = async (url: string, failureMessage: string): Promise<void> => {
   const canOpen = await Linking.canOpenURL(url);
   if (canOpen) {
@@ -26,31 +35,34 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 };
 
 function HomeScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [selected, setSelected] = useState<string>('');
-  const [dropdownStyle, setDropdownStyle] = useState(styles.dropdownUnselected);
+  const [dropdownStyle, setDropdownStyle] = useState<{}>(styles.dropdownUnselected);
 
+  // Update dropdown styling based on selection state
   useEffect(() => {
-    if (selected !== '') {
-      setDropdownStyle(styles.dropdownSelected);
-    } else {
-      setDropdownStyle(styles.dropdownUnselected);
-    }
+    setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [selected]);
 
-  const SMALL_BUTTONS = [
-    { label: 'Mission Statement', action: () => console.log('Mission Statement') },
-    { label: 'Evanston History', action: () => console.log('Evanston History') },
-    { label: 'B&B Team', action: () => console.log('B&B Team') },
-    {
-      label: 'Link to GroupMe',
-      action: () =>
+  // Button press handler for navigation and action buttons
+  const handleButtonPress = (buttonIndex: number) => {
+    switch (buttonIndex) {
+      case 1:
+        navigation.navigate('Navigation');
+        break;
+      case 2:
+        navigation.navigate('Tracker');
+        break;
+      case 6:
         attemptOpenURL(
           'https://groupme.com/join_group/58634493/LJyTEs7U',
           'Sorry, it looks like GroupMe cannot be opened.'
-        ),
-    },
-  ];
+        );
+        break;
+      default:
+        console.log(`Button ${buttonIndex} pressed`);
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -69,18 +81,22 @@ function HomeScreen() {
           boxStyles={dropdownStyle}
         />
         <View style={styles.buttonsGrid}>
-          <TouchableOpacity
-            style={styles.bigButton}
-            onPress={() => navigation.navigate('Navigation')}>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
+            <Image source={require('../assets/navicon.jpg')} style={styles.buttonIcon} />
             <Text style={styles.trackerNavText}>Navigation</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.bigButton} onPress={() => navigation.navigate('Tracker')}>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
+            <Image source={require('../assets/trackericon.jpg')} style={styles.buttonIcon} />
             <Text style={styles.trackerNavText}>Tracker</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.buttonsGridSmall}>
-          {SMALL_BUTTONS.map((button, index) => (
-            <TouchableOpacity key={index} style={styles.smallButton} onPress={button.action}>
+
+        <View style={styles.buttonsGrid}>
+          {SMALLBUTTONS.map((button) => (
+            <TouchableOpacity
+              key={button.index}
+              style={styles.button}
+              onPress={() => handleButtonPress(button.index + 1)}>
               <Text style={styles.buttonText}>{button.label}</Text>
             </TouchableOpacity>
           ))}
@@ -119,6 +135,11 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 2, width: 0 },
     elevation: 5,
   },
+  buttonIcon: {
+    width: 50, // Adjust size as needed
+    height: 50, // Adjust size as needed
+    marginBottom: 10, // Space between the icon and text
+  },
   logo: {
     width: 300,
     height: 100,
@@ -147,20 +168,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 10,
   },
-  buttonsGridSmall: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    marginTop: 10,
-  },
-  smallButton: {
-    // Define styles for smaller buttons here
+  button: {
     borderWidth: 0.5,
     borderColor: '#e73e5f',
     backgroundColor: '#FFFFFF',
     margin: 5,
-    width: '100%', // Adjust width for smaller buttons
-    height: 72, // Keep or adjust the height as needed
+    width: '95%',
+    height: 72,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,
