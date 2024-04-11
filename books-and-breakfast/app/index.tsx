@@ -13,8 +13,7 @@ const SCHOOLS = [
   { key: '7', value: 'Washington Elementary School' },
   { key: '8', value: 'Lincolnwood Elementary School' },
 ];
-
-// 
+//
 // Transportation article for later
 //
 // export default function App() {
