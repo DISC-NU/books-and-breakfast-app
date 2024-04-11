@@ -6,13 +6,9 @@ Please explain the changes you made here.
 
 Please explain in detailed steps how the reviewer can test your changes and what the expected behaivors are (visual would help!). Consider different test cases/scenarios.
 
-it's just data, so no testing needed I think.
-
 ### Packages
 
 Please describe any additional packages you added to package.json.
-
-no other packages added.
 
 ### Checklist
 
