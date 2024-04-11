@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@babel/preset-typescript": "^7.23.3",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/stack": "^6.3.29",
     "@types/react": "~18.2.45",
     "eslint": "^8.57.0",
     "expo": "~50.0.8",
