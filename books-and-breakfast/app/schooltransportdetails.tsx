@@ -1,5 +1,8 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+
 import { DIRECTIONS_INFO } from './schooldirections';
+
+const screenHeight = Dimensions.get('window').height;
 
 const ArticleHeader = ({ schoolName, location }: { schoolName: string; location: string }) => (
   <View style={styles.headerContainer}>
@@ -19,40 +22,41 @@ const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
   />
 );
 
-export const SchoolTransportDetails = ({ schoolname }: { schoolname: string }) => {
-  const transportDetails = DIRECTIONS_INFO[schoolname];
+export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) => {
+  const transportDetails = DIRECTIONS_INFO[schoolName];
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-      <ArticleHeader schoolName={transportDetails.schoolname} location={transportDetails.address} />
+      <ArticleHeader schoolName={transportDetails.schoolName} location={transportDetails.address} />
       <View style={styles.section}>
         <Text style={styles.header}>Directions</Text>
         <Text style={styles.text}>{transportDetails.specifics}</Text>
-        <Divider />
       </View>
-      <View style={styles.section}>
-        <Text style={styles.header}>Parking</Text>
-        <Text style={styles.text}>{transportDetails.driving}</Text>
-        <Divider />
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.header}>Public Transportation</Text>
-        <Text style={styles.text}>{transportDetails.publictransport}</Text>
-      </View>
+      {transportDetails.driving && (
+        <View style={styles.section}>
+          <Divider />
+          <Text style={styles.header}>Parking</Text>
+          <Text style={styles.text}>{transportDetails.driving}</Text>
+        </View>
+      )}
+      {transportDetails.publicTransport && (
+        <View style={styles.section}>
+          <Divider />
+          <Text style={styles.header}>Public Transportation</Text>
+          <Text style={styles.text}>{transportDetails.publicTransport}</Text>
+        </View>
+      )}
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollViewContentContainer: {
     backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  scrollViewContentContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 30,
+    justifyContent: 'flex-start',
+    padding: 30,
+    minHeight: screenHeight,
+    flexGrow: 1,
   },
   section: {
     margin: 0,

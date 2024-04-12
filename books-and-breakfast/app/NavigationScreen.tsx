@@ -1,14 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-const NavigationScreen = () => {
+import { SchoolTransportDetails } from './schooltransportdetails';
+
+// // Define your navigation stack types as needed
+// type NavigationScreenRouteParams = {
+//   schoolName: string;
+// };
+
+const NavigationScreen = ({ route, navigation }) => {
   // Using the useNavigation hook to access navigation in this component
-  const navigation = useNavigation();
+  navigation = useNavigation();
+
+  //passing in school name to article page from dropdown selection
+  const { schoolName } = route.params;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Navigation Information</Text>
+      <SchoolTransportDetails schoolName={schoolName} />
     </View>
   );
 };
@@ -19,10 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  text: {
-    fontSize: 22,
-    marginBottom: 20,
+    backgroundColor: 'white',
   },
 });
 

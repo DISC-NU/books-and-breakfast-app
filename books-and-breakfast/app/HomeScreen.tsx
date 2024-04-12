@@ -48,7 +48,7 @@ function HomeScreen() {
   const handleButtonPress = (buttonIndex: number) => {
     switch (buttonIndex) {
       case 1:
-        navigation.navigate('Navigation');
+        navigation.navigate('Navigation', { schoolName: selected });
         break;
       case 2:
         navigation.navigate('Tracker');
