@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { SchoolTransportDetails } from './schooltransportdetails';
+import { SchoolTransportDetails } from './SchoolTransportDetails';
 
 // // Define your navigation stack types as needed
 // type NavigationScreenRouteParams = {
