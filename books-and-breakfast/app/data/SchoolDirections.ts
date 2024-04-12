@@ -104,7 +104,7 @@ const WashingtonDirections: SchoolDirections = {
 
 export const DIRECTIONS_INFO: DirectionsDictionary = {
   willard: WillardDirections,
-  dewey: HavenDirections,
+  dewey: DeweyDirections,
   haven: HavenDirections,
   kingsley: KingsleyDirections,
   lincoln: LincolnDirections,
