@@ -1,6 +1,6 @@
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { DIRECTIONS_INFO } from './schooldirections';
+import { DIRECTIONS_INFO } from './data/SchoolDirections';
 
 const screenHeight = Dimensions.get('window').height;
 
