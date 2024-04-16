@@ -1,8 +1,8 @@
 export interface SchoolDirections {
-  schoolname: string;
+  schoolName: string;
   address: string;
   specifics: string;
-  publictransport?: string;
+  publicTransport?: string;
   driving?: string;
   rideshare?: string;
   contact?: string;
@@ -15,11 +15,11 @@ export interface DirectionsDictionary {
 }
 
 const WillardDirections: SchoolDirections = {
-  schoolname: 'Willard Elementary School',
+  schoolName: 'Willard Elementary School',
   address: '2700 Hurd Ave., Evanston, IL 60201',
   specifics:
     'All volunteers will enter the building using door #4, off of Park Place (at Hurd). The door will be unlocked, but if you have any issue send a text message to Juan using the number you will find on a B&B sign at door #4.',
-  publictransport:
+  publicTransport:
     'For public transportation, you can take the 201 CTA BUS (going down Central St. to Old Orchard) from NU campus to Lincolnwood Ave., then walk 1 block west to Hurd, then go right 1.5 blocks to Park Pl. to find door #4.',
   driving:
     'If you are driving, you can park on Hurd Ave. or on Central Park Ave. (*pay attention to the signs for street cleaning).',
@@ -28,7 +28,7 @@ const WillardDirections: SchoolDirections = {
 };
 
 const DeweyDirections: SchoolDirections = {
-  schoolname: 'Dewey Elementary School',
+  schoolName: 'Dewey Elementary School',
   address: '1551 Wesley Ave, Evanston, IL 60201',
   specifics:
     'ENTER THE BUILDING THROUGH DOOR 4 ON WESLEY AVE. There is a silver  buzzer on the right side of the door, please ring it and say you’re here for Books and Breakfast. Once you have entered the building turn left and go up the stairs and through doors and you will arrive at the multipurpose room!',
@@ -38,18 +38,18 @@ const DeweyDirections: SchoolDirections = {
 };
 
 const HavenDirections: SchoolDirections = {
-  schoolname: 'Haven Middle School',
+  schoolName: 'Haven Middle School',
   address: '2417 Prairie Ave, Evanston, IL 60201',
   specifics:
     'You will enter the building through the main office located on Prairie Avenue. You will need to stop by the Haven office to sign in before coming down to room AA10. Once you exit the main office, go left until you reach the first hallway, then turn right. Keep walking down the hallway until you see the Art Wing sign. Go through the double entrance and the first room on the right is AA10!',
-  publictransport:
+  publicTransport:
     'You can take the 201 Central CTA bus from campus to the corner of Green Bay Rd and Lincoln St. Once you get off the bus, cross the street and walk down Lincoln to Prairie Ave and turn left.',
   geoLat: '42.06158542233899',
   geoLong: '-87.69825834361463',
 };
 
 const KingsleyDirections: SchoolDirections = {
-  schoolname: 'Kingsley Elementary School',
+  schoolName: 'Kingsley Elementary School',
   address: '2300 Green Bay Rd, Evanston, IL 60201',
   specifics:
     'To enter into the school building, please enter through door NUMBER ONE by ringing the doorbell. OR call (312) 927-1169 to be let into the building',
@@ -60,7 +60,7 @@ const KingsleyDirections: SchoolDirections = {
 };
 
 const LincolnDirections: SchoolDirections = {
-  schoolname: 'Lincoln Elementary School',
+  schoolName: 'Lincoln Elementary School',
   address: '910 Forest Ave, Evanston, IL 60202',
   specifics: 'Please ring the doorbell at entrance A1-off the playground on Main St.',
   driving: 'If you are driving, you will need to find street parking.',
@@ -69,7 +69,7 @@ const LincolnDirections: SchoolDirections = {
 };
 
 const LincolnwoodDirections: SchoolDirections = {
-  schoolname: 'Lincolnwood Elementary School',
+  schoolName: 'Lincolnwood Elementary School',
   address: '2600 Colfax St, Evanston, IL 60201',
   specifics:
     'Please enter through Door 3 through the courtyard on the East side of the building, off McDaniel. There is a sign for the Gym over the door. The daily program is held in the Gym.',
@@ -80,7 +80,7 @@ const LincolnwoodDirections: SchoolDirections = {
 };
 
 const WalkerDirections: SchoolDirections = {
-  schoolname: 'Walker Elementary School',
+  schoolName: 'Walker Elementary School',
   address: '3601 Church St, Skokie, IL 60076',
   specifics:
     'The program starts at 8 am Monday through Friday and tutors normally arrive between 7:50-7:55 am. Enter through DOOR 1 (main entrance) or DOOR 3 (next to the playground). There is a doorbell at each entrance for childcare that we are allowed to use. The program takes place in the school gym. Please feel free to call if you need help entering the building.',
@@ -92,7 +92,7 @@ const WalkerDirections: SchoolDirections = {
 };
 
 const WashingtonDirections: SchoolDirections = {
-  schoolname: 'Washington Elementary School',
+  schoolName: 'Washington Elementary School',
   address: '914 Ashland Ave, Evanston, IL 60201',
   specifics:
     'The new room is accessible at Door 31. This door is to the RIGHT of the MAIN OFFICE, between Doors 30 and 34, just right of the shed. Look fo the B&B logo on the door and ring the doorbell.',

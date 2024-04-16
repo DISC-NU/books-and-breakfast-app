@@ -48,6 +48,12 @@ function HomeScreen() {
   const handleButtonPress = (buttonIndex: number) => {
     switch (buttonIndex) {
       case 1:
+        if (selected) {
+          navigation.navigate('Navigation', { schoolName: selected });
+        } else {
+          // Handle the error - alert the user or log an error
+          alert('Please select a school before continuing.');
+        }
         navigation.navigate('Navigation', { schoolName: selected });
         break;
       case 2:
