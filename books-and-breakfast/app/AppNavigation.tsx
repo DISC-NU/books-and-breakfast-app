@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './HomeScreen';
@@ -26,12 +25,7 @@ function AppNavigation() {
         options={({ navigation }) => ({
           headerTitle: '', // Remove title
           headerLeft: () => (
-            <Icon
-              name="arrow-back"
-              size={24}
-              color="black"
-              onPress={() => navigation.goBack()}
-            />
+            <Icon name="arrow-back" size={24} color="black" onPress={() => navigation.goBack()} />
           ),
           headerBackVisible: false, // Hide the default back button
           headerStyle: {
