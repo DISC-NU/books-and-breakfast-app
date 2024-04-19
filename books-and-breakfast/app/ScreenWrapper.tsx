@@ -22,7 +22,7 @@ const ScreenWrapper: React.FC<ScreenWrapperProps> = ({ children }) => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#FFFFFF', // Ensure this is set to white
+    backgroundColor: 'white', // Ensure this is set to white
     // Other styles as necessary...
   },
 });
