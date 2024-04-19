@@ -44,7 +44,6 @@ function HomeScreen() {
           // Handle the error - alert the user or log an error
           alert('Please select a school before continuing.');
         }
-        navigation.navigate('Navigation', { schoolName: selected });
         break;
       case 2:
         navigation.navigate('Tracker');
