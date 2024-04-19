@@ -102,13 +102,26 @@ const WashingtonDirections: SchoolDirections = {
   geoLong: '-87.69353514262588',
 };
 
+// Static data for school selection dropdown
+export const SCHOOLS = [
+  { key: '1', value: 'Willard Elementary School' },
+  { key: '2', value: 'Dewey Elementary School' },
+  { key: '3', value: 'Haven Middle School' },
+  { key: '4', value: 'Kingsley Elementary School' },
+  { key: '5', value: 'Lincoln Elementary School' },
+  { key: '6', value: 'Walker Elementary School' },
+  { key: '7', value: 'Washington Elementary School' },
+  { key: '8', value: 'Lincolnwood Elementary School' },
+];
+
+// Make sure the names match SCHOOLS above
 export const DIRECTIONS_INFO: DirectionsDictionary = {
-  willard: WillardDirections,
-  dewey: DeweyDirections,
-  haven: HavenDirections,
-  kingsley: KingsleyDirections,
-  lincoln: LincolnDirections,
-  lincolnwood: LincolnwoodDirections,
-  walker: WalkerDirections,
-  washington: WashingtonDirections,
+  'Willard Elementary School': WillardDirections,
+  'Dewey Elementary School': DeweyDirections,
+  'Haven Middle School': HavenDirections,
+  'Kingsley Elementary School': KingsleyDirections,
+  'Lincoln Elementary School': LincolnDirections,
+  'Lincolnwood Elementary School': LincolnwoodDirections,
+  'Walker Elementary School': WalkerDirections,
+  'Washington Elementary School': WashingtonDirections,
 };
