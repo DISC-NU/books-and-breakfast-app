@@ -1,4 +1,5 @@
 import { get, ref } from 'firebase/database';
+
 import { database } from './firebaseConfig';
 
 export interface SchoolKeyPair {

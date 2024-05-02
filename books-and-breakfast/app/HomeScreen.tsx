@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { SchoolKeyPair, getSchoolList } from './firebase/util';
 
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
+import { SchoolKeyPair, getSchoolList } from './firebase/util';
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
