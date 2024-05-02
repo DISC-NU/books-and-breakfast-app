@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import { SchoolKeyPair, getSchoolList } from './firebase/util';
 
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
-import { SCHOOLS } from './data/SchoolDirections';
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
@@ -27,12 +27,27 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 function HomeScreen() {
   const navigation = useNavigation<any>();
   const [selected, setSelected] = useState<string>('');
+  const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
     setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [selected]);
+
+  useEffect(() => {
+    const fetchSchools = async () => {
+      try {
+        const schoolList = await getSchoolList();
+        if (schoolList != null) {
+          setSchoolOptions(schoolList);
+        }
+      } catch (error) {
+        console.error('Failed to fetch schools:', error);
+      }
+    };
+    fetchSchools();
+  }, []);
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
@@ -68,7 +83,7 @@ function HomeScreen() {
       <View style={styles.dropdownContainer}>
         <SelectList
           setSelected={(val: string) => setSelected(val)}
-          data={SCHOOLS}
+          data={schoolOptions}
           inputStyles={{ fontSize: 16, width: '90%', color: '#36afbc' }}
           save="value"
           placeholder="Select School"

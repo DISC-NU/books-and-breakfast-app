@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { DIRECTIONS_INFO } from './data/SchoolDirections';
+import { SchoolDirections } from './data/SchoolDirections';
+import { getSchoolDirections } from './firebase/util';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -23,29 +25,48 @@ const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
 );
 
 export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) => {
-  const transportDetails = DIRECTIONS_INFO[schoolName];
+  const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections>();
+
+  useEffect(() => {
+    const fetchSchoolDirections = async () => {
+      try {
+        const directionsInfo = await getSchoolDirections(schoolName);
+        if (directionsInfo != null) {
+          setDirectionsInfo(directionsInfo);
+        }
+      } catch (error) {
+        console.error('Failed to fetch school directions info', error);
+      }
+    };
+    fetchSchoolDirections();
+  }, [schoolName]);
+
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-      <ArticleHeader schoolName={transportDetails.schoolName} location={transportDetails.address} />
-      <View style={styles.section}>
-        <Text style={styles.header}>Directions</Text>
-        <Text style={styles.text}>{transportDetails.specifics}</Text>
-      </View>
-      {transportDetails.driving && (
-        <View style={styles.section}>
-          <Divider />
-          <Text style={styles.header}>Parking</Text>
-          <Text style={styles.text}>{transportDetails.driving}</Text>
-        </View>
+    <>
+      {directionsInfo && (
+        <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+          <ArticleHeader schoolName={directionsInfo.schoolName} location={directionsInfo.address} />
+          <View style={styles.section}>
+            <Text style={styles.header}>Directions</Text>
+            <Text style={styles.text}>{directionsInfo.specifics}</Text>
+          </View>
+          {directionsInfo.driving && (
+            <View style={styles.section}>
+              <Divider />
+              <Text style={styles.header}>Parking</Text>
+              <Text style={styles.text}>{directionsInfo.driving}</Text>
+            </View>
+          )}
+          {directionsInfo.publicTransport && (
+            <View style={styles.section}>
+              <Divider />
+              <Text style={styles.header}>Public Transportation</Text>
+              <Text style={styles.text}>{directionsInfo.publicTransport}</Text>
+            </View>
+          )}
+        </ScrollView>
       )}
-      {transportDetails.publicTransport && (
-        <View style={styles.section}>
-          <Divider />
-          <Text style={styles.header}>Public Transportation</Text>
-          <Text style={styles.text}>{transportDetails.publicTransport}</Text>
-        </View>
-      )}
-    </ScrollView>
+    </>
   );
 };
 
