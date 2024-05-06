@@ -48,6 +48,9 @@ function HomeScreen() {
       case 2:
         navigation.navigate('Tracker');
         break;
+      case 3:
+        navigation.navigate('Mission');
+        break;
       case 6:
         // Directly using the URL opening logic here
         attemptOpenURL(
