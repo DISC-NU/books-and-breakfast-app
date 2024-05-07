@@ -1,4 +1,6 @@
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { DIRECTIONS_INFO } from './data/SchoolDirections';
 
@@ -22,30 +24,95 @@ const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
   />
 );
 
+// TEXTINPUT FOR EDITABLE TEXT FIELDS ON THE SCREEN
+const EditText = ({
+  value,
+  onSave,
+  edit,
+  setEdit,
+}: {
+  value: string;
+  onSave: (newValue: string) => void;
+}) => {
+  const [text, setText] = useState(value);
+
+  const finishSave = () => {
+    onSave(text);
+    setEdit(false); // exit out of editing mode
+  };
+  return edit ? (
+    <TextInput
+      style={styles.editText}
+      value={text}
+      onChangeText={setText}
+      onBlur={finishSave} // save after user is done editing
+      multiline // keeps multiline view in edit mode
+    />
+  ) : (
+    <Text style={styles.text}>{value}</Text>
+  );
+};
+
 export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) => {
-  const transportDetails = DIRECTIONS_INFO[schoolName];
+  const [transportDetails, setTransportDetails] = useState(DIRECTIONS_INFO[schoolName]); // for updating when user edits
+  const [edit, setEdit] = useState(false);
+
+  const handleSave = (field: keyof typeof transportDetails, value: string) => {
+    setTransportDetails({ ...transportDetails, [field]: value }); // creates new state object
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-      <ArticleHeader schoolName={transportDetails.schoolName} location={transportDetails.address} />
-      <View style={styles.section}>
-        <Text style={styles.header}>Directions</Text>
-        <Text style={styles.text}>{transportDetails.specifics}</Text>
-      </View>
-      {transportDetails.driving && (
+    <View>
+      <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+        <ArticleHeader
+          schoolName={transportDetails.schoolName}
+          location={transportDetails.address}
+        />
         <View style={styles.section}>
-          <Divider />
-          <Text style={styles.header}>Parking</Text>
-          <Text style={styles.text}>{transportDetails.driving}</Text>
+          <Text style={styles.header}>Directions</Text>
+          <EditText
+            value={transportDetails.specifics}
+            onSave={(newValue) => handleSave('specifics', newValue)}
+            edit={edit}
+            setEdit={setEdit}
+          />
         </View>
-      )}
-      {transportDetails.publicTransport && (
-        <View style={styles.section}>
-          <Divider />
-          <Text style={styles.header}>Public Transportation</Text>
-          <Text style={styles.text}>{transportDetails.publicTransport}</Text>
-        </View>
-      )}
-    </ScrollView>
+        {transportDetails.driving && (
+          <View style={styles.section}>
+            <Divider />
+            <Text style={styles.header}>Parking</Text>
+            <EditText
+              value={transportDetails.driving}
+              onSave={(newValue) => handleSave('driving', newValue)}
+              edit={edit}
+              setEdit={setEdit}
+            />
+          </View>
+        )}
+        {transportDetails.publicTransport && (
+          <View style={styles.section}>
+            <Divider />
+            <Text style={styles.header}>Public Transportation</Text>
+            <EditText
+              value={transportDetails.publicTransport}
+              onSave={(newValue) => handleSave('publicTransport', newValue)}
+              edit={edit}
+              setEdit={setEdit}
+            />
+          </View>
+        )}
+      </ScrollView>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? '#0056b3' : '#007AFF',
+          },
+          styles.button,
+        ]}
+        onPress={() => setEdit(!edit)}>
+        <Icon name="edit" size={30} color="white" />
+      </Pressable>
+    </View>
   );
 };
 
@@ -57,6 +124,7 @@ const styles = StyleSheet.create({
     padding: 30,
     minHeight: screenHeight,
     flexGrow: 1,
+    position: 'relative',
   },
   section: {
     margin: 0,
@@ -76,7 +144,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 15,
   },
@@ -87,5 +155,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'left',
     lineHeight: 23,
+  },
+  editText: {
+    fontSize: 16,
+    textAlign: 'left',
+    lineHeight: 23,
+    padding: 18,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+  },
+  button: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: 'black',
   },
 });

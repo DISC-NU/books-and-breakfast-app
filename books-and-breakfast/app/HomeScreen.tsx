@@ -46,7 +46,11 @@ function HomeScreen() {
         }
         break;
       case 2:
-        navigation.navigate('Tracker');
+        attemptOpenURL(
+          'https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit',
+          'Sorry, it looks like the Work Tracker Doc cannot be opened.'
+        );
+        //navigation.navigate('Tracker');
         break;
       case 6:
         // Directly using the URL opening logic here
