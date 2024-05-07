@@ -4,7 +4,7 @@ import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
-import { SCHOOLS } from './data/SchoolDirections';
+import { SchoolKeyPair, getSchoolList } from './firebase/util';
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
@@ -27,12 +27,33 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 function HomeScreen() {
   const navigation = useNavigation<any>();
   const [selected, setSelected] = useState<string>('');
+  const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
     setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [selected]);
+
+  useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
+    const fetchSchools = async () => {
+      try {
+        // Attempt to fetch the school list using the getSchoolList function.
+        const schoolList = await getSchoolList();
+        if (schoolList != null) {
+          setSchoolOptions(schoolList);
+        }
+      } catch (error) {
+        // If an error occurs during fetching, log it to the console.
+        console.error('Failed to fetch schools:', error);
+      }
+    };
+
+    // Call the fetchSchools function defined above to execute the fetching process.
+    // This function is called right after the component mounts due to the empty dependency array.
+    fetchSchools();
+  }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
@@ -68,7 +89,7 @@ function HomeScreen() {
       <View style={styles.dropdownContainer}>
         <SelectList
           setSelected={(val: string) => setSelected(val)}
-          data={SCHOOLS}
+          data={schoolOptions}
           inputStyles={{ fontSize: 16, width: '90%', color: '#36afbc' }}
           save="value"
           placeholder="Select School"
