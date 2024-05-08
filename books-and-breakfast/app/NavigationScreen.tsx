@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 
 import { SchoolTransportDetails } from './SchoolTransportDetails';
 
@@ -16,9 +16,14 @@ const NavigationScreen = ({ route, navigation }) => {
   const { schoolName } = route.params;
 
   return (
-    <View style={styles.container}>
-      <SchoolTransportDetails schoolName={schoolName} />
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+      <View style={styles.container}>
+        <SchoolTransportDetails schoolName={schoolName} />
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
