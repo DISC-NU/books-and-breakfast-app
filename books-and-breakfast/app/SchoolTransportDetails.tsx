@@ -160,9 +160,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'left',
     lineHeight: 23,
-    padding: 18,
     borderWidth: 0.5,
     borderColor: 'gray',
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   button: {
     position: 'absolute',
