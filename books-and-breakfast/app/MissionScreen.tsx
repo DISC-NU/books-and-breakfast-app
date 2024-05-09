@@ -61,9 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 5,
     height: 500,
-    padding: 20,
-    marginLeft: 30,
-    marginRight: 30,
+    padding: 30,
   },
   subtitle: {
     fontSize: 16,
@@ -78,7 +76,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 25,
     textAlign: 'center', // Ensures the title is centered
     color: '#36afbc',
   },
