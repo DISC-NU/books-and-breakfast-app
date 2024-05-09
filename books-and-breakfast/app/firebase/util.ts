@@ -1,4 +1,5 @@
-// Imports the necessary functions from the Firebase database module.
+/**
+ * // Imports the necessary functions from the Firebase database module.
 import { get, ref } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
@@ -28,6 +29,7 @@ export interface SchoolDirections {
  * Each school is returned as a key-value pair with the school's key and its name.
  * @returns A promise resolving to an array of SchoolKeyPair objects or null if no data is found.
  */
+/*
 async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
   return get(ref(database, '/SchoolDirections'))
@@ -59,6 +61,8 @@ async function getSchoolList() {
  * @param schoolName The unique identifier for the school whose directions are being fetched.
  * @returns A promise resolving to a SchoolDirections object or null if no data or an error occurs.
  */
+/*
+
 async function getSchoolDirections(schoolName: string) {
   // Generate a database reference specifically targeting the requested school's directions.
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}`);
@@ -80,4 +84,5 @@ async function getSchoolDirections(schoolName: string) {
 }
 
 // Export the functions for use in other parts of the application.
-export { getSchoolList, getSchoolDirections };
+export { getSchoolDirections, getSchoolList };
+*/

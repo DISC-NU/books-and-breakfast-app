@@ -1,13 +1,23 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
-import { SCHOOLS } from './data/SchoolDirections';
+// import { SchoolKeyPair, getSchoolList } from './firebase/util';
 import ClockIcon from './icons/ClockIcon';
 import MapIcon from './icons/MapIcon';
-import { SchoolKeyPair, getSchoolList } from './firebase/util';
+
+const { width: screenWidth } = Dimensions.get('window'); // Get screen width
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
@@ -106,7 +116,7 @@ function HomeScreen() {
         <View style={styles.buttonsGrid}>
           <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
             <MapIcon />
-            <Text style={styles.trackerNavText}>Navigation</Text>
+            <Text style={styles.trackerNavText}>Directions</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
             <ClockIcon />
@@ -146,8 +156,8 @@ const styles = StyleSheet.create({
   },
   bigButton: {
     margin: 8,
-    height: 160,
-    width: 160,
+    height: (screenWidth - 76) / 2,
+    width: (screenWidth - 76) / 2,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#36afbc',
