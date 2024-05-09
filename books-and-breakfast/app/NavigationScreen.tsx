@@ -1,15 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View } from 'react-native';
 
+import { SchoolTransportDetails } from './SchoolTransportDetails';
 
 // // Define your navigation stack types as needed
 // type NavigationScreenRouteParams = {
 //   schoolName: string;
 // };
 
-
-
-const NavigationScreen = ({route, navigation}) => {
 const NavigationScreen = ({ route, navigation }) => {
   // Using the useNavigation hook to access navigation in this component
   navigation = useNavigation();
@@ -19,7 +17,7 @@ const NavigationScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Navigation Information</Text>
+      <SchoolTransportDetails schoolName={schoolName} />
     </View>
   );
 };
