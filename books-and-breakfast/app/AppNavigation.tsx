@@ -3,6 +3,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './HomeScreen';
+import MissionScreen from './MissionScreen';
 import NavigationScreen from './NavigationScreen';
 import TrackerScreen from './TrackerScreen';
 
@@ -12,6 +13,7 @@ export type RootStackParamList = {
   Home: undefined;
   Navigation: { schoolName: string };
   Tracker: undefined;
+  Mission: undefined;
 };
 
 function AppNavigation() {
@@ -40,6 +42,26 @@ function AppNavigation() {
         })}
       />
       <Stack.Screen name="Tracker" component={TrackerScreen} />
+      <Stack.Screen
+        name="Mission"
+        component={MissionScreen}
+        options={({ navigation }) => ({
+          headerTitle: '', // Remove title
+          headerLeft: () => (
+            <Icon name="arrow-back" size={24} color="black" onPress={() => navigation.goBack()} />
+          ),
+          headerBackVisible: false, // Hide the default back button
+          headerStyle: {
+            // Optional: if you want to style the header area
+            minHeight: 0,
+            elevation: 0, // for Android
+            shadowOpacity: 0, // for iOS
+          },
+          headerLeftContainerStyle: {
+            // Optional: style for back button container
+          },
+        })}
+      />
     </Stack.Navigator>
     //</NavigationContainer>
   );
