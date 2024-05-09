@@ -1,6 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
 
@@ -18,10 +27,11 @@ const SCHOOLS = [
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
-  { index: 2, label: 'Mission Statement' },
-  { index: 3, label: 'Evanston History' },
-  { index: 4, label: 'B&B Team' },
-  { index: 5, label: 'Link to GroupMe' },
+  { index: 2, label: 'Tips' },
+  { index: 3, label: 'Mission Statement' },
+  { index: 4, label: 'Evanston History' },
+  { index: 5, label: 'B&B Team' },
+  { index: 6, label: 'Link to GroupMe' },
 ];
 
 // Utility function to handle URL opening with error management
@@ -67,42 +77,44 @@ function HomeScreen() {
 
   return (
     <ScreenWrapper>
-      <View style={styles.imageContainer}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-      </View>
-      <View style={styles.dropdownContainer}>
-        <SelectList
-          setSelected={(val: string) => setSelected(val)}
-          data={SCHOOLS}
-          inputStyles={{ fontSize: 16, width: '90%', color: '#36afbc' }}
-          save="value"
-          placeholder="Select School"
-          maxHeight={275}
-          search={false}
-          boxStyles={dropdownStyle}
-        />
-        <View style={styles.buttonsGrid}>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
-            <Image source={require('../assets/navicon.jpg')} style={styles.buttonIcon} />
-            <Text style={styles.trackerNavText}>Navigation</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
-            <Image source={require('../assets/trackericon.jpg')} style={styles.buttonIcon} />
-            <Text style={styles.trackerNavText}>Tracker</Text>
-          </TouchableOpacity>
+      <ScrollView>
+        <View style={styles.imageContainer}>
+          <Image source={require('../assets/logo.png')} style={styles.logo} />
         </View>
-
-        <View style={styles.buttonsGrid}>
-          {SMALLBUTTONS.map((button) => (
-            <TouchableOpacity
-              key={button.index}
-              style={styles.button}
-              onPress={() => handleButtonPress(button.index + 1)}>
-              <Text style={styles.buttonText}>{button.label}</Text>
+        <View style={styles.dropdownContainer}>
+          <SelectList
+            setSelected={(val: string) => setSelected(val)}
+            data={SCHOOLS}
+            inputStyles={{ fontSize: 16, width: '90%', color: '#36afbc' }}
+            save="value"
+            placeholder="Select School"
+            maxHeight={275}
+            search={false}
+            boxStyles={dropdownStyle}
+          />
+          <View style={styles.buttonsGrid}>
+            <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
+              <Image source={require('../assets/navicon.jpg')} style={styles.buttonIcon} />
+              <Text style={styles.trackerNavText}>Navigation</Text>
             </TouchableOpacity>
-          ))}
+            <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
+              <Image source={require('../assets/trackericon.jpg')} style={styles.buttonIcon} />
+              <Text style={styles.trackerNavText}>Tracker</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.buttonsGrid}>
+            {SMALLBUTTONS.map((button) => (
+              <TouchableOpacity
+                key={button.index}
+                style={styles.button}
+                onPress={() => handleButtonPress(button.index + 1)}>
+                <Text style={styles.buttonText}>{button.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 }
