@@ -1,10 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
+//import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 const TrackerScreen = () => {
   // Using the useNavigation hook to access navigation in this component
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   return (
     <View style={styles.container}>

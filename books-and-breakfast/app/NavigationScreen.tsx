@@ -1,11 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { SchoolTipsPage } from './TipsScreen';
+
+// // Define your navigation stack types as needed
+// type NavigationScreenRouteParams = {
+//   schoolName: string;
+// };
+
 
 
 const NavigationScreen = ({route, navigation}) => {
+const NavigationScreen = ({ route, navigation }) => {
   // Using the useNavigation hook to access navigation in this component
   navigation = useNavigation();
 
@@ -14,7 +19,7 @@ const NavigationScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <SchoolTipsPage schoolName={schoolName} />
+      <Text style={styles.text}>Navigation Information</Text>
     </View>
   );
 };
@@ -25,10 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  text: {
-    fontSize: 22,
-    marginBottom: 20,
+    backgroundColor: 'white',
   },
 });
 
