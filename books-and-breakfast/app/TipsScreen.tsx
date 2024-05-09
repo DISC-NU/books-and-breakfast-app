@@ -1,59 +1,82 @@
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
-import ScreenWrapper from './ScreenWrapper';
 
+import ScreenWrapper from './ScreenWrapper';
 import { TIPS_INFO } from './data/TipsInfo';
 
-export const Tips = ({key}: {key: string}) => {
-    const tip = TIPS_INFO[key];
-    let color = 'white';
+export const Tips = ({ tip }: { tip: any }) => (
+  <View style={style.section}>
+    <Text style={style.title}> Tips! </Text>
+    <View style={style.standoutText}>
+        <Text style={style.text}>{tip.content} </Text>
+    </View>
+  </View>
+);
 
-    if (tip.site === 'Dewey') {
-    color = 'green';
+export const TipsHeader = ({ schoolName }: { schoolName: string }) => (
+    <View style={ style.headerContainer }>
+        <Text style={ style.header }>{ schoolName }</Text>
+    </View>
+);
+
+export const SchoolTipsPage = ({ schoolName }: {schoolName: string}) => {
+    var tipArray = [];  //create new array to keep track of which tips are from the school
+
+    // loops over TIPS_INFO object and pulls which key:value pairs coordinate to the relevant school
+    for (const key in TIPS_INFO) {
+        const value = TIPS_INFO[key];
+        if (value.site === schoolName) {
+            tipArray.push(value);
+        }
     }
-    else if (tip.site === 'Kingsley') {
-    color = 'blue';
-    }
-    else if (tip.site === 'Lincoln') {
-        color = "pink";
-    }
-    else if (tip.site === 'Lincolnwood') {
-        color = "yellow";
-    }
-    else if (tip.site === 'Walker') {
-        color = "red";
-    }
-    else if (tip.site === 'Washington') {
-        color = 'orange';
-    }
-    else if (tip.site === 'Willard') {
-        color = 'purple';
-    }
+
+    // Rendering the header and a list of tips 
 
     return (
-     <ScreenWrapper>
-        <Text style={style.title}> Tips! </Text>
-        <View style={ style.standoutText } backgroundColor={ color } > 
-            <Text style={style.text}>{ tip.content } </Text>
-        </View>
-     </ScreenWrapper>
+        <ScreenWrapper>
+            <TipsHeader schoolName={schoolName} />
+            {
+                tipArray.map((tip) => (
+                <View style={style.standoutText}>
+                    <Text style={style.text}>{tip.content} </Text>
+                </View>
+                ))
+            }
+        </ScreenWrapper>
+    )
+}
 
-    );
-};
 
 const style = StyleSheet.create({
-    standoutText: {
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        borderRadius: 10
-    },
+  standoutText: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+  },
 
-    text: {
-        fontSize: 18,
-        color: "white",
-    },
+  text: {
+    fontSize: 18,
+    color: 'white',
+  },
 
-    title: {
-        fontSize: 28,
-        color: "#34B3C2",
-    },
-})
+  title: {
+    fontSize: 28,
+    color: '#34B3C2',
+  },
+  section: {
+    margin: 0,
+    width: '100%',
+  },
+  header: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  headerContainer: {
+    borderRadius: 20,
+    padding: 20,
+    width: '95%',
+    backgroundColor: 'rgba(255, 228, 181, 0.2)',
+    marginBottom: 25,
+  },
+});
