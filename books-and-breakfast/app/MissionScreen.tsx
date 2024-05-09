@@ -74,12 +74,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     textAlign: 'center', // Correct property to center text
-    marginBottom: 10, // Adds spacing below the missionCenter text
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
     textAlign: 'center', // Ensures the title is centered
     color: '#36afbc',
   },
