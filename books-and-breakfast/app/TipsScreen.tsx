@@ -1,50 +1,49 @@
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import ScreenWrapper from './ScreenWrapper';
 import { TIPS_INFO } from './data/TipsInfo';
 
-export const Tips = ({ tip }: { tip: any }) => (
+const Tips = ({ tip }: { tip: any }) => (
   <View style={style.section}>
     <Text style={style.title}> Tips! </Text>
     <View style={style.standoutText}>
-        <Text style={style.text}>{tip.content} </Text>
+      <Text style={style.text}>{tip.content} </Text>
     </View>
   </View>
 );
 
-export const TipsHeader = ({ schoolName }: { schoolName: string }) => (
-    <View style={ style.headerContainer }>
-        <Text style={ style.header }>{ schoolName }</Text>
-    </View>
+const TipsHeader = ({ schoolName }: { schoolName: string }) => (
+  <View style={style.headerContainer}>
+    <Text style={style.header}>{schoolName}</Text>
+  </View>
 );
 
-export const SchoolTipsPage = ({ schoolName }: {schoolName: string}) => {
-    var tipArray = [];  //create new array to keep track of which tips are from the school
+const TipsScreen = ({ schoolName }: { schoolName: string }) => {
+  var tipArray = []; //create new array to keep track of which tips are from the school
 
-    // loops over TIPS_INFO object and pulls which key:value pairs coordinate to the relevant school
-    for (const key in TIPS_INFO) {
-        const value = TIPS_INFO[key];
-        if (value.site === schoolName) {
-            tipArray.push(value);
-        }
+  // loops over TIPS_INFO object and pulls which key:value pairs coordinate to the relevant school
+  for (const key in TIPS_INFO) {
+    const value = TIPS_INFO[key];
+    if (value.site === schoolName) {
+      tipArray.push(value);
     }
+  }
 
-    // Rendering the header and a list of tips 
+  // Rendering the header and a list of tips
 
-    return (
-        <ScreenWrapper>
-            <TipsHeader schoolName={schoolName} />
-            {
-                tipArray.map((tip) => (
-                <View style={style.standoutText}>
-                    <Text style={style.text}>{tip.content} </Text>
-                </View>
-                ))
-            }
-        </ScreenWrapper>
-    )
-}
+  return (
+    <ScreenWrapper>
+      <TipsHeader schoolName={schoolName} />
+      {tipArray.map((tip) => (
+        <View style={style.standoutText}>
+          <Text style={style.text}>{tip.content} </Text>
+        </View>
+      ))}
+    </ScreenWrapper>
+  );
+};
 
+export default TipsScreen;
 
 const style = StyleSheet.create({
   standoutText: {

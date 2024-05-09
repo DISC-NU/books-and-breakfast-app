@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './HomeScreen';
 import NavigationScreen from './NavigationScreen';
+import TipsScreen from './TipsScreen';
 import TrackerScreen from './TrackerScreen';
 
 const Stack = createNativeStackNavigator();
@@ -40,6 +41,7 @@ function AppNavigation() {
         })}
       />
       <Stack.Screen name="Tracker" component={TrackerScreen} />
+      <Stack.Screen name="Tips" component={TipsScreen} />
     </Stack.Navigator>
     //</NavigationContainer>
   );
