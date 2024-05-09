@@ -3,14 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import ScreenWrapper from './ScreenWrapper';
 import { TIPS_INFO } from './data/TipsInfo';
 
-const Tips = ({ tip }: { tip: any }) => (
-  <View style={style.section}>
-    <Text style={style.title}> Tips! </Text>
-    <View style={style.standoutText}>
-      <Text style={style.text}>{tip.content} </Text>
-    </View>
-  </View>
-);
+// const Tips = ({ tip }: { tip: any }) => (
+//   <View style={style.section}>
+//     <Text style={style.title}> Tips! </Text>
+//     <View style={style.standoutText}>
+//       <Text style={style.text}>{tip.content} </Text>
+//     </View>
+//   </View>
+// );
 
 const TipsHeader = ({ schoolName }: { schoolName: string }) => (
   <View style={style.headerContainer}>
@@ -18,8 +18,8 @@ const TipsHeader = ({ schoolName }: { schoolName: string }) => (
   </View>
 );
 
-const TipsScreen = ({ schoolName }: { schoolName: string }) => {
-  var tipArray = []; //create new array to keep track of which tips are from the school
+const TipsDetails = ({ schoolName }: { schoolName: string }) => {
+  let tipArray = []; //create new array to keep track of which tips are from the school
 
   // loops over TIPS_INFO object and pulls which key:value pairs coordinate to the relevant school
   for (const key in TIPS_INFO) {
@@ -43,7 +43,7 @@ const TipsScreen = ({ schoolName }: { schoolName: string }) => {
   );
 };
 
-export default TipsScreen;
+export default TipsDetails;
 
 const style = StyleSheet.create({
   standoutText: {

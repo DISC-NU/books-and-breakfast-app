@@ -80,7 +80,11 @@ function HomeScreen() {
         navigation.navigate('Tracker');
         break;
       case 3:
-        navigation.navigate('Tips', { schoolName: selected });
+        if (selected) {
+          navigation.navigate('Tips', { schoolName: selected });
+        } else {
+          alert('Please select a schoole!');
+        }
         break;
       case 6:
         // Directly using the URL opening logic here
