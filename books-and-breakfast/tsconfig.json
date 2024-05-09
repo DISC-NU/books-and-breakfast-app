@@ -7,5 +7,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "babel.config.js"]
+  "include": ["**/*.ts", "**/*.tsx", "babel.config.js", "app/data/MissionData"]
 }
