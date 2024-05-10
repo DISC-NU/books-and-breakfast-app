@@ -9,10 +9,10 @@ import { SchoolKeyPair, getSchoolList } from './firebase/util';
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
   { index: 2, label: 'Mission Statement' },
-  { index: 3, label: 'Evanston History' },
-  { index: 4, label: 'B&B Team' },
-  { index: 5, label: 'Link to GroupMe' },
-  { index: 6, label: 'Tips' },
+  { index: 3, label: 'Tips' },
+  { index: 4, label: 'Evanston History' },
+  { index: 5, label: 'B&B Team' },
+  { index: 6, label: 'Link to GroupMe' },
 ];
 
 // Utility function to handle URL opening with error management
@@ -69,7 +69,7 @@ function HomeScreen() {
         break;
       case 2:
         navigation.navigate('Tracker');
-      case 3:
+      case 4:
         if (selected) {
           navigation.navigate('Tips', { schoolName: selected });
         } else {
