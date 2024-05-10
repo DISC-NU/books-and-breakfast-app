@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, ref, set } from 'firebase/database';
+import { get, off, onValue, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -55,28 +55,35 @@ async function getSchoolList() {
 }
 
 /**
- * Fetches detailed directions for a specific school by name from the Firebase database.
+ * Listens for detailed directions for a specific school by name from the Firebase database.
  * @param schoolName The unique identifier for the school whose directions are being fetched.
- * @returns A promise resolving to a SchoolDirections object or null if no data or an error occurs.
+ * @param callback The function to call with the updated data.
+ * @returns A function to unsubscribe from the real-time updates.
  */
-async function getSchoolDirections(schoolName: string) {
+function listenToSchoolDirections(schoolName, callback) {
   // Generate a database reference specifically targeting the requested school's directions.
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}`);
-  return get(schoolRef)
-    .then((snapshot) => {
-      // Check if the snapshot at this specific reference contains data.
+
+  // Attach a listener to get real-time updates.
+  const unsubscribe = onValue(
+    schoolRef,
+    (snapshot) => {
       if (snapshot.exists()) {
-        // If data exists, return the entire data object for this school.
-        return snapshot.val();
+        // If data exists, call the callback with the entire data object for this school.
+        callback(snapshot.val());
       } else {
         console.log('No data available for:', schoolName);
-        return null; // Return null if no specific data is found for the requested school.
+        callback(null); // Call the callback with null if no data is found.
       }
-    })
-    .catch((error) => {
+    },
+    (error) => {
       console.error('Error fetching school directions:', error);
-      return null; // Return null to indicate that an error occurred during the data fetch.
-    });
+      callback(null); // Call the callback with null to indicate an error occurred.
+    }
+  );
+
+  // Return a function to unsubscribe from the listener when it's no longer needed.
+  return () => off(schoolRef, 'value', unsubscribe);
 }
 
 // Save function for school transportation details
@@ -93,4 +100,4 @@ async function updateSchoolDirections(schoolName: string, field: string, value: 
 }
 
 // Export the functions for use in other parts of the application.
-export { getSchoolList, getSchoolDirections, updateSchoolDirections };
+export { getSchoolList, listenToSchoolDirections, updateSchoolDirections };

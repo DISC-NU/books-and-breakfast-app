@@ -1,20 +1,40 @@
-import { useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import EditText from './components/EditText';
 
 import { SchoolDirections } from './data/SchoolDirections';
-import { getSchoolDirections, updateSchoolDirections } from './firebase/util';
+import { listenToSchoolDirections, updateSchoolDirections } from './firebase/util';
 
 const screenHeight = Dimensions.get('window').height;
 
-const ArticleHeader = ({ schoolName, location }: { schoolName: string; location: string }) => (
+// Props interface for ArticleHeader component
+interface ArticleHeaderProps {
+  schoolName: string;
+  location: string;
+}
+
+// Component to display the header with school name and location
+const ArticleHeader: React.FC<ArticleHeaderProps> = ({ schoolName, location }) => (
   <View style={styles.headerContainer}>
     <Text style={styles.headerTitle}>{schoolName}</Text>
     <Text style={styles.headerLocation}>{location}</Text>
   </View>
 );
 
-const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
+// Props interface for Divider component
+interface DividerProps {
+  color?: string;
+  thickness?: number;
+  marginVertical?: number;
+}
+
+// Component to render a customizable divider line
+const Divider: React.FC<DividerProps> = ({
+  color = '#D9D9D9',
+  thickness = 1,
+  marginVertical = 20,
+}) => (
   <View
     style={{
       height: thickness,
@@ -25,89 +45,50 @@ const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
   />
 );
 
-// TEXTINPUT FOR EDITABLE TEXT FIELDS ON THE SCREEN
-const EditText = ({
-  value,
-  onSave,
-  edit,
-  setEdit,
-}: {
-  value: string;
-  onSave: (newValue: string) => void;
-}) => {
-  const [text, setText] = useState(value);
+// Props interface for SchoolTransportDetails component
+interface SchoolTransportDetailsProps {
+  schoolName: string;
+}
 
-  const finishSave = () => {
-    onSave(text);
-    setEdit(false); // exit out of editing mode
-  };
-  return edit ? (
-    <TextInput
-      style={styles.editText}
-      value={text}
-      onChangeText={setText}
-      onBlur={finishSave} // save after user is done editing
-      multiline // keeps multiline view in edit mode
-    />
-  ) : (
-    <Text style={styles.text}>{value}</Text>
-  );
-};
-
-export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) => {
-  const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections>();
+// Main component to display and edit school transportation details
+export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ schoolName }) => {
+  const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
 
-  const handleSave = async (schoolName, field, value) => {
+  // Function to handle saving updated school directions
+  const handleSave = async (schoolName: string, field: string, value: string) => {
     try {
-      updateSchoolDirections(schoolName, field, value);
+      await updateSchoolDirections(schoolName, field, value);
     } catch (error) {
-      console.error('Failed to update school directions', error); // Log error to console for debugging.
-      setError('Failed to update school directions. Please try again later.'); // Set user-friendly error message.
+      console.error('Failed to update school directions', error);
+      setError('Failed to update school directions. Please try again later.');
     }
   };
 
-  // This useEffect is triggered when the component mounts and anytime the schoolName prop changes.
+  // Effect to listen to real-time updates for school directions
   useEffect(() => {
-    // Define an asynchronous function inside the effect that will fetch the school directions.
-    const fetchSchoolDirections = async () => {
-      setIsLoading(true); // Set loading state to true to show a loading indicator
-      setError(null); // Reset error state to null to clear previous errors
-
-      try {
-        // Attempt to fetch directions using the schoolName parameter.
-        const directionsInfo = await getSchoolDirections(schoolName);
-
-        // If fetch is successful and directions are returned, update state.
-        if (directionsInfo != null) {
-          setDirectionsInfo(directionsInfo);
-        } else {
-          // If no data is returned, set an appropriate error message.
-          setError('No directions available for this school.');
-        }
-      } catch (error) {
-        console.error('Failed to fetch school directions info', error); // Log error to console for debugging.
-        setError('Failed to load directions. Please try again later.'); // Set user-friendly error message.
-      } finally {
-        setIsLoading(false); // Ensure loading state is set to false when fetch is complete.
+    const unsubscribe = listenToSchoolDirections(schoolName, (data) => {
+      if (data) {
+        setDirectionsInfo(data);
+      } else {
+        setError('No directions available for this school.');
       }
-    };
+      setIsLoading(false);
+    });
 
-    // Call the fetch function defined above.
-    fetchSchoolDirections();
-  }, [schoolName, handleSave]); // The effect depends on schoolName, so it re-runs when schoolName or handleSave changes.
+    // Clean up listener on component unmount or when schoolName changes
+    return () => unsubscribe();
+  }, [schoolName]);
 
-  // Conditionally render UI based on the state of the data fetch.
   if (isLoading) {
-    return <Text>Loading...</Text>; // Display loading text while data is being fetched.
+    return <Text>Loading...</Text>;
   }
   if (error) {
-    return <Text>{error}</Text>; // Show any error messages if present.
+    return <Text>{error}</Text>;
   }
 
-  // Main content rendering, conditioned on having valid directions data.
   return (
     <View>
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
