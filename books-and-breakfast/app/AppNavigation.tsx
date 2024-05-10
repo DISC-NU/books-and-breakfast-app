@@ -41,7 +41,16 @@ function AppNavigation() {
         })}
       />
       <Stack.Screen name="Tracker" component={TrackerScreen} />
-      <Stack.Screen name="Tips" component={TipsScreen} />
+      <Stack.Screen
+        name="Tips"
+        component={TipsScreen}
+        options={({ navigation }) => ({
+          headerTitle: '',
+          headerLeft: () => (
+            <Icon name="arrow-back" size={24} color="black" onPress={() => navigation.goBack()} />
+          ),
+        })}
+      />
     </Stack.Navigator>
     //</NavigationContainer>
   );

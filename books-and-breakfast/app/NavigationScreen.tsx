@@ -30,6 +30,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
   },
+  text: {
+    fontSize: 22,
+    marginBottom: 20,
+  },
 });
 
 export default NavigationScreen;
