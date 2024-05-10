@@ -18,7 +18,6 @@ const NavigationScreen = ({ route, navigation }) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 85 : 0}>
       <SchoolTransportDetails schoolName={schoolName} />

@@ -4,10 +4,9 @@ import { Alert, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
-import { SCHOOLS } from './data/SchoolDirections';
+import { SchoolKeyPair, getSchoolList } from './firebase/util';
 import ClockIcon from './icons/ClockIcon';
 import MapIcon from './icons/MapIcon';
-import { SchoolKeyPair, getSchoolList } from './firebase/util';
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
