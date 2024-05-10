@@ -13,18 +13,18 @@ import {
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
-// import { SchoolKeyPair, getSchoolList } from './firebase/util';
+//import { SchoolKeyPair, getSchoolList } from './firebase/util';
 import ClockIcon from './icons/ClockIcon';
+import GroupMeIcon from './icons/GroupMeIcon';
 import MapIcon from './icons/MapIcon';
+import TipsIcon from './icons/TipsIcon';
 
-const { width: screenWidth } = Dimensions.get('window'); // Get screen width
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
-  { index: 2, label: 'Mission Statement' },
-  { index: 3, label: 'Evanston History' },
-  { index: 4, label: 'B&B Team' },
-  { index: 5, label: 'Link to GroupMe' },
+  { index: 1, label: 'Mission Statement' },
+  { index: 2, label: 'Morning Program' },
 ];
 
 // Utility function to handle URL opening with error management
@@ -68,32 +68,26 @@ function HomeScreen() {
     fetchSchools();
   }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
+  const actionMap = {
+    1: () => navigation.navigate('Navigation', { schoolName: selected }),
+    2: () => navigation.navigate('Tracker'),
+    // 3: () => navigation.navigate('Tips'),
+    4: () =>
+      attemptOpenURL(
+        'https://groupme.com/join_group/58634493/LJyTEs7U',
+        'Sorry, it looks like GroupMe cannot be opened.'
+      ),
+    // 5: () => navigation.navigate('Mission'),
+    // 6: () => navigation.navigate('Morning Program'),
+  };
+
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
-    switch (buttonIndex) {
-      case 1:
-        if (selected) {
-          navigation.navigate('Navigation', { schoolName: selected });
-        } else {
-          // Handle the error - alert the user or log an error
-          alert('Please select a school before continuing.');
-        }
-        break;
-      case 2:
-        navigation.navigate('Tracker');
-        break;
-      case 3:
-        navigation.navigate('Mission');
-        break;
-      case 6:
-        // Directly using the URL opening logic here
-        attemptOpenURL(
-          'https://groupme.com/join_group/58634493/LJyTEs7U',
-          'Sorry, it looks like GroupMe cannot be opened.'
-        );
-        break;
-      default:
-        console.log(`Button ${buttonIndex} pressed`);
+    const action = actionMap[buttonIndex];
+    if (action) {
+      action();
+    } else {
+      console.log(`Button ${buttonIndex} pressed`);
     }
   };
 
@@ -106,34 +100,44 @@ function HomeScreen() {
         <SelectList
           setSelected={(val: string) => setSelected(val)}
           data={schoolOptions}
-          inputStyles={{ fontSize: 16, width: '90%', color: '#36afbc' }}
+          inputStyles={{ fontSize: 16, width: '81%', color: '#36afbc' }}
           save="value"
           placeholder="Select School"
           maxHeight={275}
           search={false}
           boxStyles={dropdownStyle}
         />
-        <View style={styles.buttonsGrid}>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
-            <MapIcon />
-            <Text style={styles.trackerNavText}>Directions</Text>
+      </View>
+      <Text style={styles.subtitle}>Resources</Text>
+      <View style={styles.buttonsGrid}>
+        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
+          <MapIcon />
+          <Text style={styles.bigButtonText}>Directions</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
+          <ClockIcon />
+          <Text style={styles.bigButtonText}>Tracker</Text>
+        </TouchableOpacity>
+        {/* Duplicate Buttons */}
+        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(3)}>
+          <TipsIcon />
+          <Text style={styles.bigButtonText}>Tips</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(4)}>
+          <GroupMeIcon />
+          <Text style={styles.bigButtonText}>GroupMe</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.subtitle}>Program Info</Text>
+      <View style={styles.buttonsGrid}>
+        {SMALLBUTTONS.map((button) => (
+          <TouchableOpacity
+            key={button.index}
+            style={styles.button}
+            onPress={() => handleButtonPress(4 + button.index)}>
+            <Text style={styles.buttonText}>{button.label}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
-            <ClockIcon />
-            <Text style={styles.trackerNavText}>Tracker</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonsGrid}>
-          {SMALLBUTTONS.map((button) => (
-            <TouchableOpacity
-              key={button.index}
-              style={styles.button}
-              onPress={() => handleButtonPress(button.index + 1)}>
-              <Text style={styles.buttonText}>{button.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        ))}
       </View>
     </ScreenWrapper>
   );
@@ -142,22 +146,32 @@ function HomeScreen() {
 const styles = StyleSheet.create({
   imageContainer: {
     paddingHorizontal: 20,
-    paddingTop: 20, // Keep top padding to distance from screen edge
-    paddingBottom: 10, // Reduced bottom padding
+    paddingTop: 2,
+    paddingBottom: 0,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
   },
   dropdownContainer: {
     paddingHorizontal: 20,
-    paddingTop: 0, // Remove top padding to bring closer to the image above
-    paddingBottom: 20,
-    alignItems: 'center',
+    paddingTop: 0,
+    paddingBottom: 10,
     backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    paddingLeft: screenWidth / 19,
+  },
+  subtitle: {
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#36afbc',
+    textAlign: 'left', // Align text to the left within the Text component
+    paddingLeft: screenWidth * 0.11,
   },
   bigButton: {
-    margin: 8,
-    height: (screenWidth - 76) / 2,
-    width: (screenWidth - 76) / 2,
+    margin: screenWidth / 23,
+    height: screenWidth / 2.9,
+    width: screenWidth / 2.9,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#36afbc',
@@ -165,7 +179,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 5,
     shadowColor: '#000',
-    shadowOffset: { height: 2, width: 0 },
+    shadowOffset: { height: 3, width: 0 },
     elevation: 5,
     borderWidth: 0.5,
     borderColor: '#ffffff',
@@ -173,7 +187,7 @@ const styles = StyleSheet.create({
   buttonIcon: {
     width: 50, // Adjust size as needed
     height: 50, // Adjust size as needed
-    marginBottom: 10, // Space between the icon and text
+    marginBottom: 14, // Space between the icon and text
   },
   logo: {
     width: 300,
@@ -184,7 +198,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     shadowColor: '#000',
-    shadowOffset: { height: 2, width: 0 },
+    shadowOffset: { height: 3, width: 0 },
     elevation: 3,
   },
   dropdownUnselected: {
@@ -200,30 +214,29 @@ const styles = StyleSheet.create({
   buttonsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    marginTop: 10,
+    justifyContent: 'center',
   },
   button: {
-    borderWidth: 0.5,
-    borderColor: '#e73e5f',
+    borderWidth: 0.2,
+    borderColor: '#F3F3F3',
     backgroundColor: '#FFFFFF',
-    margin: 5,
-    width: '95%',
-    height: 72,
+    margin: 10,
+    width: '79%',
+    height: screenHeight / 15,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 15,
+    borderRadius: 10,
     shadowOpacity: 0.5,
     shadowRadius: 3,
     shadowColor: '#000',
-    shadowOffset: { height: 2, width: 0 },
+    shadowOffset: { height: 3, width: 0 },
     elevation: 2,
   },
   buttonText: {
     color: '#36afbc',
     fontSize: 16,
   },
-  trackerNavText: {
+  bigButtonText: {
     marginTop: 5,
     color: '#fff',
     fontSize: 16,
