@@ -12,14 +12,14 @@ import {
 } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
-//import { SchoolKeyPair, getSchoolList } from './firebase/util';
+import ScreenWrapper from './ScreenWrapper';
+import { SchoolKeyPair, getSchoolList } from './firebase/util';
 import ClockIcon from './icons/ClockIcon';
 import GroupMeIcon from './icons/GroupMeIcon';
 import MapIcon from './icons/MapIcon';
 import TipsIcon from './icons/TipsIcon';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
@@ -83,11 +83,22 @@ function HomeScreen() {
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
-    const action = actionMap[buttonIndex];
+    const routeMap = {
+      1: { route: 'Navigation', params: { schoolName: selected } },
+      2: { route: 'Tracker' },
+      3: { route: 'Tips' },
+      4: { route: 'GroupMe', isUrl: true, url: 'https://groupme.com/join_group/58634493/LJyTEs7U' },
+    };
+
+    const action = routeMap[buttonIndex];
     if (action) {
-      action();
+      if (action.isUrl) {
+        attemptOpenURL(action.url, 'Sorry, it looks like GroupMe cannot be opened.');
+      } else {
+        navigation.navigate(action.route, action.params);
+      }
     } else {
-      console.log(`Button ${buttonIndex} pressed`);
+      console.log(`Button ${buttonIndex} pressed with no action defined.`);
     }
   };
 
@@ -100,7 +111,7 @@ function HomeScreen() {
         <SelectList
           setSelected={(val: string) => setSelected(val)}
           data={schoolOptions}
-          inputStyles={{ fontSize: 16, width: '81%', color: '#36afbc' }}
+          inputStyles={styles.selectInput}
           save="value"
           placeholder="Select School"
           maxHeight={275}
@@ -118,7 +129,6 @@ function HomeScreen() {
           <ClockIcon />
           <Text style={styles.bigButtonText}>Tracker</Text>
         </TouchableOpacity>
-        {/* Duplicate Buttons */}
         <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(3)}>
           <TipsIcon />
           <Text style={styles.bigButtonText}>Tips</Text>
@@ -143,9 +153,17 @@ function HomeScreen() {
   );
 }
 
+const layoutConstants = {
+  padding: 20,
+  subtitlePaddingLeft: screenWidth * 0.11,
+  buttonMargin: screenWidth / 23,
+  buttonSize: screenWidth / 2.9,
+  smallButtonHeight: screenHeight / 15,
+};
+
 const styles = StyleSheet.create({
   imageContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: layoutConstants.padding,
     paddingTop: 2,
     paddingBottom: 0,
     alignItems: 'center',
@@ -166,12 +184,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#36afbc',
     textAlign: 'left', // Align text to the left within the Text component
-    paddingLeft: screenWidth * 0.11,
+    paddingLeft: layoutConstants.subtitlePaddingLeft,
   },
   bigButton: {
-    margin: screenWidth / 23,
-    height: screenWidth / 2.9,
-    width: screenWidth / 2.9,
+    margin: layoutConstants.buttonMargin,
+    height: layoutConstants.buttonSize,
+    width: layoutConstants.buttonSize,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#36afbc',
@@ -184,6 +202,11 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#ffffff',
   },
+  selectInput: {
+    fontSize: 16,
+    width: '81%',
+    color: '#36afbc',
+  },
   buttonIcon: {
     width: 50, // Adjust size as needed
     height: 50, // Adjust size as needed
@@ -192,14 +215,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 300,
     height: 100,
-  },
-  boxStyles: {
-    borderRadius: 8,
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    shadowColor: '#000',
-    shadowOffset: { height: 3, width: 0 },
-    elevation: 3,
   },
   dropdownUnselected: {
     borderWidth: 1,
@@ -221,7 +236,7 @@ const styles = StyleSheet.create({
     borderColor: '#F3F3F3',
     backgroundColor: '#FFFFFF',
     margin: 10,
-    width: '79%',
+    width: '78%',
     height: screenHeight / 15,
     alignItems: 'center',
     justifyContent: 'center',
