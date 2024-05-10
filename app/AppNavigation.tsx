@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './HomeScreen';
 import MissionScreen from './MissionScreen';
 import NavigationScreen from './NavigationScreen';
+import TipsScreen from './TipsScreen';
 import TrackerScreen from './TrackerScreen';
 
 const Stack = createNativeStackNavigator();
