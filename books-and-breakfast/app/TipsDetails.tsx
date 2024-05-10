@@ -19,15 +19,19 @@ const TipsHeader = ({ schoolName }: { schoolName: string }) => (
 );
 
 const TipsDetails = ({ schoolName }: { schoolName: string }) => {
-  let tipArray = []; //create new array to keep track of which tips are from the school
+  const tipArray = []; //create new array to keep track of which tips are from the school
+  // let testTip = TIPS_INFO['tip1'];
+
+  console.log(schoolName);
 
   // loops over TIPS_INFO object and pulls which key:value pairs coordinate to the relevant school
   for (const key in TIPS_INFO) {
     const value = TIPS_INFO[key];
-    if (value.site === schoolName) {
+    if (value.site == schoolName) {
       tipArray.push(value);
     }
   }
+  console.log(tipArray);
 
   // Rendering the header and a list of tips
 
@@ -39,6 +43,11 @@ const TipsDetails = ({ schoolName }: { schoolName: string }) => {
           <Text style={style.text}>{tip.content} </Text>
         </View>
       ))}
+      {/* <View style={style.standoutText}>
+          <Text style={style.text}>{testTip.content} </Text>
+          <Text style={style.text}>seeing if this map function works LMAO</Text>
+        </View>
+      <Text style={style.text}>Is anything rendering at all???/</Text> */}
     </ScreenWrapper>
   );
 };
@@ -54,7 +63,7 @@ const style = StyleSheet.create({
 
   text: {
     fontSize: 18,
-    color: 'white',
+    color: 'black',
   },
 
   title: {

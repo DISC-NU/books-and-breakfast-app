@@ -11,6 +11,7 @@ const TipsScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <TipsDetails schoolName={schoolName} />
+      <Text style={styles.text}>HELLO IS ANYTHING RENDERING</Text>
     </View>
   );
 };
@@ -24,4 +25,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
   },
+  text: {
+    fontSize: 20,
+    marginBottom: 20,
+  }
 });
