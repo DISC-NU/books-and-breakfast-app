@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { SchoolDirections } from './data/SchoolDirections';
+import { getSchoolDirections } from './firebase/util';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -123,7 +125,7 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
                 <Divider />
                 <Text style={styles.header}>Parking</Text>
                 <EditText
-                  value={directionsInfo.parking}
+                  value={directionsInfo.driving}
                   onSave={(newValue) => handleSave('specifics', newValue)}
                   edit={edit}
                   setEdit={setEdit}
@@ -205,8 +207,7 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     borderWidth: 0.5,
     borderColor: 'gray',
-    alignContent: 'center',
-    justifyContent: 'center',
+    padding: 15,
   },
   button: {
     position: 'absolute',
