@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, ref } from 'firebase/database';
+import { get, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -79,5 +79,18 @@ async function getSchoolDirections(schoolName: string) {
     });
 }
 
+// Save function for school transportation details
+async function updateSchoolDirections(schoolName: string, field: string, value: string) {
+  // Generate a database reference specifically targeting the requested school's directions.
+  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
+  try {
+    set(schoolRef, value);
+    return true;
+  } catch (error) {
+    console.error('Error updating school directions: ', error);
+    return null;
+  }
+}
+
 // Export the functions for use in other parts of the application.
-export { getSchoolList, getSchoolDirections };
+export { getSchoolList, getSchoolDirections, updateSchoolDirections };

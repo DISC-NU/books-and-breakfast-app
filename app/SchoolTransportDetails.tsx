@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import { SchoolDirections } from './data/SchoolDirections';
-import { getSchoolDirections } from './firebase/util';
+import { getSchoolDirections, updateSchoolDirections } from './firebase/util';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -59,6 +60,15 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
   const [error, setError] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
 
+  const handleSave = async (schoolName, field, value) => {
+    try {
+      updateSchoolDirections(schoolName, field, value);
+    } catch (error) {
+      console.error('Failed to update school directions', error); // Log error to console for debugging.
+      setError('Failed to update school directions. Please try again later.'); // Set user-friendly error message.
+    }
+  };
+
   // This useEffect is triggered when the component mounts and anytime the schoolName prop changes.
   useEffect(() => {
     // Define an asynchronous function inside the effect that will fetch the school directions.
@@ -87,7 +97,7 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
 
     // Call the fetch function defined above.
     fetchSchoolDirections();
-  }, [schoolName]); // The effect depends on schoolName, so it re-runs when schoolName changes.
+  }, [schoolName, handleSave]); // The effect depends on schoolName, so it re-runs when schoolName or handleSave changes.
 
   // Conditionally render UI based on the state of the data fetch.
   if (isLoading) {
@@ -96,10 +106,6 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
   if (error) {
     return <Text>{error}</Text>; // Show any error messages if present.
   }
-
-  const handleSave = (field: keyof typeof transportDetails, value: string) => {
-    // setTransportDetails({ ...transportDetails, [field]: value }); // creates new state object
-  };
 
   // Main content rendering, conditioned on having valid directions data.
   return (
@@ -115,7 +121,7 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
               <Text style={styles.header}>Directions</Text>
               <EditText
                 value={directionsInfo.specifics}
-                onSave={(newValue) => handleSave('specifics', newValue)}
+                onSave={(newValue) => handleSave(directionsInfo.schoolName, 'specifics', newValue)}
                 edit={edit}
                 setEdit={setEdit}
               />
@@ -126,7 +132,7 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
                 <Text style={styles.header}>Parking</Text>
                 <EditText
                   value={directionsInfo.driving}
-                  onSave={(newValue) => handleSave('specifics', newValue)}
+                  onSave={(newValue) => handleSave(directionsInfo.schoolName, 'driving', newValue)}
                   edit={edit}
                   setEdit={setEdit}
                 />
@@ -138,7 +144,9 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
                 <Text style={styles.header}>Public Transportation</Text>
                 <EditText
                   value={directionsInfo.publicTransport}
-                  onSave={(newValue) => handleSave('specifics', newValue)}
+                  onSave={(newValue) =>
+                    handleSave(directionsInfo.schoolName, 'publicTransport', newValue)
+                  }
                   edit={edit}
                   setEdit={setEdit}
                 />
@@ -147,16 +155,18 @@ export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) =
           </>
         )}
       </ScrollView>
-      <Pressable
-        style={({ pressed }) => [
-          {
-            backgroundColor: pressed ? '#0056b3' : '#007AFF',
-          },
-          styles.button,
-        ]}
-        onPress={() => setEdit(!edit)}>
-        <Icon name="edit" size={30} color="white" />
-      </Pressable>
+      {!edit && (
+        <Pressable
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed ? '#0056b3' : '#007AFF',
+            },
+            styles.button,
+          ]}
+          onPress={() => setEdit(!edit)}>
+          <Icon name="edit" size={30} color="white" />
+        </Pressable>
+      )}
     </View>
   );
 };
