@@ -1,8 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-import { DIRECTIONS_INFO } from './data/SchoolDirections';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -54,52 +52,97 @@ const EditText = ({
 };
 
 export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) => {
-  const [transportDetails, setTransportDetails] = useState(DIRECTIONS_INFO[schoolName]); // for updating when user edits
+  const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
 
+  // This useEffect is triggered when the component mounts and anytime the schoolName prop changes.
+  useEffect(() => {
+    // Define an asynchronous function inside the effect that will fetch the school directions.
+    const fetchSchoolDirections = async () => {
+      setIsLoading(true); // Set loading state to true to show a loading indicator
+      setError(null); // Reset error state to null to clear previous errors
+
+      try {
+        // Attempt to fetch directions using the schoolName parameter.
+        const directionsInfo = await getSchoolDirections(schoolName);
+
+        // If fetch is successful and directions are returned, update state.
+        if (directionsInfo != null) {
+          setDirectionsInfo(directionsInfo);
+        } else {
+          // If no data is returned, set an appropriate error message.
+          setError('No directions available for this school.');
+        }
+      } catch (error) {
+        console.error('Failed to fetch school directions info', error); // Log error to console for debugging.
+        setError('Failed to load directions. Please try again later.'); // Set user-friendly error message.
+      } finally {
+        setIsLoading(false); // Ensure loading state is set to false when fetch is complete.
+      }
+    };
+
+    // Call the fetch function defined above.
+    fetchSchoolDirections();
+  }, [schoolName]); // The effect depends on schoolName, so it re-runs when schoolName changes.
+
+  // Conditionally render UI based on the state of the data fetch.
+  if (isLoading) {
+    return <Text>Loading...</Text>; // Display loading text while data is being fetched.
+  }
+  if (error) {
+    return <Text>{error}</Text>; // Show any error messages if present.
+  }
+
   const handleSave = (field: keyof typeof transportDetails, value: string) => {
-    setTransportDetails({ ...transportDetails, [field]: value }); // creates new state object
+    // setTransportDetails({ ...transportDetails, [field]: value }); // creates new state object
   };
 
+  // Main content rendering, conditioned on having valid directions data.
   return (
     <View>
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-        <ArticleHeader
-          schoolName={transportDetails.schoolName}
-          location={transportDetails.address}
-        />
-        <View style={styles.section}>
-          <Text style={styles.header}>Directions</Text>
-          <EditText
-            value={transportDetails.specifics}
-            onSave={(newValue) => handleSave('specifics', newValue)}
-            edit={edit}
-            setEdit={setEdit}
-          />
-        </View>
-        {transportDetails.driving && (
-          <View style={styles.section}>
-            <Divider />
-            <Text style={styles.header}>Parking</Text>
-            <EditText
-              value={transportDetails.driving}
-              onSave={(newValue) => handleSave('driving', newValue)}
-              edit={edit}
-              setEdit={setEdit}
+        {directionsInfo && (
+          <>
+            <ArticleHeader
+              schoolName={directionsInfo.schoolName}
+              location={directionsInfo.address}
             />
-          </View>
-        )}
-        {transportDetails.publicTransport && (
-          <View style={styles.section}>
-            <Divider />
-            <Text style={styles.header}>Public Transportation</Text>
-            <EditText
-              value={transportDetails.publicTransport}
-              onSave={(newValue) => handleSave('publicTransport', newValue)}
-              edit={edit}
-              setEdit={setEdit}
-            />
-          </View>
+            <View style={styles.section}>
+              <Text style={styles.header}>Directions</Text>
+              <EditText
+                value={directionsInfo.specifics}
+                onSave={(newValue) => handleSave('specifics', newValue)}
+                edit={edit}
+                setEdit={setEdit}
+              />
+            </View>
+            {directionsInfo.driving && (
+              <View style={styles.section}>
+                <Divider />
+                <Text style={styles.header}>Parking</Text>
+                <EditText
+                  value={directionsInfo.parking}
+                  onSave={(newValue) => handleSave('specifics', newValue)}
+                  edit={edit}
+                  setEdit={setEdit}
+                />
+              </View>
+            )}
+            {directionsInfo.publicTransport && (
+              <View style={styles.section}>
+                <Divider />
+                <Text style={styles.header}>Public Transportation</Text>
+                <EditText
+                  value={directionsInfo.publicTransport}
+                  onSave={(newValue) => handleSave('specifics', newValue)}
+                  edit={edit}
+                  setEdit={setEdit}
+                />
+              </View>
+            )}
+          </>
         )}
       </ScrollView>
       <Pressable

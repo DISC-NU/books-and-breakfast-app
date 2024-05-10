@@ -5,6 +5,9 @@ import { SelectList } from 'react-native-dropdown-select-list';
 
 import ScreenWrapper from './ScreenWrapper'; // Import ScreenWrapper
 import { SCHOOLS } from './data/SchoolDirections';
+import ClockIcon from './icons/ClockIcon';
+import MapIcon from './icons/MapIcon';
+import { SchoolKeyPair, getSchoolList } from './firebase/util';
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
@@ -27,12 +30,33 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 function HomeScreen() {
   const navigation = useNavigation<any>();
   const [selected, setSelected] = useState<string>('');
+  const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
     setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [selected]);
+
+  useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
+    const fetchSchools = async () => {
+      try {
+        // Attempt to fetch the school list using the getSchoolList function.
+        const schoolList = await getSchoolList();
+        if (schoolList != null) {
+          setSchoolOptions(schoolList);
+        }
+      } catch (error) {
+        // If an error occurs during fetching, log it to the console.
+        console.error('Failed to fetch schools:', error);
+      }
+    };
+
+    // Call the fetchSchools function defined above to execute the fetching process.
+    // This function is called right after the component mounts due to the empty dependency array.
+    fetchSchools();
+  }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
@@ -51,6 +75,9 @@ function HomeScreen() {
           'Sorry, it looks like the Work Tracker Doc cannot be opened.'
         );
         //navigation.navigate('Tracker');
+        break;
+      case 3:
+        navigation.navigate('Mission');
         break;
       case 6:
         // Directly using the URL opening logic here
@@ -72,7 +99,7 @@ function HomeScreen() {
       <View style={styles.dropdownContainer}>
         <SelectList
           setSelected={(val: string) => setSelected(val)}
-          data={SCHOOLS}
+          data={schoolOptions}
           inputStyles={{ fontSize: 16, width: '90%', color: '#36afbc' }}
           save="value"
           placeholder="Select School"
@@ -82,11 +109,11 @@ function HomeScreen() {
         />
         <View style={styles.buttonsGrid}>
           <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
-            <Image source={require('../assets/navicon.jpg')} style={styles.buttonIcon} />
+            <MapIcon />
             <Text style={styles.trackerNavText}>Navigation</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
-            <Image source={require('../assets/trackericon.jpg')} style={styles.buttonIcon} />
+            <ClockIcon />
             <Text style={styles.trackerNavText}>Tracker</Text>
           </TouchableOpacity>
         </View>
@@ -134,6 +161,8 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { height: 2, width: 0 },
     elevation: 5,
+    borderWidth: 0.5,
+    borderColor: '#ffffff',
   },
   buttonIcon: {
     width: 50, // Adjust size as needed
@@ -158,7 +187,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dropdownSelected: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#36afbc',
     borderRadius: 10,
   },
@@ -189,6 +218,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   trackerNavText: {
+    marginTop: 5,
     color: '#fff',
     fontSize: 16,
   },
