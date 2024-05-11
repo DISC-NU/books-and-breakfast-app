@@ -1,8 +1,9 @@
+// ClockIcon.tsx
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 const ClockIcon: React.FC = () => (
-  <Svg viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" width="60" height="60">
+  <Svg viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" width="55" height="55">
     <Path
       strokeLinecap="round"
       strokeLinejoin="round"

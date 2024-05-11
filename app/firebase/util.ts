@@ -28,6 +28,7 @@ export interface SchoolDirections {
  * Each school is returned as a key-value pair with the school's key and its name.
  * @returns A promise resolving to an array of SchoolKeyPair objects or null if no data is found.
  */
+
 async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
   return get(ref(database, '/SchoolDirections'))
