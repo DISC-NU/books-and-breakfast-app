@@ -70,7 +70,11 @@ function HomeScreen() {
 
   const actionMap = {
     1: () => navigation.navigate('Navigation', { schoolName: selected }),
-    2: () => navigation.navigate('Tracker'),
+    2: () =>
+      attemptOpenURL(
+        'https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit',
+        'Sorry, it looks like the Tracker cannot be opened'
+      ),
     // 3: () => navigation.navigate('Tips'),
     4: () =>
       attemptOpenURL(
@@ -83,20 +87,32 @@ function HomeScreen() {
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
-    const routeMap = {
-      1: { route: 'Navigation', params: { schoolName: selected } },
-      2: { route: 'Tracker' },
-      3: { route: 'Tips' },
-      4: { route: 'GroupMe', isUrl: true, url: 'https://groupme.com/join_group/58634493/LJyTEs7U' },
+    const actions = {
+      1: () => {
+        if (!selected) {
+          Alert.alert('Please select a school.');
+        } else {
+          navigation.navigate('Navigation', { schoolName: selected });
+        }
+      },
+      2: () => {
+        attemptOpenURL(
+          'https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit',
+          'Sorry, it looks like the Tracker cannot be opened'
+        );
+      },
+      3: () => navigation.navigate('Tips'),
+      4: () => {
+        attemptOpenURL(
+          'https://groupme.com/join_group/58634493/LJyTEs7U',
+          'Sorry, it looks like GroupMe cannot be opened.'
+        );
+      },
     };
 
-    const action = routeMap[buttonIndex];
+    const action = actions[buttonIndex];
     if (action) {
-      if (action.isUrl) {
-        attemptOpenURL(action.url, 'Sorry, it looks like GroupMe cannot be opened.');
-      } else {
-        navigation.navigate(action.route, action.params);
-      }
+      action();
     } else {
       console.log(`Button ${buttonIndex} pressed with no action defined.`);
     }
