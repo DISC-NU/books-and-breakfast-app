@@ -68,23 +68,6 @@ function HomeScreen() {
     fetchSchools();
   }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
-  const actionMap = {
-    1: () => navigation.navigate('Navigation', { schoolName: selected }),
-    2: () =>
-      attemptOpenURL(
-        'https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit',
-        'Sorry, it looks like the Tracker cannot be opened'
-      ),
-    // 3: () => navigation.navigate('Tips'),
-    4: () =>
-      attemptOpenURL(
-        'https://groupme.com/join_group/58634493/LJyTEs7U',
-        'Sorry, it looks like GroupMe cannot be opened.'
-      ),
-    // 5: () => navigation.navigate('Mission'),
-    // 6: () => navigation.navigate('Morning Program'),
-  };
-
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
     const actions = {
@@ -108,6 +91,7 @@ function HomeScreen() {
           'Sorry, it looks like GroupMe cannot be opened.'
         );
       },
+      5: () => navigation.navigate('Mission'),
     };
 
     const action = actions[buttonIndex];
