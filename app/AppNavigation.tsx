@@ -6,7 +6,6 @@ import HomeScreen from './HomeScreen';
 import MissionScreen from './MissionScreen';
 import NavigationScreen from './NavigationScreen';
 import TipsScreen from './TipsScreen';
-import TrackerScreen from './TrackerScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +41,6 @@ function AppNavigation() {
           },
         })}
       />
-      <Stack.Screen name="Tracker" component={TrackerScreen} />
       <Stack.Screen
         name="Mission"
         component={MissionScreen}

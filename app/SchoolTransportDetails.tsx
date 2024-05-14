@@ -1,19 +1,40 @@
-import { useEffect, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import EditText from './components/EditText';
 import { SchoolDirections } from './data/SchoolDirections';
-import { getSchoolDirections } from './firebase/util';
+import { listenToSchoolDirections, updateSchoolDirections } from './firebase/util';
 
 const screenHeight = Dimensions.get('window').height;
 
-const ArticleHeader = ({ schoolName, location }: { schoolName: string; location: string }) => (
+// Props interface for ArticleHeader component
+interface ArticleHeaderProps {
+  schoolName: string;
+  location: string;
+}
+
+// Component to display the header with school name and location
+const ArticleHeader: React.FC<ArticleHeaderProps> = ({ schoolName, location }) => (
   <View style={styles.headerContainer}>
     <Text style={styles.headerTitle}>{schoolName}</Text>
     <Text style={styles.headerLocation}>{location}</Text>
   </View>
 );
 
-const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
+// Props interface for Divider component
+interface DividerProps {
+  color?: string;
+  thickness?: number;
+  marginVertical?: number;
+}
+
+// Component to render a customizable divider line
+const Divider: React.FC<DividerProps> = ({
+  color = '#D9D9D9',
+  thickness = 1,
+  marginVertical = 20,
+}) => (
   <View
     style={{
       height: thickness,
@@ -24,76 +45,110 @@ const Divider = ({ color = '#D9D9D9', thickness = 1, marginVertical = 20 }) => (
   />
 );
 
-export const SchoolTransportDetails = ({ schoolName }: { schoolName: string }) => {
-  const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections>();
+// Props interface for SchoolTransportDetails component
+interface SchoolTransportDetailsProps {
+  schoolName: string;
+}
+
+// Main component to display and edit school transportation details
+export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ schoolName }) => {
+  const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [edit, setEdit] = useState(false);
 
-  // This useEffect is triggered when the component mounts and anytime the schoolName prop changes.
+  // Function to handle saving updated school directions
+  const handleSave = async (schoolName: string, field: string, value: string) => {
+    try {
+      await updateSchoolDirections(schoolName, field, value);
+    } catch (error) {
+      console.error('Failed to update school directions', error);
+      setError('Failed to update school directions. Please try again later.');
+    }
+  };
+
+  // Effect to listen to real-time updates for school directions
   useEffect(() => {
-    // Define an asynchronous function inside the effect that will fetch the school directions.
-    const fetchSchoolDirections = async () => {
-      setIsLoading(true); // Set loading state to true to show a loading indicator
-      setError(null); // Reset error state to null to clear previous errors
-
-      try {
-        // Attempt to fetch directions using the schoolName parameter.
-        const directionsInfo = await getSchoolDirections(schoolName);
-
-        // If fetch is successful and directions are returned, update state.
-        if (directionsInfo != null) {
-          setDirectionsInfo(directionsInfo);
-        } else {
-          // If no data is returned, set an appropriate error message.
-          setError('No directions available for this school.');
-        }
-      } catch (error) {
-        console.error('Failed to fetch school directions info', error); // Log error to console for debugging.
-        setError('Failed to load directions. Please try again later.'); // Set user-friendly error message.
-      } finally {
-        setIsLoading(false); // Ensure loading state is set to false when fetch is complete.
+    const unsubscribe = listenToSchoolDirections(schoolName, (data) => {
+      if (data) {
+        setDirectionsInfo(data);
+      } else {
+        setError('No directions available for this school.');
       }
-    };
+      setIsLoading(false);
+    });
 
-    // Call the fetch function defined above.
-    fetchSchoolDirections();
-  }, [schoolName]); // The effect depends on schoolName, so it re-runs when schoolName changes.
+    // Clean up listener on component unmount or when schoolName changes
+    return () => unsubscribe();
+  }, [schoolName]);
 
-  // Conditionally render UI based on the state of the data fetch.
   if (isLoading) {
-    return <Text>Loading...</Text>; // Display loading text while data is being fetched.
+    return <Text>Loading...</Text>;
   }
   if (error) {
-    return <Text>{error}</Text>; // Show any error messages if present.
+    return <Text>{error}</Text>;
   }
 
-  // Main content rendering, conditioned on having valid directions data.
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-      {directionsInfo && (
-        <>
-          <ArticleHeader schoolName={directionsInfo.schoolName} location={directionsInfo.address} />
-          <View style={styles.section}>
-            <Text style={styles.header}>Directions</Text>
-            <Text style={styles.text}>{directionsInfo.specifics}</Text>
-          </View>
-          {directionsInfo.driving && (
+    <View>
+      <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+        {directionsInfo && (
+          <>
+            <ArticleHeader
+              schoolName={directionsInfo.schoolName}
+              location={directionsInfo.address}
+            />
             <View style={styles.section}>
-              <Divider />
-              <Text style={styles.header}>Parking</Text>
-              <Text style={styles.text}>{directionsInfo.driving}</Text>
+              <Text style={styles.header}>Directions</Text>
+              <EditText
+                value={directionsInfo.specifics}
+                onSave={(newValue) => handleSave(directionsInfo.schoolName, 'specifics', newValue)}
+                edit={edit}
+                setEdit={setEdit}
+              />
             </View>
-          )}
-          {directionsInfo.publicTransport && (
-            <View style={styles.section}>
-              <Divider />
-              <Text style={styles.header}>Public Transportation</Text>
-              <Text style={styles.text}>{directionsInfo.publicTransport}</Text>
-            </View>
-          )}
-        </>
+            {directionsInfo.driving && (
+              <View style={styles.section}>
+                <Divider />
+                <Text style={styles.header}>Parking</Text>
+                <EditText
+                  value={directionsInfo.driving}
+                  onSave={(newValue) => handleSave(directionsInfo.schoolName, 'driving', newValue)}
+                  edit={edit}
+                  setEdit={setEdit}
+                />
+              </View>
+            )}
+            {directionsInfo.publicTransport && (
+              <View style={styles.section}>
+                <Divider />
+                <Text style={styles.header}>Public Transportation</Text>
+                <EditText
+                  value={directionsInfo.publicTransport}
+                  onSave={(newValue) =>
+                    handleSave(directionsInfo.schoolName, 'publicTransport', newValue)
+                  }
+                  edit={edit}
+                  setEdit={setEdit}
+                />
+              </View>
+            )}
+          </>
+        )}
+      </ScrollView>
+      {!edit && (
+        <Pressable
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed ? '#0056b3' : '#007AFF',
+            },
+            styles.button,
+          ]}
+          onPress={() => setEdit(!edit)}>
+          <Icon name="edit" size={30} color="white" />
+        </Pressable>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
@@ -105,6 +160,7 @@ const styles = StyleSheet.create({
     padding: 30,
     minHeight: screenHeight,
     flexGrow: 1,
+    position: 'relative',
   },
   section: {
     margin: 0,
@@ -124,7 +180,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 15,
   },
@@ -135,5 +191,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'left',
     lineHeight: 23,
+  },
+  editText: {
+    fontSize: 16,
+    textAlign: 'left',
+    lineHeight: 23,
+    borderWidth: 0.5,
+    borderColor: 'gray',
+    padding: 15,
+  },
+  button: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: 'black',
   },
 });

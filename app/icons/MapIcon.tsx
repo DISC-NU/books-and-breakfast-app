@@ -3,7 +3,7 @@ import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 const MapIcon: React.FC = () => (
-  <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" width="60" height="60">
+  <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" width="55" height="55">
     <Path
       strokeLinecap="round"
       strokeLinejoin="round"
