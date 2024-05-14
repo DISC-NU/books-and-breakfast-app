@@ -2,9 +2,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import HomeScreen from './HomeScreen';
-import MissionScreen from './MissionScreen';
-import NavigationScreen from './NavigationScreen';
+import HomeScreen from '../components/home/HomeScreen';
+import MissionScreen from '../components/home/MissionScreen';
+import NavigationScreen from '../components/home/NavigationScreen';
 
 const Stack = createNativeStackNavigator();
 

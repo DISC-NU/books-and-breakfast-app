@@ -5,6 +5,7 @@ import {
   Dimensions,
   Image,
   Linking,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,12 +13,12 @@ import {
 } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-import ScreenWrapper from './ScreenWrapper';
-import { SchoolKeyPair, getSchoolList } from './firebase/util';
-import ClockIcon from './icons/ClockIcon';
-import GroupMeIcon from './icons/GroupMeIcon';
-import MapIcon from './icons/MapIcon';
-import TipsIcon from './icons/TipsIcon';
+import { SchoolKeyPair, getSchoolList } from '../../firebase/util';
+import ClockIcon from '../../icons/ClockIcon';
+import GroupMeIcon from '../../icons/GroupMeIcon';
+import MapIcon from '../../icons/MapIcon';
+import TipsIcon from '../../icons/TipsIcon';
+import ScreenWrapper from '../ScreenWrapper';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 
@@ -104,51 +105,53 @@ function HomeScreen() {
 
   return (
     <ScreenWrapper>
-      <View style={styles.imageContainer}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-      </View>
-      <View style={styles.dropdownContainer}>
-        <SelectList
-          setSelected={(val: string) => setSelected(val)}
-          data={schoolOptions}
-          inputStyles={styles.selectInput}
-          save="value"
-          placeholder="Select School"
-          maxHeight={275}
-          search={false}
-          boxStyles={dropdownStyle}
-        />
-      </View>
-      <Text style={styles.subtitle}>Resources</Text>
-      <View style={styles.buttonsGrid}>
-        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
-          <MapIcon />
-          <Text style={styles.bigButtonText}>Directions</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
-          <ClockIcon />
-          <Text style={styles.bigButtonText}>Tracker</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(3)}>
-          <TipsIcon />
-          <Text style={styles.bigButtonText}>Tips</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(4)}>
-          <GroupMeIcon />
-          <Text style={styles.bigButtonText}>GroupMe</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.subtitle}>Program Info</Text>
-      <View style={styles.buttonsGrid}>
-        {SMALLBUTTONS.map((button) => (
-          <TouchableOpacity
-            key={button.index}
-            style={styles.button}
-            onPress={() => handleButtonPress(4 + button.index)}>
-            <Text style={styles.buttonText}>{button.label}</Text>
+      <ScrollView>
+        <View style={styles.imageContainer}>
+          <Image source={require('../../../assets/logo.png')} style={styles.logo} />
+        </View>
+        <View style={styles.dropdownContainer}>
+          <SelectList
+            setSelected={(val: string) => setSelected(val)}
+            data={schoolOptions}
+            inputStyles={styles.selectInput}
+            save="value"
+            placeholder="Select School"
+            maxHeight={275}
+            search={false}
+            boxStyles={dropdownStyle}
+          />
+        </View>
+        <Text style={styles.subtitle}>Resources</Text>
+        <View style={styles.buttonsGrid}>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
+            <MapIcon />
+            <Text style={styles.bigButtonText}>Directions</Text>
           </TouchableOpacity>
-        ))}
-      </View>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
+            <ClockIcon />
+            <Text style={styles.bigButtonText}>Tracker</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(3)}>
+            <TipsIcon />
+            <Text style={styles.bigButtonText}>Tips</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(4)}>
+            <GroupMeIcon />
+            <Text style={styles.bigButtonText}>GroupMe</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.subtitle}>Program Info</Text>
+        <View style={styles.buttonsGrid}>
+          {SMALLBUTTONS.map((button) => (
+            <TouchableOpacity
+              key={button.index}
+              style={styles.button}
+              onPress={() => handleButtonPress(4 + button.index)}>
+              <Text style={styles.buttonText}>{button.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 }
