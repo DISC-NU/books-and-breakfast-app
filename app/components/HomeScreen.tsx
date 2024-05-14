@@ -107,7 +107,7 @@ function HomeScreen() {
     <ScreenWrapper>
       <ScrollView>
         <View style={styles.imageContainer}>
-          <Image source={require('../../../assets/logo.png')} style={styles.logo} />
+          <Image source={require('../../assets/logo.png')} style={styles.logo} />
         </View>
         <View style={styles.dropdownContainer}>
           <SelectList

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { SchoolDirections } from '../../data/SchoolDirections';
-import { listenToSchoolDirections, updateSchoolDirections } from '../../firebase/util';
-import EditText from '../EditText';
+import { SchoolDirections } from '../data/SchoolDirections';
+import { listenToSchoolDirections, updateSchoolDirections } from '../firebase/util';
+import EditText from './EditText';
 
 const screenHeight = Dimensions.get('window').height;
 

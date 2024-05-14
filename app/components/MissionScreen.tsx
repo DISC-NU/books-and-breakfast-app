@@ -3,7 +3,7 @@ import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
 // Import both entries and Entry from EntryData
-import { entries, Entry } from '../../data/MissionData';
+import { entries, Entry } from '../data/MissionData';
 
 const { width: screenWidth } = Dimensions.get('window');
 

@@ -3,8 +3,8 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from '../components/HomeScreen';
-import MissionScreen from '../components/home/MissionScreen';
-import NavigationScreen from '../components/home/NavigationScreen';
+import MissionScreen from '../components/MissionScreen';
+import NavigationScreen from '../components/NavigationScreen';
 
 const Stack = createNativeStackNavigator();
 
