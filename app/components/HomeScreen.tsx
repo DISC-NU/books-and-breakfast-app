@@ -13,12 +13,12 @@ import {
 } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-import { SchoolKeyPair, getSchoolList } from '../../firebase/util';
-import ClockIcon from '../../icons/ClockIcon';
-import GroupMeIcon from '../../icons/GroupMeIcon';
-import MapIcon from '../../icons/MapIcon';
-import TipsIcon from '../../icons/TipsIcon';
-import ScreenWrapper from '../ScreenWrapper';
+import { SchoolKeyPair, getSchoolList } from '../firebase/util';
+import ClockIcon from '../icons/ClockIcon';
+import GroupMeIcon from '../icons/GroupMeIcon';
+import MapIcon from '../icons/MapIcon';
+import TipsIcon from '../icons/TipsIcon';
+import ScreenWrapper from './ScreenWrapper';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 
