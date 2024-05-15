@@ -69,6 +69,16 @@ function AppNavigation() {
           headerLeft: () => (
             <Icon name="arrow-back" size={24} color="black" onPress={() => navigation.goBack()} />
           ),
+          headerBackVisible: false, // Hide the default back button
+          headerStyle: {
+            // Optional: if you want to style the header area
+            minHeight: 0,
+            elevation: 0, // for Android
+            shadowOpacity: 0, // for iOS
+          },
+          headerLeftContainerStyle: {
+            // Optional: style for back button container
+          },
         })}
       />
     </Stack.Navigator>

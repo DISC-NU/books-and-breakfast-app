@@ -1,8 +1,10 @@
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { TIPS_INFO } from './data/TipsInfo';
+import LightbulbIcon from './icons/LightbulbIcon';
 
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 const TipsHeader = ({ schoolName }: { schoolName: string }) => (
   <View style={style.headerContainer}>
@@ -12,7 +14,6 @@ const TipsHeader = ({ schoolName }: { schoolName: string }) => (
 
 const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   const tipArray = []; //create new array to keep track of which tips are from the school
-  // let testTip = TIPS_INFO['tip1'];
 
   console.log(schoolName);
 
@@ -23,7 +24,6 @@ const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       tipArray.push(value);
     }
   }
-  console.log(tipArray);
 
   // Rendering the header and a list of tips
 
@@ -31,11 +31,14 @@ const TipsDetails = ({ schoolName }: { schoolName: string }) => {
     <ScrollView contentContainerStyle={style.scrollViewContentContainer}>
       <Text style={style.title}>Tips!</Text>
       <TipsHeader schoolName={schoolName} />
-      {tipArray.map((tip) => (
-        <View style={style.standoutText}>
-          <Text style={style.text}>{tip.content} </Text>
-        </View>
-      ))}
+      <View style={style.section}>
+        {tipArray.map((tip) => (
+          <View style={style.standoutText}>
+            <LightbulbIcon />
+            <Text style={style.text}>{tip.content} </Text>
+          </View>
+        ))}
+      </View>
     </ScrollView>
   );
 };
@@ -43,25 +46,42 @@ const TipsDetails = ({ schoolName }: { schoolName: string }) => {
 export default TipsDetails;
 
 const style = StyleSheet.create({
+  scrollViewContentContainer: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    padding: 30,
+    minHeight: screenHeight,
+    width: screenWidth,
+    flexGrow: 1,
+    position: 'relative',
+  },
+  section: {
+    width: '100%',
+    margin: 0,
+  },
   standoutText: {
-    paddingHorizontal: 7,
-    paddingVertical: 7,
+    padding: 15,
     backgroundColor: '#FFF8B4',
     borderColor: '#FFF8B4',
-    borderRadius: 10,
-    marginRight: 20,
-    marginLeft: 20,
+    borderRadius: 15,
+    marginRight: 5,
+    marginLeft: 5,
     marginTop: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
   },
 
   text: {
     fontSize: 15,
     color: 'black',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginRight: 5,
-    marginLeft: 5,
+    padding: 10,
+    margin: 5,
+    width: '85%',
+    fontWeight: 'condensedBold',
+  },
+
+  icon: {
     marginTop: 5,
   },
 
@@ -70,7 +90,7 @@ const style = StyleSheet.create({
     color: '#34B3C2',
     textAlign: 'center',
     fontWeight: 'bold',
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 20,
   },
   header: {
@@ -79,9 +99,8 @@ const style = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 20,
     padding: 5,
-    width: '95%',
     // backgroundColor: 'rgba(255, 228, 181, 0.2)',
-    marginBottom: 10,
+    // marginBottom: 10,
   },
   headerContainer: {
     borderRadius: 20,
@@ -91,13 +110,6 @@ const style = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     alignItems: 'center',
-  },
-  scrollViewContentContainer: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 30,
-    minHeight: screenHeight,
-    flexGrow: 1,
+    width: '85%',
   },
 });

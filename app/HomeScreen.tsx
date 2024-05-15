@@ -15,7 +15,9 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import ScreenWrapper from './ScreenWrapper';
 import { SchoolKeyPair, getSchoolList } from './firebase/util';
 import ClockIcon from './icons/ClockIcon';
+import GroupMeIcon from './icons/GroupMeIcon';
 import MapIcon from './icons/MapIcon';
+import TipsIcon from './icons/TipsIcon';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 
@@ -23,7 +25,6 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); /
 const SMALLBUTTONS = [
   { index: 1, label: 'Mission Statement' },
   { index: 2, label: 'Morning Program' },
-  { index: }
 ];
 
 // Utility function to handle URL opening with error management
