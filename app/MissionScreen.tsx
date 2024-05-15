@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
-// Import both entries and Entry from EntryData
-import { entries, Entry } from './data/MissionData';
+import { Entry, getMissionEntries } from './firebase/util';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 const MissionScreen: React.FC = () => {
-  const [activeSlide, setActiveSlide] = useState(0); // State to track active slide index
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  useEffect(() => {
+    const fetchEntries = async () => {
+      const fetchedEntries = await getMissionEntries();
+      if (fetchedEntries) {
+        setEntries(fetchedEntries);
+      }
+    };
+
+    fetchEntries();
+  }, []);
 
   const renderItem = ({ item }: { item: Entry }) => (
     <ScrollView style={styles.item}>
