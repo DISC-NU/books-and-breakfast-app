@@ -11,26 +11,28 @@ export interface TipsDictionary {
 const Tip_1: Tips = {
   site: 'Dewey Elementary School',
   content: `
-    you can take the 201 (and get a free Ventra card through nu) to the ridge/davis stop! 
+    you can take the 201 (and get a free Ventra card through nu) to the ridge/davis stop! \n
     https://www.northwestern.edu/transportation-parking/shuttles/routes/cta-201.html`,
 };
 
 const Tip_2: Tips = {
   site: 'Dewey Elementary School',
-  content: `The 201 bus doesn't come at the best times, but it is the most convenient bus. 
-    Biking is great and there are lots of bike lanes; a lot of people walk to get there too. 
+  content: `The 201 bus doesn't come at the best times, but it is the most convenient bus.
+    Biking is great and there are lots of bike lanes; a lot of people walk to get there too. \n
     When you get there, sit and chat with other tutors or students there and wait for everyone to arrive-- students get called up individually for breakfast; so there is no real breakfast eating period. 
     'Break the Ice' is a chaotic game whose sole object is to break things. Puzzles and drawing are popular!`,
 };
 
 const Tip_3: Tips = {
   site: 'Kingsley Elementary School',
-  content: `how to get there: most of the tutors walk, you can also take the 201 (free w/ nu ventra card, but not always the most reliable timing-wise, prob better to take it back to campus than there)`,
+  content: `How to get there: most of the tutors walk. 
+  You can also take the 201 (free w/ nu ventra card, but not always the most reliable timing-wise, prob better to take it back to campus than there)`,
 };
 
 const Tip_4: Tips = {
   site: 'Kingsley Elementary School',
-  content: `first time @ kingsley: press the button by the door to be let in, if it's not working or it doesn't look like anyone's in the main office, u can call site director precious (312-927-1169)`,
+  content: `first time @ kingsley: press the button by the door to be let in. 
+            \nIf it's not working or it doesn't look like anyone's in the main office, u can call site director precious (312-927-1169)`,
 };
 
 const Tip_5: Tips = {
@@ -56,7 +58,7 @@ const Tip_8: Tips = {
 
 const Tip_9: Tips = {
   site: 'Kingsley Elementary School',
-  content: `to break down the room after b&b: 
+  content: `to break down the room after b&b: \n
     \t- games: go in the black closet outside (basically games pt 2 playing tetris to make everything fit)
     \t- blue bins: stack on top of cabinet next to games closet 
     \t- book cart: cover with cloth, by sticker chart in front
@@ -66,9 +68,9 @@ const Tip_9: Tips = {
 
 const Tip_10: Tips = {
   site: 'Lincoln Elementary School',
-  content: `The entrance is tucked away, past the playgrounds and near the garden beds. 
-     You will see a corner of the school that is just windows, that's where you're headed! Our program is in a library which makes the space a bit more chill. 
-     We have a very multicultural group due to the area the school is in. 
+  content: `The entrance is tucked away, past the playgrounds and near the garden beds. \n
+     You will see a corner of the school that is just windows, that's where you're headed! Our program is in a library which makes the space a bit more chill. \n
+     We have a very multicultural group due to the area the school is in. \n
      The best way to get there is to take the shuttle, though you will have to be earlier than needed. The purple line also works, but isn't free!`,
 };
 
@@ -80,9 +82,9 @@ const Tip_11: Tips = {
 
 const Tip_12: Tips = {
   site: 'Walker Elementary School',
-  content: `Tutors at walker uber there in the mornings (the only site allowed for this since it would be unreasonable to get there via public transportation). 
-    This involves meeting somewhere on campus around 7:40am to travel with the group. 
-    Depending on the day of the week, we may ride back with community volunteers or Uber back to campus. 
+  content: `Tutors at walker uber there in the mornings (the only site allowed for this since it would be unreasonable to get there via public transportation).\n
+    This involves meeting somewhere on campus around 7:40am to travel with the group. \n
+    Depending on the day of the week, we may ride back with community volunteers or Uber back to campus. \n
     We have to clean up the gym after session time so we usually finish around 9:05.`,
 };
 
@@ -94,19 +96,19 @@ const Tip_13: Tips = {
 const Tip_14: Tips = {
   site: 'Walker Elementary School',
   content:
-    'Fridays we have the art teacher Ms. Sam and we usually play basketball Fridays too. Most kids will try to get around reading in their various creative ways so we sometimes need to insist on getting the brainwork done but after focusing them in it’s not usually an issue. ',
+    'Fridays we have the art teacher \n Ms. Sam and we usually play basketball Fridays too. \n Most kids will try to get around reading in their various creative ways so we sometimes need to insist on getting the brainwork done but after focusing them in it’s not usually an issue. ',
 };
 
 const Tip_15: Tips = {
   site: 'Walker Elementary School',
-  content: `don't be afraid to communicate with Nimrah and the other tutors, everyone is super nice and wants to help out! 
+  content: `don't be afraid to communicate with Nimrah and the other tutors, everyone is super nice and wants to help out! \n
     don't be discouraged if it takes a while to build connections with the kids, the more you show up the more they'll be comfortable with you and excited to see you!`,
 };
 
 const Tip_16: Tips = {
   site: 'Washington Elementary School',
-  content: `Show up early! Kids start arriving usually around 7:50am. 
-    Be flexible! You may be working with multiple kids at once and/or have to help another student after one you were working with finishes brainwork. 
+  content: `Show up early! Kids start arriving usually around 7:50am. \n
+    Be flexible! You may be working with multiple kids at once and/or have to help another student after one you were working with finishes brainwork. \n
     After b+b you have to walk through the school to the office (the first time you come, you need to show the office your ID).`,
 };
 
