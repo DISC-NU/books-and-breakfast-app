@@ -33,11 +33,8 @@ const MissionScreen: React.FC = () => {
         data={entries}
         renderItem={renderItem}
         width={screenWidth}
-        height={500}
         onSnapToItem={(index) => setActiveSlide(index)}
         loop={false}
-        autoPlay
-        autoPlayInterval={5000}
       />
       <View style={styles.paginationContainer}>
         {entries.map((_, index) => (
@@ -57,32 +54,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'white', // Sets the background color for the entire screen
   },
   item: {
-    backgroundColor: 'white',
     borderRadius: 5,
     padding: 30,
     marginBottom: 20, // Added marginBottom to separate items if needed
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-    marginBottom: 10, // Added marginBottom for spacing
+    marginBottom: 5, // Added marginBottom for spacing
   },
   missionCenter: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#333',
     textAlign: 'center', // Correct property to center text
-    marginBottom: 10, // Added marginBottom for spacing
+    marginBottom: 5, // Added marginBottom for spacing
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 25,
+    marginBottom: 15,
     textAlign: 'center', // Ensures the title is centered
     color: '#36afbc',
   },
   body: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#333',
     marginBottom: 10, // Added marginBottom for spacing
   },
@@ -98,9 +94,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 3,
     backgroundColor: 'rgba(95, 87, 79, 0.92)',
-  },
-  inactiveDotStyle: {
-    backgroundColor: 'rgba(95, 87, 79, 0.5)',
   },
 });
 
