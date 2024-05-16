@@ -46,21 +46,49 @@ const ChatScreen = () => {
   }, [schoolName, selectedDate]);
 
   // Function to handle sending new messages
-  const onSend = useCallback((newMessages = []) => {
-    const messagesRef = ref(database, `chat/${schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
+  const onSend = useCallback(
+    (newMessages = []) => {
+      const messagesRef = ref(database, `chat/${schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
 
-    newMessages.forEach((message) => {
-      const messageData = {
-        text: message.text, // Message text
-        createdAt: serverTimestamp(), // Server timestamp for message creation
-        user: message.user, // User who sent the message
-      };
-      push(messagesRef, messageData); // Push the new message to Firebase
-    });
+      newMessages.forEach((message) => {
+        const messageData = {
+          text: message.text, // Message text
+          createdAt: serverTimestamp(), // Server timestamp for message creation
+          user: message.user, // User who sent the message
+        };
+        push(messagesRef, messageData); // Push the new message to Firebase
+      });
 
-    // Append the new messages to the existing messages
-    setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
-  }, []);
+      // Append the new messages to the existing messages
+      setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
+    },
+    [schoolName, selectedDate]
+  );
+
+  const renderBubble = useCallback(
+    (props) => (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          left: {
+            backgroundColor: '#f0f0f0',
+          },
+          right: {
+            backgroundColor: '#36afbc',
+          },
+        }}
+        textStyle={{
+          left: {
+            color: '#000',
+          },
+          right: {
+            color: '#fff',
+          },
+        }}
+      />
+    ),
+    []
+  );
 
   return (
     <>
@@ -79,30 +107,9 @@ const ChatScreen = () => {
               name: user.name,
             }}
             placeholder={'Message'}
-            renderBubble={(props) => {
-              return (
-                <Bubble
-                  {...props}
-                  wrapperStyle={{
-                    left: {
-                      backgroundColor: '#f0f0f0',
-                    },
-                    right: {
-                      backgroundColor: '#36afbc',
-                    },
-                  }}
-                  textStyle={{
-                    left: {
-                      color: '#000',
-                    },
-                    right: {
-                      color: '#fff',
-                    },
-                  }}
-                />
-              );
-            }}
-          />
+            renderBubble={renderBubble}
+            listViewProps={{ keyboardDismissMode: 'on-drag' }}
+            keyboardShouldPersistTaps="never"></GiftedChat>
         </View>
       )}
     </>
