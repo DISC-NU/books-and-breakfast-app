@@ -163,5 +163,5 @@ export {
   updateSchoolDirections,
   listenToTips,
   updateTipsInfo,
-  addNewTip
+  addNewTip,
 };
