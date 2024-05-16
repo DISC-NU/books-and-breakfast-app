@@ -13,14 +13,7 @@ import {
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import ScreenWrapper from './ScreenWrapper';
-import {
-  Entry,
-  ResourceURLs,
-  SchoolKeyPair,
-  getMissionEntries,
-  getResourceURLs,
-  getSchoolList,
-} from './firebase/util';
+import { ResourceURLs, SchoolKeyPair, getResourceURLs, getSchoolList } from './firebase/util';
 import ClockIcon from './icons/ClockIcon';
 import GroupMeIcon from './icons/GroupMeIcon';
 import MapIcon from './icons/MapIcon';
@@ -50,28 +43,20 @@ function HomeScreen() {
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
   const [resourceURLs, setResourceURLs] = useState<ResourceURLs | null>(null);
-  const [missions, setMissions] = useState<Entry[] | null>(null);
 
   // Fetch resource URLs from Firebase
   useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook to fetch the resource URLs.
     const fetchResourceURLs = async () => {
       const urls = await getResourceURLs();
-      if (urls) {
+      try {
         setResourceURLs(urls);
+      } catch (error) {
+        // If an error occurs during fetching, log it to the console.
+        console.error('Failed to fetch urls:', error);
       }
     };
     fetchResourceURLs();
-  }, []);
-
-  // Fetch mission entries from Firebase
-  useEffect(() => {
-    const fetchMissionEntries = async () => {
-      const missionEntries = await getMissionEntries();
-      if (missionEntries) {
-        setMissions(missionEntries);
-      }
-    };
-    fetchMissionEntries();
   }, []);
 
   // Update dropdown styling based on selection state
@@ -79,20 +64,24 @@ function HomeScreen() {
     setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [selected]);
 
+  // Fetch school list from Firebase
   useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
     const fetchSchools = async () => {
       try {
+        // Attempt to fetch the school list using the getSchoolList function.
         const schoolList = await getSchoolList();
         if (schoolList != null) {
           setSchoolOptions(schoolList);
         }
       } catch (error) {
+        // If an error occurs during fetching, log it to the console.
         console.error('Failed to fetch schools:', error);
       }
     };
 
     fetchSchools();
-  }, []);
+  }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
@@ -105,7 +94,7 @@ function HomeScreen() {
         }
       },
       2: () => {
-        if (resourceURLs) {
+        if (resourceURLs.trackerURL) {
           attemptOpenURL(
             resourceURLs.trackerURL,
             'Sorry, it looks like the Tracker cannot be opened'
@@ -114,7 +103,7 @@ function HomeScreen() {
       },
       3: () => navigation.navigate('Tips'),
       4: () => {
-        if (resourceURLs) {
+        if (resourceURLs.groupMeURL) {
           attemptOpenURL(resourceURLs.groupMeURL, 'Sorry, it looks like GroupMe cannot be opened.');
         }
       },

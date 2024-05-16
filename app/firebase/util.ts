@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { child, get, off, onValue, push, ref, set } from 'firebase/database';
+import { child, get, off, onValue, ref } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -53,8 +53,11 @@ export interface ResourceURLs {
 export async function getSchoolList(): Promise<SchoolKeyPair[] | null> {
   try {
     const snapshot = await get(ref(database, '/SchoolDirections'));
+    // Check if the snapshot contains any data.
     if (snapshot.exists()) {
+      // Extract the data from the snapshot.
       const data = snapshot.val();
+      // Use Object.keys to get all school keys and map them to key-value pairs.
       const schools = Object.keys(data);
       const schoolOptions = schools.map((school) => ({
         key: school,
@@ -63,11 +66,11 @@ export async function getSchoolList(): Promise<SchoolKeyPair[] | null> {
       return schoolOptions;
     } else {
       console.log('No data available');
-      return null;
+      return null; // Return null to indicate no data was found.
     }
   } catch (error) {
     console.error('Error fetching school list:', error);
-    return null;
+    return null; // Return null to indicate an error occurred during the fetch.
   }
 }
 
@@ -83,61 +86,26 @@ export function listenToSchoolDirections(
 ): () => void {
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}`);
 
+  // Attach a listener to get real-time updates.
   const unsubscribe = onValue(
     schoolRef,
     (snapshot) => {
       if (snapshot.exists()) {
+        // If data exists, call the callback with the entire data object for this school.
         callback(snapshot.val());
       } else {
         console.log('No data available for:', schoolName);
-        callback(null);
+        callback(null); // Call the callback with null if no data is found.
       }
     },
     (error) => {
       console.error('Error fetching school directions:', error);
-      callback(null);
+      callback(null); // Call the callback with null to indicate an error occurred.
     }
   );
 
+  // Return a function to unsubscribe from the listener when it's no longer needed.
   return () => off(schoolRef, 'value', unsubscribe);
-}
-
-/**
- * Updates a specific field in the school directions for a given school.
- * @param schoolName The name of the school.
- * @param field The specific field to update.
- * @param value The new value for the field.
- * @returns A promise resolving to true if the update is successful, otherwise null.
- */
-export async function updateSchoolDirections(
-  schoolName: string,
-  field: string,
-  value: string
-): Promise<boolean | null> {
-  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
-  try {
-    await set(schoolRef, value);
-    return true;
-  } catch (error) {
-    console.error('Error updating school directions: ', error);
-    return null;
-  }
-}
-
-/**
- * Adds a mission entry to the Firebase database.
- * @param entry The mission entry to add.
- * @returns A promise resolving to true if the addition is successful, otherwise null.
- */
-export async function addMissionEntry(entry: Entry): Promise<boolean | null> {
-  try {
-    const newEntryRef = push(ref(database, 'missions'));
-    await set(newEntryRef, entry);
-    return true;
-  } catch (error) {
-    console.error('Error adding mission entry: ', error);
-    return null;
-  }
 }
 
 /**

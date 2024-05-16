@@ -13,11 +13,12 @@ const MissionScreen: React.FC = () => {
   useEffect(() => {
     const fetchEntries = async () => {
       const fetchedEntries = await getMissionEntries();
-      if (fetchedEntries) {
+      try {
         setEntries(fetchedEntries);
+      } catch (error) {
+        console.error('Failed to fetch mission entries:', error);
       }
     };
-
     fetchEntries();
   }, []);
 
