@@ -1,6 +1,9 @@
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { TIPS_INFO } from './data/TipsInfo';
+import EditText from './components/EditText';
+import { addNewTip, listenToTips, updateTipsInfo } from './firebase/util';
 import LightbulbIcon from './icons/LightbulbIcon';
 
 const screenHeight = Dimensions.get('window').height;
@@ -12,34 +15,102 @@ const TipsHeader = ({ schoolName }: { schoolName: string }) => (
   </View>
 );
 
-const TipsDetails = ({ schoolName }: { schoolName: string }) => {
-  const tipArray = []; //create new array to keep track of which tips are from the school
+export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
+  const [tipArray, setTipArray] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [edit, setEdit] = useState(false);
+  const [newTipContent, setNewTipContent] = useState('');
 
-  console.log(schoolName);
-
-  // loops over TIPS_INFO object and pulls which key:value pairs coordinate to the relevant school
-  for (const key in TIPS_INFO) {
-    const value = TIPS_INFO[key];
-    if (value.site === schoolName) {
-      tipArray.push(value);
+  // Function to handle saving updated tips
+  const handleSave = async (schoolName: string, value: string, index: number) => {
+    try {
+      await updateTipsInfo(schoolName, value, index);
+    } catch (error) {
+      console.error('Failed to update school tips', error);
+      setError('Failed to update school tips. Please try again later.');
     }
+  };
+
+  // Function to handle adding new tip
+  const handleAddTip = async () => {
+    try {
+      await addNewTip(schoolName, { content: newTipContent });
+      console.log('New tip added successfully');
+      // Clear the input field after adding the new tip
+      setNewTipContent('');
+    } catch (error) {
+      console.error('Failed to add new tip: ', error);
+      // Handle error
+    }
+  };
+
+  // Effect to listen to real-time updates for school directions
+  useEffect(() => {
+    const unsubscribe = listenToTips(schoolName, (tips) => {
+      if (tips) {
+        setTipArray(tips);
+      } else {
+        setError('No tips available for this school.');
+      }
+      setIsLoading(false);
+    });
+
+    // Clean up listener on component unmount or when schoolName changes
+    return () => unsubscribe();
+  }, [schoolName]);
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+  if (error) {
+    return <Text>{error}</Text>;
   }
 
-  // Rendering the header and a list of tips
-
   return (
-    <ScrollView contentContainerStyle={style.scrollViewContentContainer}>
-      <Text style={style.title}>Tips!</Text>
-      <TipsHeader schoolName={schoolName} />
-      <View style={style.section}>
-        {tipArray.map((tip) => (
-          <View style={style.standoutText}>
-            <LightbulbIcon />
-            <Text style={style.text}>{tip.content} </Text>
-          </View>
-        ))}
-      </View>
-    </ScrollView>
+    <View>
+      <ScrollView contentContainerStyle={style.scrollViewContentContainer}>
+        <Text style={style.title}>Tips!</Text>
+        <TipsHeader schoolName={schoolName} />
+        <View style={style.section}>
+          {tipArray.map((tip, index) => (
+            <View key={index} style={style.standoutText}>
+              <LightbulbIcon />
+              <EditText
+                value={tip.content}
+                onSave={(newValue) => handleSave(schoolName, newValue, index)}
+                edit={edit}
+                setEdit={setEdit}
+                display="tips"
+              />
+            </View>
+          ))}
+          {/* Input field for adding a new tip */}
+          <TextInput
+            style={style.input}
+            placeholder="Add a new tip"
+            value={newTipContent}
+            onChangeText={(text) => setNewTipContent(text)}
+          />
+          {/* Button to add the new tip */}
+          <Pressable style={style.addButton} onPress={handleAddTip}>
+            <Text style={style.addButtonText}>Add Tip</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+      {!edit && (
+        <Pressable
+          style={({ pressed }) => [
+            {
+              backgroundColor: pressed ? '#0056b3' : '#007AFF',
+            },
+            style.button,
+          ]}
+          onPress={() => setEdit(!edit)}>
+          <Icon name="edit" size={30} color="white" />
+        </Pressable>
+      )}
+    </View>
   );
 };
 
@@ -71,20 +142,6 @@ const style = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
   },
-
-  text: {
-    fontSize: 15,
-    color: 'black',
-    padding: 10,
-    margin: 5,
-    width: '85%',
-    fontWeight: 'condensedBold',
-  },
-
-  icon: {
-    marginTop: 5,
-  },
-
   title: {
     fontSize: 28,
     color: '#34B3C2',
@@ -99,8 +156,6 @@ const style = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 20,
     padding: 5,
-    // backgroundColor: 'rgba(255, 228, 181, 0.2)',
-    // marginBottom: 10,
   },
   headerContainer: {
     borderRadius: 20,
@@ -111,5 +166,35 @@ const style = StyleSheet.create({
     marginRight: 20,
     alignItems: 'center',
     width: '85%',
+  },
+  button: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    backgroundColor: 'black',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: 'gray',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  addButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });

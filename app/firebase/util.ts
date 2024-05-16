@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, off, onValue, ref, set } from 'firebase/database';
+import { get, off, onValue, ref, set, push } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -100,5 +100,68 @@ async function updateSchoolDirections(schoolName: string, field: string, value: 
   }
 }
 
+function listenToTips(schoolName: string, callback: (tips: string[]) => void) {
+  // Generate a database reference specifically targeting the tips for the requested school.
+  const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
+
+  // Attach a listener to get real-time updates.
+  const unsubscribe = onValue(
+    tipsRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        // If data exists, call the callback with the array of tips.
+        const tipsData = snapshot.val();
+        const tips = Object.keys(tipsData).map((key) => tipsData[key]);
+        callback(tips);
+      } else {
+        console.log('No tips available for:', schoolName);
+        callback([]); // Call the callback with an empty array if no tips are found.
+      }
+    },
+    (error) => {
+      console.error('Error fetching tips:', error);
+      callback([]); // Call the callback with an empty array to indicate an error occurred.
+    }
+  );
+
+  // Return a function to unsubscribe from the listener when it's no longer needed.
+  return () => off(tipsRef, 'value', unsubscribe);
+}
+
+// Save function for tips details
+async function updateTipsInfo(schoolName: string, tips: any[], index: number) {
+  const tipsRef = ref(database, `/TipsInfo/${schoolName}/${index}`);
+  try {
+    // Set the tip at the specified index
+    set(tipsRef, tips);
+    return true;
+  } catch (error) {
+    console.error('Error updating school tips: ', error);
+    return null;
+  }
+}
+
+async function addNewTip(schoolName: string, newTip: any) {
+  const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
+  try {
+    // Push the new tip to the array
+    const newTipRef = push(tipsRef);
+    // Set the value of the new tip
+    await set(newTipRef, newTip);
+    return true;
+  } catch (error) {
+    console.error('Error adding new tip: ', error);
+    return null;
+  }
+}
+
+
 // Export the functions for use in other parts of the application.
-export { getSchoolList, listenToSchoolDirections, updateSchoolDirections };
+export {
+  getSchoolList,
+  listenToSchoolDirections,
+  updateSchoolDirections,
+  listenToTips,
+  updateTipsInfo,
+  addNewTip
+};

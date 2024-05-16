@@ -1,0 +1,216 @@
+{
+  "SchoolDirections": {
+    "Dewey Elementary School": {
+      "address": "1551 Wesley Ave, Evanston, IL 60201",
+      "driving": "There is no parking lot so if you are driving there is street parking near the school.",
+      "geoLat": "42.046142838456795",
+      "geoLong": "-87.69150908049619",
+      "schoolName": "Dewey Elementary School",
+      "specifics": "ENTER THE BUILDING THROUGH DOOR 4 ON WESLEY AVE. There is a silver buzzer on the right side of the door, please ring it and say you’re here for Books and Breakfast. Once you have entered the building turn left and go up the stairs and through doors and you will arrive at the multipurpose room!"
+    },
+    "Haven Middle School": {
+      "address": "2417 Prairie Ave, Evanston, IL 60201",
+      "geoLat": "42.06158542233899",
+      "geoLong": "-87.69825834361463",
+      "publicTransport": "You can take the 201 Central CTA bus from campus to the corner of Green Bay Rd and Lincoln St. Once you get off the bus, cross the street and walk down Lincoln to Prairie Ave and turn left.",
+      "schoolName": "Haven Middle School",
+      "specifics": "You will enter the building through the main office located on Prairie Avenue. You will need to stop by the Haven office to sign in before coming down to room AA10. Once you exit the main office, go left until you reach the first hallway, then turn right. Keep walking down the hallway until you see the Art Wing sign. Go through the double entrance and the first room on the right is AA10!"
+    },
+    "Kingsley Elementary School": {
+      "address": "2300 Green Bay Rd, Evanston, IL 60201",
+      "contact": "(312)927-1169",
+      "driving": "Please pull into the parking lot and park anywhere that is not reserved",
+      "geoLat": "42.06029083267393",
+      "geoLong": "-87.69609852376988",
+      "schoolName": "Kingsley Elementary School",
+      "specifics": "To enter into the school building, please enter through door NUMBER ONE by ringing the doorbell. OR call (312) 927-1169 to be let into the building"
+    },
+    "Lincoln Elementary School": {
+      "address": "910 Forest Ave, Evanston, IL 60202",
+      "driving": "If you are driving, you will need to find street parking.",
+      "geoLat": "42.03418264201512",
+      "geoLong": "-87.67562534273824",
+      "schoolName": "Lincoln Elementary School",
+      "specifics": "Please ring the doorbell at entrance A1-off the playground on Main St."
+    },
+    "Lincolnwood Elementary School": {
+      "address": "2600 Colfax St, Evanston, IL 60201",
+      "contact": "Tricia:(847)687-8469, Miranda:(708)673-4374",
+      "driving": "You can park on the streets, but please pay attention to the street signage.",
+      "geoLat": "42.06023940294461",
+      "geoLong": "-87.7093222693812",
+      "schoolName": "Lincolnwood Elementary School",
+      "specifics": "Please enter through Door 3 through the courtyard on the East side of the building, off McDaniel. There is a sign for the Gym over the door. The daily program is held in the Gym."
+    },
+    "Walker Elementary School": {
+      "address": "3601 Church St, Skokie, IL 60076",
+      "contact": "(773)988-1681",
+      "driving": "When you arrive at the school, you may park at the front of the building and enter through door 1, or you may park in the parking lot at the back of the building and enter through door 3.",
+      "geoLat": "42.04752291137184",
+      "geoLong": "-87.71911821724765",
+      "schoolName": "Walker Elementary School",
+      "specifics": "The program starts at 8 am Monday through Friday and tutors normally arrive between 7:50-7:55 am. Enter through DOOR 1 (main entrance) or DOOR 3 (next to the playground). There is a doorbell at each entrance for childcare that we are allowed to use. The program takes place in the school gym. Please feel free to call if you need help entering the building."
+    },
+    "Washington Elementary School": {
+      "address": "914 Ashland Ave, Evanston, IL 60201",
+      "driving": "If you are driving, there is some street parking available on Ashland Ave north of the front of the building, or on Lee St. behind the school. PLEASE DO NOT PARK IN THE SCHOOL PARKING LOT.",
+      "geoLat": "42.03524177565056",
+      "geoLong": "-87.69353514262588",
+      "schoolName": "Washington Elementary School",
+      "specifics": "The new room is accessible at Door 31. This door is to the RIGHT of the MAIN OFFICE, between Doors 30 and 34, just right of the shed. Look for the B&B logo on the door and ring the doorbell."
+    },
+    "Willard Elementary School": {
+      "address": "2700 Hurd Ave., Evanston, IL 60201",
+      "driving": "If you are driving, you can park on Hurd Ave. or on Central Park Ave. (*pay attention to the signs for street cleaning).",
+      "geoLat": "42.06653207492189",
+      "geoLong": "-87.71703059565027",
+      "publicTransport": "For public transportation, you can take the 201 CTA BUS (going down Central St. to Old Orchard) from NU campus to Lincolnwood Ave., then walk 1 block west to Hurd, then go right 1.5 blocks to Park Pl. to find door #4.",
+      "schoolName": "Willard Elementary School",
+      "specifics": "All volunteers will enter the building using door #4, off of Park Place (at Hurd). The door will be unlocked, but if you have any issue send a text message to Juan using the number you will find on a B&B sign at door #4."
+    }
+  },
+  "missions": [
+    {
+      "body": " ",
+      "missionCenter": "\"Books & Breakfast is a before-school program offering a healthy breakfast and homework help to students in need of additional support. B&B exists so that every student enters his or her classroom physically, emotionally, and academically prepared. Our mission is to advance educational equity in Evanston schools.\"",
+      "title": "The Mission"
+    },
+    {
+      "body": "Every part of the B&B experience should highlight relationships (welcome, breakfast, homework, games, clean up and dismissal). We want students to experience the refrain, \"You are important. You are valuable\" in our words, demeanor, and actions. We build community and connection every day.\n",
+      "body1": "The goal of B&B is to help students be prepared for the next 6-7 hours of the day. If kids enter the classroom ready physically, emotionally, and academically, daily learning has a greater impact.\n",
+      "body2": "What you believe about yourself as a student and what you believe about your connection to your academic community. \"I belong in this academic community.\" \"My ability and competence grow with my effort.\" \"I can succeed at this.\" \"This work has value for me.\"\n",
+      "subtitle": "Relationships:",
+      "subtitle1": "Daily School Readiness:",
+      "subtitle2": "Academic Mindset:",
+      "title": "Primary Strategies"
+    },
+    {
+      "body": "A good friend wants to know the other person. A good friend asks questions about the other person's life, family, likes, and dislikes. Take time to build trust and connection.\n",
+      "body1": "Pour courage into your students, be positive, call out the good stuff, communicate that you believe in them.\n",
+      "body2": "We ask for strong effort and for each student to do their best work. We believe students can succeed. We support and train all the way.\n",
+      "body3": "The goal is for the student to drive, keeping them safe emotionally in mastering a difficult task. Students need to learn to drive themselves!\n",
+      "body4": "We are learning together! It's okay if you don't know an answer or how to help. We encourage asking for help and see it as a chance to model that for children.\n",
+      "subtitle": "Friend:",
+      "subtitle1": "Cheerleader (EnCOURAGE):",
+      "subtitle2": "Coach:",
+      "subtitle3": "Driver’s Education Teacher:",
+      "subtitle4": "Learner:",
+      "title": "Your Role"
+    },
+    {
+      "body": "Directs volunteer efforts, makes tutor matches, builds community, sets the tone, handles the challenges, and provides ongoing support to tutors.\n",
+      "body1": "Builds relationships with students and families.\n",
+      "body2": "Work closely with teachers, the principal, the school staff and the PTA.\n",
+      "body3": "Collecting Evanston Resources to B&B Families and Schools.\n",
+      "subtitle": "Daily Program Manager:",
+      "subtitle1": "Family and Student Connector:",
+      "subtitle2": "District 65 Partner:",
+      "subtitle3": "Student and Family Advocate:",
+      "title": "Site Director Role"
+    },
+    {
+      "body": "Every student will begin the day with a healthy meal so they have the fuel they need to do their best as learners.\n",
+      "body1": "We will create a positive, personal and welcoming environment so that children feel safe, known and cared for.\n",
+      "body2": "We will focus primarily on homework support so that every student can start the day prepared and ready. We will also provide additional support according to teacher requests.\n",
+      "subtitle": "Physically (Body):",
+      "subtitle1": "Emotionally (Heart):",
+      "subtitle2": "Academically (Mind):",
+      "title": "The Mission"
+    }
+  ],
+  "resources": {
+    "groupMeURL": "https://groupme.com/join_group/58634493/LJyTEs7U",
+    "trackerURL": "https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit"
+  },
+
+  "TipsInfo": {
+    "Dewey Elementary School": [
+      {
+        "site": "Dewey Elementary School",
+        "content": "you can take the 201 (and get a free Ventra card through nu) to the ridge/davis stop! \nhttps://www.northwestern.edu/transportation-parking/shuttles/routes/cta-201.html"
+      },
+      {
+        "site": "Dewey Elementary School",
+        "content": "The 201 bus doesn't come at the best times, but it is the most convenient bus.\nBiking is great and there are lots of bike lanes; a lot of people walk to get there too. \nWhen you get there, sit and chat with other tutors or students there and wait for everyone to arrive-- students get called up individually for breakfast; so there is no real breakfast eating period. 'Break the Ice' is a chaotic game whose sole object is to break things. Puzzles and drawing are popular!"
+      }
+    ],
+    "Haven Middle School": [
+      {
+        "site": "Haven Middle School",
+        "content": "No tips yet..."
+      }
+    ],
+    "Kingsley Elementary School": [
+      {
+        "site": "Kingsley Elementary School",
+        "content": "How to get there: most of the tutors walk. \nYou can also take the 201 (free w/ nu ventra card, but not always the most reliable timing-wise, prob better to take it back to campus than there)"
+      },
+      {
+        "site": "Kingsley Elementary School",
+        "content": "first time @ kingsley: press the button by the door to be let in. \nIf it's not working or it doesn't look like anyone's in the main office, u can call site director precious (312-927-1169)"
+      },
+      {
+        "site": "Kingsley Elementary School",
+        "content": "remind kiddos to put a sticker on the sticker chart after brain work! they're often so excited about games they forget"
+      },
+      {
+        "site": "Kingsley Elementary School",
+        "content": "fridays are usually free days for them (no brain work), precious brings in prizes"
+      },
+      {
+        "site": "Kingsley Elementary School",
+        "content": "don't forget to fill out the brain work tracker at the end of each day!"
+      },
+      {
+        "site": "Kingsley Elementary School",
+        "content": "(unrelated to b&b) but if u have time after, central street is so underrated (highly rec hewn & backlot coffee for a lil sweet treat)"
+      },
+      {
+        "site": "Kingsley Elementary School",
+        "content": "to break down the room after b&b: \n\t- games: go in the black closet outside (basically games pt 2 playing tetris to make everything fit)\n\t- blue bins: stack on top of cabinet next to games closet \n\t- book cart: cover with cloth, by sticker chart in front\n\t- chairs: stack in front right corner of room, but leave 2 at every table facing front of room\n\t- tables: should be 3 x 5 (i think?), one gets taken down + put in front by chairs, ones in the back get rotated, align back row with the ac groove >> then wipe it all down"
+      }
+    ],
+    "Lincoln Elementary School": [
+      {
+        "site": "Lincoln Elementary School",
+        "content": "The entrance is tucked away, past the playgrounds and near the garden beds. \nYou will see a corner of the school that is just windows, that's where you're headed! Our program is in a library which makes the space a bit more chill. \nWe have a very multicultural group due to the area the school is in. \nThe best way to get there is to take the shuttle, though you will have to be earlier than needed. The purple line also works, but isn't free!"
+      }
+    ],
+    "Lincolnwood Elementary School": [
+      {
+        "site": "Lincolnwood Elementary School",
+        "content": "It’s in a gym which means there’s a lot of open space for the kids to run around so it’s a bit chaotic"
+      }
+    ],
+    "Walker Elementary School": [
+      {
+        "site": "Walker Elementary School",
+        "content": "Tutors at walker uber there in the mornings (the only site allowed for this since it would be unreasonable to get there via public transportation).\nThis involves meeting somewhere on campus around 7:40am to travel with the group. \nDepending on the day of the week, we may ride back with community volunteers or Uber back to campus. \nWe have to clean up the gym after session time so we usually finish around 9:05."
+      },
+      {
+        "site": "Walker Elementary School",
+        "content": "Walker has a lot of siblings and cousins / otherwise related kiddos so it’s important to know that family dynamics often play into the morning"
+      },
+      {
+        "site": "Walker Elementary School",
+        "content": "Fridays we have the art teacher \nMs. Sam and we usually play basketball Fridays too. \nMost kids will try to get around reading in their various creative ways so we sometimes need to insist on getting the brainwork done but after focusing them in it’s not usually an issue."
+      },
+      {
+        "site": "Walker Elementary School",
+        "content": "don't be afraid to communicate with Nimrah and the other tutors, everyone is super nice and wants to help out! \ndon't be discouraged if it takes a while to build connections with the kids, the more you show up the more they'll be comfortable with you and excited to see you!"
+      }
+    ],
+    "Washington Elementary School": [
+      {
+        "site": "Washington Elementary School",
+        "content": "Show up early! Kids start arriving usually around 7:50am. \nBe flexible! You may be working with multiple kids at once and/or have to help another student after one you were working with finishes brainwork. \nAfter b+b you have to walk through the school to the office (the first time you come, you need to show the office your ID)."
+      }
+    ],
+    "Willard Elementary School": [
+      {
+        "site": "Willard Elementary School",
+        "content": "Don’t be afraid to exert warm commands, acknowledge and validate a child’s emotions"
+      }
+    ]
+  }
+}
