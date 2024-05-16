@@ -13,13 +13,13 @@ import {
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import ScreenWrapper from './ScreenWrapper';
-import { SchoolKeyPair, getSchoolList } from './firebase/util';
+import { ResourceURLs, SchoolKeyPair, getResourceURLs, getSchoolList } from './firebase/util';
 import ClockIcon from './icons/ClockIcon';
 import GroupMeIcon from './icons/GroupMeIcon';
 import MapIcon from './icons/MapIcon';
 import TipsIcon from './icons/TipsIcon';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // Button configuration for smaller action buttons
 const SMALLBUTTONS = [
@@ -42,12 +42,29 @@ function HomeScreen() {
   const [selected, setSelected] = useState<string>('');
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
+  const [resourceURLs, setResourceURLs] = useState<ResourceURLs | null>(null);
+
+  // Fetch resource URLs from Firebase
+  useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook to fetch the resource URLs.
+    const fetchResourceURLs = async () => {
+      const urls = await getResourceURLs();
+      try {
+        setResourceURLs(urls);
+      } catch (error) {
+        // If an error occurs during fetching, log it to the console.
+        console.error('Failed to fetch urls:', error);
+      }
+    };
+    fetchResourceURLs();
+  }, []);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
     setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [selected]);
 
+  // Fetch school list from Firebase
   useEffect(() => {
     // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
     const fetchSchools = async () => {
@@ -63,8 +80,6 @@ function HomeScreen() {
       }
     };
 
-    // Call the fetchSchools function defined above to execute the fetching process.
-    // This function is called right after the component mounts due to the empty dependency array.
     fetchSchools();
   }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
@@ -79,17 +94,18 @@ function HomeScreen() {
         }
       },
       2: () => {
-        attemptOpenURL(
-          'https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit',
-          'Sorry, it looks like the Tracker cannot be opened'
-        );
+        if (resourceURLs.trackerURL) {
+          attemptOpenURL(
+            resourceURLs.trackerURL,
+            'Sorry, it looks like the Tracker cannot be opened'
+          );
+        }
       },
       3: () => navigation.navigate('Tips'),
       4: () => {
-        attemptOpenURL(
-          'https://groupme.com/join_group/58634493/LJyTEs7U',
-          'Sorry, it looks like GroupMe cannot be opened.'
-        );
+        if (resourceURLs.groupMeURL) {
+          attemptOpenURL(resourceURLs.groupMeURL, 'Sorry, it looks like GroupMe cannot be opened.');
+        }
       },
       5: () => navigation.navigate('Mission'),
     };
@@ -183,7 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#36afbc',
-    textAlign: 'left', // Align text to the left within the Text component
+    textAlign: 'left',
     paddingLeft: layoutConstants.subtitlePaddingLeft,
   },
   bigButton: {
@@ -208,9 +224,9 @@ const styles = StyleSheet.create({
     color: '#36afbc',
   },
   buttonIcon: {
-    width: 50, // Adjust size as needed
-    height: 50, // Adjust size as needed
-    marginBottom: 14, // Space between the icon and text
+    width: 50,
+    height: 50,
+    marginBottom: 14,
   },
   logo: {
     width: 300,

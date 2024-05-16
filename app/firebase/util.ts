@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, off, onValue, ref, set } from 'firebase/database';
+import { child, get, off, onValue, ref } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -23,36 +23,55 @@ export interface SchoolDirections {
   geoLong?: string;
 }
 
+// TypeScript interface for mission entries
+export interface Entry {
+  title: string;
+  missionCenter?: string;
+  subtitle?: string;
+  body: string;
+  subtitle1?: string;
+  body1?: string;
+  subtitle2?: string;
+  body2?: string;
+  subtitle3?: string;
+  body3?: string;
+  subtitle4?: string;
+  body4?: string;
+  link?: string;
+}
+
+export interface ResourceURLs {
+  trackerURL: string;
+  groupMeURL: string;
+}
+
 /**
  * Fetches a list of schools from Firebase database.
  * Each school is returned as a key-value pair with the school's key and its name.
  * @returns A promise resolving to an array of SchoolKeyPair objects or null if no data is found.
  */
-
-async function getSchoolList() {
-  // Create a reference to the SchoolDirections node in Firebase database.
-  return get(ref(database, '/SchoolDirections'))
-    .then((snapshot) => {
-      // Check if the snapshot contains any data.
-      if (snapshot.exists()) {
-        // Extract the data from the snapshot.
-        const data = snapshot.val();
-        // Use Object.keys to get all school keys and map them to key-value pairs.
-        const schools = Object.keys(data);
-        const schoolOptions = schools.map((school) => ({
-          key: school,
-          value: school,
-        }));
-        return schoolOptions;
-      } else {
-        console.log('No data available');
-        return null; // Return null to indicate no data was found.
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching school list:', error);
-      return null; // Return null to indicate an error occurred during the fetch.
-    });
+export async function getSchoolList(): Promise<SchoolKeyPair[] | null> {
+  try {
+    const snapshot = await get(ref(database, '/SchoolDirections'));
+    // Check if the snapshot contains any data.
+    if (snapshot.exists()) {
+      // Extract the data from the snapshot.
+      const data = snapshot.val();
+      // Use Object.keys to get all school keys and map them to key-value pairs.
+      const schools = Object.keys(data);
+      const schoolOptions = schools.map((school) => ({
+        key: school,
+        value: school,
+      }));
+      return schoolOptions;
+    } else {
+      console.log('No data available');
+      return null; // Return null to indicate no data was found.
+    }
+  } catch (error) {
+    console.error('Error fetching school list:', error);
+    return null; // Return null to indicate an error occurred during the fetch.
+  }
 }
 
 /**
@@ -61,8 +80,10 @@ async function getSchoolList() {
  * @param callback The function to call with the updated data.
  * @returns A function to unsubscribe from the real-time updates.
  */
-function listenToSchoolDirections(schoolName, callback) {
-  // Generate a database reference specifically targeting the requested school's directions.
+export function listenToSchoolDirections(
+  schoolName: string,
+  callback: (data: SchoolDirections | null) => void
+): () => void {
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}`);
 
   // Attach a listener to get real-time updates.
@@ -87,18 +108,68 @@ function listenToSchoolDirections(schoolName, callback) {
   return () => off(schoolRef, 'value', unsubscribe);
 }
 
-// Save function for school transportation details
-async function updateSchoolDirections(schoolName: string, field: string, value: string) {
-  // Generate a database reference specifically targeting the requested school's directions.
-  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
+/**
+ * Fetches all mission entries from the Firebase database.
+ * @returns A promise resolving to an array of Entry objects or null if no data is found.
+ */
+export async function getMissionEntries(): Promise<Entry[] | null> {
   try {
-    set(schoolRef, value);
-    return true;
+    const snapshot = await get(child(ref(database), 'missions'));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
+      return missionEntries;
+    } else {
+      console.log('No data available');
+      return null;
+    }
   } catch (error) {
-    console.error('Error updating school directions: ', error);
+    console.error('Error fetching mission entries:', error);
     return null;
   }
 }
 
-// Export the functions for use in other parts of the application.
-export { getSchoolList, listenToSchoolDirections, updateSchoolDirections };
+// Function to fetch resource URLs from Firebase
+export const getResourceURLs = async (): Promise<ResourceURLs | null> => {
+  try {
+    const snapshot = await get(child(ref(database), 'resources'));
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log('No resource data available');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching resource URLs:', error);
+    return null;
+  }
+};
+
+/**
+ * Listens for updates to mission entries in the Firebase database.
+ * @param callback The function to call with the updated data.
+ * @returns A function to unsubscribe from the real-time updates.
+ */
+export function listenToMissionEntries(callback: (data: Entry[] | null) => void): () => void {
+  const missionsRef = ref(database, 'missions');
+
+  const unsubscribe = onValue(
+    missionsRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
+        callback(missionEntries);
+      } else {
+        console.log('No mission entries available');
+        callback(null);
+      }
+    },
+    (error) => {
+      console.error('Error fetching mission entries:', error);
+      callback(null);
+    }
+  );
+
+  return () => off(missionsRef, 'value', unsubscribe);
+}
