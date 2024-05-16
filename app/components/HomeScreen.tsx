@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Dimensions,
@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import Context from './Context';
 
 import { SchoolKeyPair, getSchoolList } from '../firebase/util';
 import ClockIcon from '../icons/ClockIcon';
@@ -40,14 +41,14 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 
 function HomeScreen() {
   const navigation = useNavigation<any>();
-  const [selected, setSelected] = useState<string>('');
+  const { schoolName, setSchoolName } = useContext(Context);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
-    setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
-  }, [selected]);
+    setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
+  }, [schoolName]);
 
   useEffect(() => {
     // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
@@ -73,10 +74,10 @@ function HomeScreen() {
   const handleButtonPress = (buttonIndex: number) => {
     const actions = {
       1: () => {
-        if (!selected) {
+        if (!schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Navigation', { schoolName: selected });
+          navigation.navigate('Navigation', { schoolName: schoolName });
         }
       },
       2: () => {
@@ -111,7 +112,7 @@ function HomeScreen() {
         </View>
         <View style={styles.dropdownContainer}>
           <SelectList
-            setSelected={(val: string) => setSelected(val)}
+            setSelected={(val: string) => setSchoolName(val)}
             data={schoolOptions}
             inputStyles={styles.selectInput}
             save="value"
