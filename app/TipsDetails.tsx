@@ -20,7 +20,7 @@ const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   // loops over TIPS_INFO object and pulls which key:value pairs coordinate to the relevant school
   for (const key in TIPS_INFO) {
     const value = TIPS_INFO[key];
-    if (value.site == schoolName) {
+    if (value.site === schoolName) {
       tipArray.push(value);
     }
   }

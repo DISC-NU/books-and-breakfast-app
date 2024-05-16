@@ -214,11 +214,6 @@ const styles = StyleSheet.create({
     width: '81%',
     color: '#36afbc',
   },
-  selectInput: {
-    fontSize: 16,
-    width: '81%',
-    color: '#36afbc',
-  },
   buttonIcon: {
     width: 50, // Adjust size as needed
     height: 50, // Adjust size as needed

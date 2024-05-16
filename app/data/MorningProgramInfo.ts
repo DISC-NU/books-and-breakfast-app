@@ -89,6 +89,7 @@ const Extras: MorningProgram = {
 // import in morning program file
 export const MORNING_PROGRAM_INFO: MorningProgramDictionary = {
   beforeBB: BeforeBB,
+  breakfastTables: BreakfastTables,
   brainWork: BrainWorkTables,
   games: GamesArtTables,
   cleanUp: CleanUp,
