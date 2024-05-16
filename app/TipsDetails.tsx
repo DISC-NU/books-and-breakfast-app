@@ -9,12 +9,6 @@ import LightbulbIcon from './icons/LightbulbIcon';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const TipsHeader = ({ schoolName }: { schoolName: string }) => (
-  <View style={style.headerContainer}>
-    <Text style={style.header}>{schoolName}</Text>
-  </View>
-);
-
 export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   const [tipArray, setTipArray] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,11 +65,12 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
     <View>
       <ScrollView contentContainerStyle={style.scrollViewContentContainer}>
         <Text style={style.title}>Tips!</Text>
-        <TipsHeader schoolName={schoolName} />
         <View style={style.section}>
           {tipArray.map((tip, index) => (
             <View key={index} style={style.standoutText}>
-              <LightbulbIcon />
+              <View style={style.icon}>
+                <LightbulbIcon />
+              </View>
               <EditText
                 value={tip.content}
                 onSave={(newValue) => handleSave(schoolName, newValue, index)}
@@ -141,6 +136,7 @@ const style = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     flexDirection: 'row',
+    alignItems: 'center', // Ensure items are centered vertically
   },
   title: {
     fontSize: 28,
@@ -149,23 +145,6 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 10,
     marginBottom: 20,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    borderRadius: 20,
-    padding: 5,
-  },
-  headerContainer: {
-    borderRadius: 20,
-    padding: 10,
-    backgroundColor: 'rgba(255, 228, 181, 0.2)',
-    marginBottom: 25,
-    marginLeft: 20,
-    marginRight: 20,
-    alignItems: 'center',
-    width: '85%',
   },
   button: {
     position: 'absolute',
@@ -196,5 +175,9 @@ const style = StyleSheet.create({
   addButtonText: {
     color: '#FFF',
     fontWeight: 'bold',
+  },
+  icon: {
+    marginRight: 5,
+    marginLeft: 5,
   },
 });
