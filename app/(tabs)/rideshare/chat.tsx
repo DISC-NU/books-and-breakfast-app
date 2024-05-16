@@ -2,7 +2,7 @@ import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { onValue, push, ref, serverTimestamp } from 'firebase/database';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import { Bubble, GiftedChat, IMessage } from 'react-native-gifted-chat';
 import Context from '../../components/Context';
 import { database } from '../../firebase/firebaseConfig';
 
@@ -70,14 +70,40 @@ const ChatScreen = () => {
         </View>
       )}
       {schoolName && selectedDate && (
-        <GiftedChat
-          messages={messages} // Messages to be displayed in the chat
-          onSend={(messages) => onSend(messages)} // Function to call when sending messages
-          user={{
-            _id: user.id,
-            name: user.name,
-          }}
-        />
+        <View style={{ backgroundColor: '#ffffff', flex: 1 }}>
+          <GiftedChat
+            messages={messages} // Messages to be displayed in the chat
+            onSend={(messages) => onSend(messages)} // Function to call when sending messages
+            user={{
+              _id: user.id,
+              name: user.name,
+            }}
+            placeholder={'Message'}
+            renderBubble={(props) => {
+              return (
+                <Bubble
+                  {...props}
+                  wrapperStyle={{
+                    left: {
+                      backgroundColor: '#f0f0f0',
+                    },
+                    right: {
+                      backgroundColor: '#36afbc',
+                    },
+                  }}
+                  textStyle={{
+                    left: {
+                      color: '#000',
+                    },
+                    right: {
+                      color: '#fff',
+                    },
+                  }}
+                />
+              );
+            }}
+          />
+        </View>
       )}
     </>
   );
