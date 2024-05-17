@@ -1,25 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import EditText from './components/EditText';
-import { addNewTip, listenToTips, updateTipsInfo } from './firebase/util';
+import { addNewTip, deleteTip, listenToTips, updateTipsInfo } from './firebase/util';
 import LightbulbIcon from './icons/LightbulbIcon';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
-  const [tipArray, setTipArray] = useState<string[]>([]);
+  const [tipArray, setTipArray] = useState<{ content: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
   const [newTipContent, setNewTipContent] = useState('');
 
   // Function to handle saving updated tips
-  const handleSave = async (schoolName: string, value: string, index: number) => {
+  const handleSave = async (schoolName: string, newValue: string, index: number) => {
     try {
-      await updateTipsInfo(schoolName, value, index);
+      // Update the tip in the database
+      await updateTipsInfo(schoolName, newValue, index);
+
+      // Update the local state to reflect the change
+      setTipArray((prevTips) => {
+        const updatedTips = [...prevTips];
+        updatedTips[index].content = newValue;
+        return updatedTips;
+      });
+
+      console.log('Tip updated successfully');
     } catch (error) {
       console.error('Failed to update school tips', error);
       setError('Failed to update school tips. Please try again later.');
@@ -28,18 +48,46 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
 
   // Function to handle adding new tip
   const handleAddTip = async () => {
+    if (newTipContent.length === 0) {
+      Alert.alert('Please enter text for your tip.');
+      return;
+    }
     try {
-      await addNewTip(schoolName, { content: newTipContent });
+      const newTip = { content: newTipContent };
+      console.log(newTip);
+      await addNewTip(schoolName, newTip);
       console.log('New tip added successfully');
+
       // Clear the input field after adding the new tip
       setNewTipContent('');
     } catch (error) {
       console.error('Failed to add new tip: ', error);
-      // Handle error
+      setError('Failed to add new tip. Please try again later.');
     }
   };
 
-  // Effect to listen to real-time updates for school directions
+  // Function to handle deleting a tip
+  const handleDelete = async (index: number) => {
+    try {
+      await deleteTip(schoolName, index);
+      setTipArray((prevTips) => prevTips.filter((_, i) => i !== index));
+      console.log('Tip deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete tip: ', error);
+      setError('Failed to delete tip. Please try again later.');
+    }
+  };
+
+  // Render the delete action
+  const renderRightActions = (index: number) => {
+    return (
+      <Pressable style={style.deleteButton} onPress={() => handleDelete(index)}>
+        <Text style={style.deleteButtonText}>Delete</Text>
+      </Pressable>
+    );
+  };
+
+  // Effect to listen to real-time updates for school tips
   useEffect(() => {
     const unsubscribe = listenToTips(schoolName, (tips) => {
       if (tips) {
@@ -67,18 +115,18 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
         <Text style={style.title}>Tips!</Text>
         <View style={style.section}>
           {tipArray.map((tip, index) => (
-            <View key={index} style={style.standoutText}>
-              <View style={style.icon}>
-                <LightbulbIcon />
+            <Swipeable key={index} renderRightActions={() => renderRightActions(index)}>
+              <View style={style.standoutText}>
+                <LightbulbIcon style={style.icon} />
+                <EditText
+                  value={tip.content}
+                  onSave={(newValue) => handleSave(schoolName, newValue, index)}
+                  edit={edit}
+                  setEdit={setEdit}
+                  display="tips"
+                />
               </View>
-              <EditText
-                value={tip.content}
-                onSave={(newValue) => handleSave(schoolName, newValue, index)}
-                edit={edit}
-                setEdit={setEdit}
-                display="tips"
-              />
-            </View>
+            </Swipeable>
           ))}
           {/* Input field for adding a new tip */}
           <TextInput
@@ -177,7 +225,19 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
   },
   icon: {
-    marginRight: 5,
-    marginLeft: 5,
+    marginRight: 15, // Adjust the spacing as needed
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 80,
+    borderRadius: 15,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

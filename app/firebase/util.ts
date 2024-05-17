@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, off, onValue, ref, set, push } from 'firebase/database';
+import { get, off, onValue, push, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -155,13 +155,51 @@ async function addNewTip(schoolName: string, newTip: any) {
   }
 }
 
+export const deleteTip = async (schoolName, index) => {
+  try {
+    const tipsRef = ref(database, `schools/${schoolName}/tips`);
+
+    // Retrieve the current list of tips
+    const snapshot = await get(tipsRef);
+    const tips = snapshot.val();
+
+    if (tips) {
+      // Convert tips object to an array
+      const tipsArray = Object.entries(tips);
+
+      // Check if the index is within bounds
+      if (index < 0 || index >= tipsArray.length) {
+        throw new Error('Invalid index');
+      }
+
+      // Remove the specified index
+      tipsArray.splice(index, 1);
+
+      // Convert the updated array back to an object with unique keys
+      const updatedTips = tipsArray.reduce((acc, [key, tip], idx) => {
+        acc[key] = tip;
+        return acc;
+      }, {});
+
+      // Update the tips list in the database
+      await set(tipsRef, updatedTips);
+      console.log('Tip deleted successfully');
+    } else {
+      console.error('Tips not found');
+      throw new Error('Tips not found');
+    }
+  } catch (error) {
+    console.error('Error deleting tip: ', error);
+    throw error;
+  }
+};
 
 // Export the functions for use in other parts of the application.
 export {
+  addNewTip,
   getSchoolList,
   listenToSchoolDirections,
-  updateSchoolDirections,
   listenToTips,
+  updateSchoolDirections,
   updateTipsInfo,
-  addNewTip,
 };
