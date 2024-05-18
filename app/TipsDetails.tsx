@@ -61,8 +61,7 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       const newTipID = newTipRef.key;
       console.log('New tip added successfully with ID:', newTipID);
 
-      // Add the new tip to the local state
-      setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
+      //setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
 
       // Clear the input field after adding the new tip
       setNewTipContent('');

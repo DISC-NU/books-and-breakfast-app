@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, off, onValue, push, ref, remove, set } from 'firebase/database';
+import { get, off, onValue, push, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -28,23 +28,6 @@ export interface SchoolDirections {
  * Each school is returned as a key-value pair with the school's key and its name.
  * @returns A promise resolving to an array of SchoolKeyPair objects or null if no data is found.
  */
-
-const migrateTipsToFirebaseIDs = async (schoolName) => {
-  const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
-  const snapshot = await get(tipsRef);
-  if (snapshot.exists()) {
-    const tips = snapshot.val();
-    for (const key in tips) {
-      if (!key.startsWith('-')) {
-        // Check if the key is numeric
-        const newTipRef = push(tipsRef);
-        await set(newTipRef, tips[key]); // Create new tip with Firebase-generated ID
-        await remove(ref(database, `/TipsInfo/${schoolName}/${key}`)); // Remove old tip
-      }
-    }
-  }
-};
-
 async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
   return get(ref(database, '/SchoolDirections'))
@@ -116,10 +99,9 @@ async function updateSchoolDirections(schoolName: string, field: string, value: 
   }
 }
 
-function listenToTips(schoolName: string, callback: (tips: string[]) => void) {
+export const listenToTips = (schoolName: string, callback: (tips: any[]) => void) => {
   // Generate a database reference specifically targeting the tips for the requested school.
   const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
-  migrateTipsToFirebaseIDs(schoolName);
 
   // Attach a listener to get real-time updates.
   const unsubscribe = onValue(
@@ -128,7 +110,10 @@ function listenToTips(schoolName: string, callback: (tips: string[]) => void) {
       if (snapshot.exists()) {
         // If data exists, call the callback with the array of tips.
         const tipsData = snapshot.val();
-        const tips = Object.keys(tipsData).map((key) => tipsData[key]);
+        const tips = Object.keys(tipsData).map((key) => ({
+          id: key,
+          content: tipsData[key].content,
+        }));
         callback(tips);
       } else {
         console.log('No tips available for:', schoolName);
@@ -143,7 +128,7 @@ function listenToTips(schoolName: string, callback: (tips: string[]) => void) {
 
   // Return a function to unsubscribe from the listener when it's no longer needed.
   return () => off(tipsRef, 'value', unsubscribe);
-}
+};
 
 // Save function for tips details
 async function updateTipsInfo(schoolName: string, tips: string, index: string) {
@@ -185,10 +170,4 @@ export const deleteTip = async (schoolName: string, tipID: string) => {
   }
 };
 // Export the functions for use in other parts of the application.
-export {
-  getSchoolList,
-  listenToSchoolDirections,
-  listenToTips,
-  updateSchoolDirections,
-  updateTipsInfo,
-};
+export { getSchoolList, listenToSchoolDirections, updateSchoolDirections, updateTipsInfo };
