@@ -20,24 +20,22 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
-  const [tipArray, setTipArray] = useState<{ content: string }[]>([]);
+  const [tipArray, setTipArray] = useState<{ id: string; content: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [edit, setEdit] = useState(false);
   const [newTipContent, setNewTipContent] = useState('');
 
   // Function to handle saving updated tips
-  const handleSave = async (schoolName: string, newValue: string, index: number) => {
+  const handleSave = async (schoolName: string, newValue: string, tipID: string) => {
     try {
       // Update the tip in the database
-      await updateTipsInfo(schoolName, newValue, index);
+      await updateTipsInfo(schoolName, newValue, tipID);
 
       // Update the local state to reflect the change
-      setTipArray((prevTips) => {
-        const updatedTips = [...prevTips];
-        updatedTips[index].content = newValue;
-        return updatedTips;
-      });
+      setTipArray((prevTips) =>
+        prevTips.map((tip) => (tip.id === tipID ? { ...tip, content: newValue } : tip))
+      );
 
       console.log('Tip updated successfully');
     } catch (error) {
@@ -54,34 +52,43 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
     }
     try {
       const newTip = { content: newTipContent };
-      console.log(newTip);
-      await addNewTip(schoolName, newTip);
-      console.log('New tip added successfully');
+      console.log('Adding new tip:', newTip);
+
+      // Generate a new reference with a unique key
+      const newTipRef = await addNewTip(schoolName, newTip);
+
+      // Capture the unique key
+      const newTipID = newTipRef.key;
+      console.log('New tip added successfully with ID:', newTipID);
+
+      // Add the new tip to the local state
+      setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
 
       // Clear the input field after adding the new tip
       setNewTipContent('');
     } catch (error) {
-      console.error('Failed to add new tip: ', error);
+      console.error('Failed to add new tip:', error);
       setError('Failed to add new tip. Please try again later.');
     }
   };
 
   // Function to handle deleting a tip
-  const handleDelete = async (index: number) => {
+  const handleDelete = async (tipID: string) => {
     try {
-      await deleteTip(schoolName, index);
-      setTipArray((prevTips) => prevTips.filter((_, i) => i !== index));
-      console.log('Tip deleted successfully');
+      console.log('Attempting to delete tip with ID:', tipID); // Log the tipID being deleted
+      await deleteTip(schoolName, tipID);
+      setTipArray((prevTips) => prevTips.filter((tip) => tip.id !== tipID));
+      console.log('Tip deleted successfully:', tipID);
     } catch (error) {
-      console.error('Failed to delete tip: ', error);
+      console.error('Failed to delete tip:', error);
       setError('Failed to delete tip. Please try again later.');
     }
   };
 
   // Render the delete action
-  const renderRightActions = (index: number) => {
+  const renderRightActions = (tipID: string) => {
     return (
-      <Pressable style={style.deleteButton} onPress={() => handleDelete(index)}>
+      <Pressable style={style.deleteButton} onPress={() => handleDelete(tipID)}>
         <Text style={style.deleteButtonText}>Delete</Text>
       </Pressable>
     );
@@ -91,7 +98,12 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   useEffect(() => {
     const unsubscribe = listenToTips(schoolName, (tips) => {
       if (tips) {
-        setTipArray(tips);
+        // Map the tips to include the id for each tip
+        const formattedTips = Object.keys(tips).map((key) => ({
+          id: key,
+          content: tips[key].content,
+        }));
+        setTipArray(formattedTips);
       } else {
         setError('No tips available for this school.');
       }
@@ -114,13 +126,13 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       <ScrollView contentContainerStyle={style.scrollViewContentContainer}>
         <Text style={style.title}>Tips!</Text>
         <View style={style.section}>
-          {tipArray.map((tip, index) => (
-            <Swipeable key={index} renderRightActions={() => renderRightActions(index)}>
+          {tipArray.map((tip) => (
+            <Swipeable key={tip.id} renderRightActions={() => renderRightActions(tip.id)}>
               <View style={style.standoutText}>
                 <LightbulbIcon style={style.icon} />
                 <EditText
                   value={tip.content}
-                  onSave={(newValue) => handleSave(schoolName, newValue, index)}
+                  onSave={(newValue) => handleSave(schoolName, newValue, tip.id)}
                   edit={edit}
                   setEdit={setEdit}
                   display="tips"

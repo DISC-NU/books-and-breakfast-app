@@ -9,7 +9,7 @@ const TipsScreen = ({ route, navigation }) => {
   const { schoolName } = route.params;
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 85 : 0}>

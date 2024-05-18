@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, off, onValue, push, ref, set } from 'firebase/database';
+import { get, off, onValue, push, ref, remove, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -28,6 +28,22 @@ export interface SchoolDirections {
  * Each school is returned as a key-value pair with the school's key and its name.
  * @returns A promise resolving to an array of SchoolKeyPair objects or null if no data is found.
  */
+
+const migrateTipsToFirebaseIDs = async (schoolName) => {
+  const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
+  const snapshot = await get(tipsRef);
+  if (snapshot.exists()) {
+    const tips = snapshot.val();
+    for (const key in tips) {
+      if (!key.startsWith('-')) {
+        // Check if the key is numeric
+        const newTipRef = push(tipsRef);
+        await set(newTipRef, tips[key]); // Create new tip with Firebase-generated ID
+        await remove(ref(database, `/TipsInfo/${schoolName}/${key}`)); // Remove old tip
+      }
+    }
+  }
+};
 
 async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
@@ -103,6 +119,7 @@ async function updateSchoolDirections(schoolName: string, field: string, value: 
 function listenToTips(schoolName: string, callback: (tips: string[]) => void) {
   // Generate a database reference specifically targeting the tips for the requested school.
   const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
+  migrateTipsToFirebaseIDs(schoolName);
 
   // Attach a listener to get real-time updates.
   const unsubscribe = onValue(
@@ -129,7 +146,7 @@ function listenToTips(schoolName: string, callback: (tips: string[]) => void) {
 }
 
 // Save function for tips details
-async function updateTipsInfo(schoolName: string, tips: any[], index: number) {
+async function updateTipsInfo(schoolName: string, tips: string, index: string) {
   const tipsRef = ref(database, `/TipsInfo/${schoolName}/${index}`);
   try {
     // Set the tip at the specified index
@@ -141,62 +158,34 @@ async function updateTipsInfo(schoolName: string, tips: any[], index: number) {
   }
 }
 
-async function addNewTip(schoolName: string, newTip: any) {
+export const addNewTip = async (schoolName, newTip) => {
   const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
+  const newTipRef = push(tipsRef); // Generate a new reference with a unique key
+  await set(newTipRef, newTip); // Set the value of the new tip
+  return newTipRef; // Return the reference to the newly added tip
+};
+
+export const deleteTip = async (schoolName: string, tipID: string) => {
   try {
-    // Push the new tip to the array
-    const newTipRef = push(tipsRef);
-    // Set the value of the new tip
-    await set(newTipRef, newTip);
-    return true;
-  } catch (error) {
-    console.error('Error adding new tip: ', error);
-    return null;
-  }
-}
+    const tipRef = ref(database, `/TipsInfo/${schoolName}/${tipID}`);
 
-export const deleteTip = async (schoolName, index) => {
-  try {
-    const tipsRef = ref(database, `schools/${schoolName}/tips`);
-
-    // Retrieve the current list of tips
-    const snapshot = await get(tipsRef);
-    const tips = snapshot.val();
-
-    if (tips) {
-      // Convert tips object to an array
-      const tipsArray = Object.entries(tips);
-
-      // Check if the index is within bounds
-      if (index < 0 || index >= tipsArray.length) {
-        throw new Error('Invalid index');
-      }
-
-      // Remove the specified index
-      tipsArray.splice(index, 1);
-
-      // Convert the updated array back to an object with unique keys
-      const updatedTips = tipsArray.reduce((acc, [key, tip], idx) => {
-        acc[key] = tip;
-        return acc;
-      }, {});
-
-      // Update the tips list in the database
-      await set(tipsRef, updatedTips);
-      console.log('Tip deleted successfully');
+    // Check if the tip exists
+    const snapshot = await get(tipRef);
+    if (snapshot.exists()) {
+      // Remove the tip
+      await set(tipRef, null);
+      console.log('Tip deleted successfully:', tipID);
     } else {
-      console.error('Tips not found');
-      throw new Error('Tips not found');
+      console.error('Tip not found:', tipID);
+      throw new Error('Tip not found');
     }
   } catch (error) {
-    console.error('Error deleting tip: ', error);
+    console.error('Error deleting tip:', error);
     throw error;
   }
 };
-
 // Export the functions for use in other parts of the application.
 export {
-  addNewTip,
   getSchoolList,
   listenToSchoolDirections,
   listenToTips,
