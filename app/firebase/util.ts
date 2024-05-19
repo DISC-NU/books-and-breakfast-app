@@ -110,9 +110,9 @@ export const listenToTips = (schoolName: string, callback: (tips: any[]) => void
       if (snapshot.exists()) {
         // If data exists, call the callback with the array of tips.
         const tipsData = snapshot.val();
-        const tips = Object.keys(tipsData).map((key) => ({
-          id: key,
-          content: tipsData[key].content,
+        const tips = Object.entries(tipsData).map(([id, tip]) => ({
+          id,
+          content: tip,
         }));
         callback(tips);
       } else {

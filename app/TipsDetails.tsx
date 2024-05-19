@@ -29,6 +29,8 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   // Function to handle saving updated tips
   const handleSave = async (schoolName: string, newValue: string, tipID: string) => {
     try {
+      console.log(tipArray);
+      console.log(newValue);
       // Update the tip in the database
       await updateTipsInfo(schoolName, newValue, tipID);
 
@@ -36,6 +38,8 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       setTipArray((prevTips) =>
         prevTips.map((tip) => (tip.id === tipID ? { ...tip, content: newValue } : tip))
       );
+
+      console.log(tipArray);
 
       console.log('Tip updated successfully');
     } catch (error) {
@@ -61,7 +65,9 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       const newTipID = newTipRef.key;
       console.log('New tip added successfully with ID:', newTipID);
 
-      //setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
+      // setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
+
+      console.log(tipArray);
 
       // Clear the input field after adding the new tip
       setNewTipContent('');
@@ -97,12 +103,8 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   useEffect(() => {
     const unsubscribe = listenToTips(schoolName, (tips) => {
       if (tips) {
-        // Map the tips to include the id for each tip
-        const formattedTips = Object.keys(tips).map((key) => ({
-          id: key,
-          content: tips[key].content,
-        }));
-        setTipArray(formattedTips);
+        console.log(tips);
+        setTipArray(tips);
       } else {
         setError('No tips available for this school.');
       }
