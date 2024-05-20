@@ -81,17 +81,18 @@ function HomeScreen() {
         }
       },
       2: () => {
-        attemptOpenURL(
-          'https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit',
-          'Sorry, it looks like the Tracker cannot be opened'
-        );
+        if (resourceURLs.trackerURL) {
+          attemptOpenURL(
+            resourceURLs.trackerURL,
+            'Sorry, it looks like the Tracker cannot be opened'
+          );
+        }
       },
       3: () => navigation.navigate('Tips'),
       4: () => {
-        attemptOpenURL(
-          'https://groupme.com/join_group/58634493/LJyTEs7U',
-          'Sorry, it looks like GroupMe cannot be opened.'
-        );
+        if (resourceURLs.groupMeURL) {
+          attemptOpenURL(resourceURLs.groupMeURL, 'Sorry, it looks like GroupMe cannot be opened.');
+        }
       },
       5: () => navigation.navigate('Mission'),
     };
