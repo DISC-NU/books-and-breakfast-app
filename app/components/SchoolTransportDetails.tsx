@@ -105,6 +105,7 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
                 onSave={(newValue) => handleSave(directionsInfo.schoolName, 'specifics', newValue)}
                 edit={edit}
                 setEdit={setEdit}
+                display="directions"
               />
             </View>
             {directionsInfo.driving && (
@@ -116,6 +117,7 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
                   onSave={(newValue) => handleSave(directionsInfo.schoolName, 'driving', newValue)}
                   edit={edit}
                   setEdit={setEdit}
+                  display="directions"
                 />
               </View>
             )}
@@ -130,6 +132,7 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
                   }
                   edit={edit}
                   setEdit={setEdit}
+                  display="directions"
                 />
               </View>
             )}
@@ -186,19 +189,6 @@ const styles = StyleSheet.create({
   },
   headerLocation: {
     fontSize: 12,
-  },
-  text: {
-    fontSize: 16,
-    textAlign: 'left',
-    lineHeight: 23,
-  },
-  editText: {
-    fontSize: 16,
-    textAlign: 'left',
-    lineHeight: 23,
-    borderWidth: 0.5,
-    borderColor: 'gray',
-    padding: 15,
   },
   button: {
     position: 'absolute',

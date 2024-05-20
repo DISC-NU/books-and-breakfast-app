@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { child, get, off, onValue, ref, set } from 'firebase/database';
+import { child, get, off, onValue, push, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { UserInfo } from '../components/Context';
@@ -46,33 +46,30 @@ export interface ResourceURLs {
   groupMeURL: string;
 }
 
-/**
- * Fetches a list of schools from Firebase database.
- * Each school is returned as a key-value pair with the school's key and its name.
- * @returns A promise resolving to an array of SchoolKeyPair objects or null if no data is found.
- */
-export async function getSchoolList(): Promise<SchoolKeyPair[] | null> {
-  try {
-    const snapshot = await get(ref(database, '/SchoolDirections'));
-    // Check if the snapshot contains any data.
-    if (snapshot.exists()) {
-      // Extract the data from the snapshot.
-      const data = snapshot.val();
-      // Use Object.keys to get all school keys and map them to key-value pairs.
-      const schools = Object.keys(data);
-      const schoolOptions = schools.map((school) => ({
-        key: school,
-        value: school,
-      }));
-      return schoolOptions;
-    } else {
-      console.log('No data available');
-      return null; // Return null to indicate no data was found.
-    }
-  } catch (error) {
-    console.error('Error fetching school list:', error);
-    return null; // Return null to indicate an error occurred during the fetch.
-  }
+async function getSchoolList() {
+  // Create a reference to the SchoolDirections node in Firebase database.
+  return get(ref(database, '/SchoolDirections'))
+    .then((snapshot) => {
+      // Check if the snapshot contains any data.
+      if (snapshot.exists()) {
+        // Extract the data from the snapshot.
+        const data = snapshot.val();
+        // Use Object.keys to get all school keys and map them to key-value pairs.
+        const schools = Object.keys(data);
+        const schoolOptions = schools.map((school) => ({
+          key: school,
+          value: school,
+        }));
+        return schoolOptions;
+      } else {
+        console.log('No data available');
+        return null; // Return null to indicate no data was found.
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching school list:', error);
+      return null; // Return null to indicate an error occurred during the fetch.
+    });
 }
 
 /**
@@ -108,6 +105,76 @@ export function listenToSchoolDirections(
   // Return a function to unsubscribe from the listener when it's no longer needed.
   return () => off(schoolRef, 'value', unsubscribe);
 }
+
+export const listenToTips = (
+  schoolName: string,
+  callback: (tips: { id: string; content: string }[]) => void
+) => {
+  const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
+
+  const unsubscribe = onValue(
+    tipsRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const tipsData = snapshot.val();
+        const tips = Object.entries(tipsData).map(([id, tip]) => ({
+          id,
+          content: tip.content,
+        }));
+        callback(tips);
+      } else {
+        console.log('No tips available for:', schoolName);
+        callback([]);
+      }
+    },
+    (error) => {
+      console.error('Error fetching tips:', error);
+      callback([]);
+    }
+  );
+
+  return () => off(tipsRef, 'value', unsubscribe);
+};
+};
+
+// Save function for tips details
+async function updateTipsInfo(schoolName: string, content: string, index: string) {
+  const tipsRef = ref(database, `/TipsInfo/${schoolName}/${index}`);
+  try {
+    set(tipsRef, { content });
+    return true;
+  } catch (error) {
+    console.error('Error updating school tips: ', error);
+    return null;
+  }
+}
+
+export const addNewTip = async (schoolName, newTip) => {
+  const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
+  const newTipRef = push(tipsRef); // Generate a new reference with a unique key
+  await set(newTipRef, newTip); // Set the value of the new tip
+  return newTipRef; // Return the reference to the newly added tip
+};
+
+export const deleteTip = async (schoolName: string, tipID: string) => {
+  try {
+    const tipRef = ref(database, `/TipsInfo/${schoolName}/${tipID}`);
+
+    // Check if the tip exists
+    const snapshot = await get(tipRef);
+    if (snapshot.exists()) {
+      // Remove the tip
+      await set(tipRef, null);
+      console.log('Tip deleted successfully:', tipID);
+    } else {
+      console.error('Tip not found:', tipID);
+      throw new Error('Tip not found');
+    }
+  } catch (error) {
+    console.error('Error deleting tip:', error);
+    throw error;
+  }
+};
 
 // Function to fetch resource URLs from Firebase
 export const getResourceURLs = async (): Promise<ResourceURLs | null> => {

@@ -77,13 +77,21 @@ function HomeScreen() {
           );
         }
       },
-      3: () => navigation.navigate('Tips'),
+      3: () => {
+        if (!schoolName) {
+          Alert.alert('Please select a school.');
+        } else {
+          navigation.navigate('Tips', { schoolName });
+        }
+      },
+
       4: () => {
         if (resourceURLs.groupMeURL) {
           attemptOpenURL(resourceURLs.groupMeURL, 'Sorry, it looks like GroupMe cannot be opened.');
         }
       },
       5: () => navigation.navigate('Mission'),
+      6: () => navigation.navigate('Morning'),
     };
 
     const action = actions[buttonIndex];
