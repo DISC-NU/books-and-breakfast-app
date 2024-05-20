@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 
-import { Entry, getMissionEntries } from './firebase/util';
+import { Entry, getMissionEntries } from '../firebase/util';
 
 const { width: screenWidth } = Dimensions.get('window');
 
