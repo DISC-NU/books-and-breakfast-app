@@ -41,14 +41,14 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 
 function HomeScreen() {
   const navigation = useNavigation<any>();
-  const { schoolName, setSchoolName } = useContext(Context);
+  const { selected, setSelected } = useContext(Context);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
-    setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
-  }, [schoolName]);
+    setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
+  }, [selected]);
 
   useEffect(() => {
     // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
@@ -74,10 +74,10 @@ function HomeScreen() {
   const handleButtonPress = (buttonIndex: number) => {
     const actions = {
       1: () => {
-        if (!schoolName) {
+        if (!selected) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Navigation', { schoolName: schoolName });
+          navigation.navigate('Navigation', { schoolName: selected });
         }
       },
       2: () => {
@@ -112,7 +112,7 @@ function HomeScreen() {
         </View>
         <View style={styles.dropdownContainer}>
           <SelectList
-            setSelected={(val: string) => setSchoolName(val)}
+            setSelected={(val: string) => setSelected(val)}
             data={schoolOptions}
             inputStyles={styles.selectInput}
             save="value"
