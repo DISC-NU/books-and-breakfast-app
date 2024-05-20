@@ -58,7 +58,7 @@ export const StatusScreenDetails: React.FC<StatusScreenDetailsProps> = ({ school
           dropdownStyles={styles.dropdownStyles}
           boxStyles={styles.dropdownBox}
           inputStyles={styles.dropdownInput}
-          dropdownTextStyles={styles.dropdownText}  
+          maxHeight={122}
           search={false}
         />
       </View>
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     borderColor: '#27530B',
     backgroundColor: '#5ED217',
   },
+  
   dropdownInput: {
     fontSize: 18,
     fontWeight: '600',
