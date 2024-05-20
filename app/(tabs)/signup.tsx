@@ -92,12 +92,14 @@ export default function SignUpScreen() {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-        {Object.values(dateArray).map((date) => (
+        {Object.values(dateArray).map((date, index) => (
           <View style={styles.datesContainer}>
             <TouchableOpacity
               style={[styles.dateButton, { borderColor: dateColor }]}
               onPress={handleDateButtonPress}>
-              <Text style={[styles.unselectedText, { color: dateColor }]}>{date.date}</Text>
+              <Text key={index} style={[styles.unselectedText, { color: dateColor }]}>
+                {date.date}
+              </Text>
             </TouchableOpacity>
           </View>
         ))}
