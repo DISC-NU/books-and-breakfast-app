@@ -13,6 +13,11 @@ const nextThreeMonthsDates = getNextThreeMonthsDates();
 
 export default function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
+  const [dateColor, setDateColor] = useState('#CBCBCB');
+  const [lastButtonColor, setLastButtonColor] = useState('#F1375A');
+
+  let lastText = 'Edit';
+  let editable = true;
 
   const handleRedButtonPress = (buttonIndex: number) => {
     let newDateArray;
@@ -40,9 +45,31 @@ export default function SignUpScreen() {
     setDateArray(newDateArray);
   };
 
-  // const handleDateButtonPress = () => {
-  //     style.
-  // }
+  const handleDateButtonPress = () => {
+    if (editable) {
+      if (dateColor === '#CBCBCB') {
+        setDateColor('#36afbc');
+      } else {
+        setDateColor('#CBCBCB');
+      }
+    }
+  };
+
+  const handleLastButtonPress = () => {
+    if (lastButtonColor === '#F1375A') {
+      lastText = 'Submit';
+      console.log(lastText);
+      editable = true;
+      console.log(editable);
+      setLastButtonColor('#36afbc');
+    } else {
+      lastText = 'Edit';
+      console.log(lastText);
+      editable = false;
+      console.log(editable);
+      setLastButtonColor('#F1375A');
+    }
+  };
 
   return (
     <ScreenWrapper>
@@ -67,12 +94,21 @@ export default function SignUpScreen() {
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         {Object.values(dateArray).map((date) => (
           <View style={styles.datesContainer}>
-            <TouchableOpacity style={styles.dateButton}>
-              <Text>{date.date}</Text>
+            <TouchableOpacity
+              style={[styles.dateButton, { borderColor: dateColor }]}
+              onPress={handleDateButtonPress}>
+              <Text style={[styles.unselectedText, { color: dateColor }]}>{date.date}</Text>
             </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
+      <View style={styles.finalContainer}>
+        <TouchableOpacity
+          style={[styles.finalButton, { backgroundColor: lastButtonColor }]}
+          onPress={handleLastButtonPress}>
+          <Text style={styles.finalButtonText}>{lastText}</Text>
+        </TouchableOpacity>
+      </View>
     </ScreenWrapper>
   );
 }
@@ -115,36 +151,53 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     marginVertical: 15,
   },
-  dateButtonSelected: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderColor: '#36afbc',
-    borderWidth: 5,
-  },
-  selectedText: {
-    fontWeight: 'condensedBold',
-    fontSize: 25,
-    color: '#36afbc',
-  },
+  // dateButtonSelected: {
+  //   justifyContent: 'center',
+  //   backgroundColor: 'white',
+  //   borderColor: '#36afbc',
+  //   borderWidth: 5,
+  // },
+  // selectedText: {
+  //   fontWeight: 'condensedBold',
+  //   fontSize: 30,
+  //   color: '#36afbc',
+  //   textAlign: 'left',
+  // },
   dateButton: {
-    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 20,
-    padding: 20,
+    padding: 15,
     marginBottom: 15,
-    width: 300,
+    width: 320,
   },
   unselectedText: {
     fontWeight: 'condensedBold',
-    fontSize: 25,
-    color: 'grey',
+    fontSize: 22,
+    textAlign: 'left',
   },
   datesContainer: {
     justifyContent: 'space-evenly',
     backgroundColor: 'white',
+  },
+  finalContainer: {
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  finalButton: {
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F1375A',
+    borderRadius: 20,
+    marginVertical: 20,
+    paddingVertical: 20,
+    width: 200,
+  },
+  finalButtonText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlign: 'center',
+    color: 'white',
   },
 });

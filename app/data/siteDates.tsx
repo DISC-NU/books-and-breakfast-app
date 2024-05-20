@@ -45,8 +45,9 @@ export const getNextThreeMonthsDates: () => DateArray = () => {
       const currentDate = new Date(currentYear, currentMonth - 1, j);
       const dayOfWeek = daysOfWeek[currentDate.getDay()];
       const formattedDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(j).padStart(2, '0')}`;
+      const stringDate = months[currentMonth - 1] + ' ' + String(j) + ', ' + String(currentYear);
 
-      result[formattedDate] = { dayOfWeek, date: formattedDate };
+      result[formattedDate] = { dayOfWeek, date: stringDate };
     }
 
     // Move to the next month

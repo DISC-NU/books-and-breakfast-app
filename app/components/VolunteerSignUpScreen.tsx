@@ -7,7 +7,7 @@ import ScreenWrapper from './ScreenWrapper';
 const { width: screenWidth } = Dimensions.get('window');
 const { height: screenHeight } = Dimensions.get('window');
 
-export function SignUpScreen() {
+export default function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
 
   const handleRedButtonPress = (buttonIndex: number) => {
