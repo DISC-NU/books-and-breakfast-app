@@ -2,9 +2,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import moment from 'moment';
 import React, { useCallback, useContext, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Context from '../../components/Context';
+import { StatusScreenDetails } from './status';
+
+const screenHeight = Dimensions.get('window').height;
 
 const DatePickerScreen: React.FC = () => {
   const [date, setDate] = useState(new Date());
@@ -30,13 +34,16 @@ const DatePickerScreen: React.FC = () => {
   }, [date, schoolName]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.datePickerContainer}>
-        <DateTimePicker value={date} mode="date" display="default" onChange={onChange} />
-      </View>
+    <View>
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* <View style={styles.datePickerContainer}>
+          <DateTimePicker value={date} mode="date" display="default" onChange={onChange} /> */}
+        {/* </View> */}
+        <StatusScreenDetails date={date} totalGoing={10} />
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
-          <Text style={styles.buttonText}>Enter Chat</Text>
+          <Icon name="chat" size={35} color="white" />
         </TouchableOpacity>
       </View>
     </View>
@@ -45,10 +52,13 @@ const DatePickerScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'space-between', // Space out elements with space between them
     alignItems: 'center',
     padding: 16,
+    minHeight: screenHeight,
+    marginVertical: 22,
+    backgroundColor: 'white',
   },
   datePickerContainer: {
     marginTop: 50, // Adjust as needed to position at the top
@@ -63,10 +73,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#36afbc',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 10, // Make the button rounded
     alignItems: 'center',
     justifyContent: 'center',
-    width: '50%', // Make the button width responsive
+    width: 70,
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    height: 70,
+    borderRadius: 50,
   },
   buttonText: {
     color: '#fff',
