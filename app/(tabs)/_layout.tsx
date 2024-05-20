@@ -21,12 +21,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="rideshare"
+        name="signup"
         options={{
-          title: 'Rideshare',
+          title: 'Sign up',
           tabBarIcon: ({ color }) => (
             <Ionicons name="calendar-clear-sharp" size={24} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="rideshare"
+        options={{
+          title: 'Rideshare',
+          tabBarIcon: ({ color }) => <Ionicons name="car" size={28} color={color} />,
         }}
       />
       <Tabs.Screen

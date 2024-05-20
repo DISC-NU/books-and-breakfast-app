@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router/stack';
 import { useState } from 'react';
+
 import Context, { User, defaultUser } from './components/Context';
 
 export default function AppLayout() {

@@ -3,6 +3,7 @@ import { onValue, push, ref, serverTimestamp } from 'firebase/database';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { Bubble, GiftedChat, IMessage } from 'react-native-gifted-chat';
+
 import Context from '../../components/Context';
 import { database } from '../../firebase/firebaseConfig';
 
@@ -106,10 +107,11 @@ const ChatScreen = () => {
               _id: user.id,
               name: user.name,
             }}
-            placeholder={'Message'}
+            placeholder="Message"
             renderBubble={renderBubble}
             listViewProps={{ keyboardDismissMode: 'on-drag' }}
-            keyboardShouldPersistTaps="never"></GiftedChat>
+            keyboardShouldPersistTaps="never"
+          />
         </View>
       )}
     </>
