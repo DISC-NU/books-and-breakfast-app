@@ -3,13 +3,14 @@ import { onValue, push, ref, serverTimestamp } from 'firebase/database';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { Bubble, GiftedChat, IMessage } from 'react-native-gifted-chat';
+
 import Context from '../../components/Context';
 import { database } from '../../firebase/firebaseConfig';
 
 const ChatScreen = () => {
   // State to store chat messages
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const { schoolName, user } = useContext(Context);
+  const { schoolName, userInfo } = useContext(Context);
   const { selectedDate } = useLocalSearchParams<{ selectedDate: string }>();
 
   const navigation = useNavigation();
@@ -103,13 +104,14 @@ const ChatScreen = () => {
             messages={messages} // Messages to be displayed in the chat
             onSend={(messages) => onSend(messages)} // Function to call when sending messages
             user={{
-              _id: user.id,
-              name: user.name,
+              _id: userInfo.email,
+              name: userInfo.name,
             }}
-            placeholder={'Message'}
+            placeholder="Message"
             renderBubble={renderBubble}
             listViewProps={{ keyboardDismissMode: 'on-drag' }}
-            keyboardShouldPersistTaps="never"></GiftedChat>
+            keyboardShouldPersistTaps="never"
+          />
         </View>
       )}
     </>
