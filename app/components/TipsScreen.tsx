@@ -1,18 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 
-import { SchoolTransportDetails } from './SchoolTransportDetails';
+import TipsDetails from './TipsDetails';
 
-// // Define your navigation stack types as needed
-// type NavigationScreenRouteParams = {
-//   schoolName: string;
-// };
-
-const NavigationScreen = ({ route, navigation }) => {
-  // Using the useNavigation hook to access navigation in this component
+const TipsScreen = ({ route, navigation }) => {
   navigation = useNavigation();
 
-  //passing in school name to article page from dropdown selection
   const { schoolName } = route.params;
 
   return (
@@ -20,12 +13,13 @@ const NavigationScreen = ({ route, navigation }) => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 85 : 0}>
-      <SchoolTransportDetails schoolName={schoolName} />
+      <TipsDetails schoolName={schoolName} />
     </KeyboardAvoidingView>
   );
 };
 
-// Add styles for your DetailsScreen here
+export default TipsScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -34,9 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   text: {
-    fontSize: 22,
+    fontSize: 20,
     marginBottom: 20,
   },
 });
-
-export default NavigationScreen;

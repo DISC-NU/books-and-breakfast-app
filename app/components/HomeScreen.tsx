@@ -13,13 +13,13 @@ import {
 } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-import Context from './Context';
-import ScreenWrapper from './ScreenWrapper';
 import { ResourceURLs, SchoolKeyPair, getResourceURLs, getSchoolList } from '../firebase/util';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
 import TipsIcon from '../icons/TipsIcon';
+import Context from './Context';
+import ScreenWrapper from './ScreenWrapper';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 
@@ -104,13 +104,21 @@ function HomeScreen() {
           );
         }
       },
-      3: () => navigation.navigate('Tips'),
+      3: () => {
+        if (!schoolName) {
+          Alert.alert('Please select a school.');
+        } else {
+          navigation.navigate('Tips', { schoolName });
+        }
+      },
+
       4: () => {
         if (resourceURLs.groupMeURL) {
           attemptOpenURL(resourceURLs.groupMeURL, 'Sorry, it looks like GroupMe cannot be opened.');
         }
       },
       5: () => navigation.navigate('Mission'),
+      6: () => navigation.navigate('Morning'),
     };
 
     const action = actions[buttonIndex];
@@ -243,7 +251,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dropdownSelected: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#36afbc',
     borderRadius: 10,
   },
