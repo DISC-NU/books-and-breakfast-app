@@ -15,8 +15,9 @@ export default function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
   const [dateColor, setDateColor] = useState('#CBCBCB');
   const [lastButtonColor, setLastButtonColor] = useState('#F1375A');
+  const [lastText, setLastText] = useState('Edit');
+  const [isFilterSelected, setIsFilterSelected] = useState(false);
 
-  let lastText = 'Edit';
   let editable = true;
 
   const handleRedButtonPress = (buttonIndex: number) => {
@@ -46,7 +47,7 @@ export default function SignUpScreen() {
   };
 
   const handleDateButtonPress = () => {
-    if (editable) {
+    if (isFilterSelected === false) {
       if (dateColor === '#CBCBCB') {
         setDateColor('#36afbc');
       } else {
@@ -57,13 +58,13 @@ export default function SignUpScreen() {
 
   const handleLastButtonPress = () => {
     if (lastButtonColor === '#F1375A') {
-      lastText = 'Submit';
+      setLastText('Submit');
       console.log(lastText);
       editable = true;
       console.log(editable);
       setLastButtonColor('#36afbc');
     } else {
-      lastText = 'Edit';
+      setLastText('Edit');
       console.log(lastText);
       editable = false;
       console.log(editable);
@@ -182,22 +183,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   finalContainer: {
-    alignContent: 'center',
-    justifyContent: 'center',
+    paddingHorizontal: 40,
+    paddingBottom: 30,
   },
   finalButton: {
-    alignContent: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F1375A',
-    borderRadius: 20,
-    marginVertical: 20,
-    paddingVertical: 20,
-    width: 200,
+    padding: 15,
+    alignItems: 'center',
+    borderRadius: 10,
   },
   finalButtonText: {
     fontWeight: 'bold',
     fontSize: 18,
-    textAlign: 'center',
     color: 'white',
   },
 });
