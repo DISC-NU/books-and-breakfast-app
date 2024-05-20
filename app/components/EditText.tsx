@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontWeight: 'condensedBold',
     borderWidth: 0.5,
     borderColor: 'gray',
-  }
+  },
 });
 
 export default EditText;

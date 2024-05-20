@@ -1,5 +1,5 @@
 // Imports the necessary functions from the Firebase database module.
-import { get, off, onValue, push, ref, remove, set } from 'firebase/database';
+import { child, get, off, onValue, push, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
 import { database } from './firebaseConfig';
@@ -23,27 +23,27 @@ export interface SchoolDirections {
   geoLong?: string;
 }
 
-/**
- * Fetches a list of schools from Firebase database.
- * Each school is returned as a key-value pair with the school's key and its name.
- * @returns A promise resolving to an array of SchoolKeyPair objects or null if no data is found.
- */
+// TypeScript interface for mission entries
+export interface Entry {
+  title: string;
+  missionCenter?: string;
+  subtitle?: string;
+  body: string;
+  subtitle1?: string;
+  body1?: string;
+  subtitle2?: string;
+  body2?: string;
+  subtitle3?: string;
+  body3?: string;
+  subtitle4?: string;
+  body4?: string;
+  link?: string;
+}
 
-const migrateTipsToFirebaseIDs = async (schoolName) => {
-  const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
-  const snapshot = await get(tipsRef);
-  if (snapshot.exists()) {
-    const tips = snapshot.val();
-    for (const key in tips) {
-      if (!key.startsWith('-')) {
-        // Check if the key is numeric
-        const newTipRef = push(tipsRef);
-        await set(newTipRef, tips[key]); // Create new tip with Firebase-generated ID
-        await remove(ref(database, `/TipsInfo/${schoolName}/${key}`)); // Remove old tip
-      }
-    }
-  }
-};
+export interface ResourceURLs {
+  trackerURL: string;
+  groupMeURL: string;
+}
 
 async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
@@ -77,8 +77,10 @@ async function getSchoolList() {
  * @param callback The function to call with the updated data.
  * @returns A function to unsubscribe from the real-time updates.
  */
-function listenToSchoolDirections(schoolName, callback) {
-  // Generate a database reference specifically targeting the requested school's directions.
+export function listenToSchoolDirections(
+  schoolName: string,
+  callback: (data: SchoolDirections | null) => void
+): () => void {
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}`);
 
   // Attach a listener to get real-time updates.
@@ -103,54 +105,62 @@ function listenToSchoolDirections(schoolName, callback) {
   return () => off(schoolRef, 'value', unsubscribe);
 }
 
-// Save function for school transportation details
-async function updateSchoolDirections(schoolName: string, field: string, value: string) {
-  // Generate a database reference specifically targeting the requested school's directions.
-  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
+/**
+ * Fetches all mission entries from the Firebase database.
+ * @returns A promise resolving to an array of Entry objects or null if no data is found.
+ */
+export async function getMissionEntries(): Promise<Entry[] | null> {
   try {
-    set(schoolRef, value);
-    return true;
+    const snapshot = await get(child(ref(database), 'missions'));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
+      return missionEntries;
+    } else {
+      console.log('No data available');
+      return null;
+    }
   } catch (error) {
-    console.error('Error updating school directions: ', error);
+    console.error('Error fetching mission entries:', error);
     return null;
   }
 }
 
-function listenToTips(schoolName: string, callback: (tips: string[]) => void) {
-  // Generate a database reference specifically targeting the tips for the requested school.
+export const listenToTips = (
+  schoolName: string,
+  callback: (tips: { id: string; content: string }[]) => void
+) => {
   const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
-  migrateTipsToFirebaseIDs(schoolName);
 
-  // Attach a listener to get real-time updates.
   const unsubscribe = onValue(
     tipsRef,
     (snapshot) => {
       if (snapshot.exists()) {
-        // If data exists, call the callback with the array of tips.
         const tipsData = snapshot.val();
-        const tips = Object.keys(tipsData).map((key) => tipsData[key]);
+        const tips = Object.entries(tipsData).map(([id, tip]) => ({
+          id,
+          content: tip.content,
+        }));
         callback(tips);
       } else {
         console.log('No tips available for:', schoolName);
-        callback([]); // Call the callback with an empty array if no tips are found.
+        callback([]);
       }
     },
     (error) => {
       console.error('Error fetching tips:', error);
-      callback([]); // Call the callback with an empty array to indicate an error occurred.
+      callback([]);
     }
   );
 
-  // Return a function to unsubscribe from the listener when it's no longer needed.
   return () => off(tipsRef, 'value', unsubscribe);
-}
+};
 
 // Save function for tips details
-async function updateTipsInfo(schoolName: string, tips: string, index: string) {
+async function updateTipsInfo(schoolName: string, content: string, index: string) {
   const tipsRef = ref(database, `/TipsInfo/${schoolName}/${index}`);
   try {
-    // Set the tip at the specified index
-    set(tipsRef, tips);
+    set(tipsRef, { content });
     return true;
   } catch (error) {
     console.error('Error updating school tips: ', error);
@@ -184,11 +194,51 @@ export const deleteTip = async (schoolName: string, tipID: string) => {
     throw error;
   }
 };
-// Export the functions for use in other parts of the application.
-export {
-  getSchoolList,
-  listenToSchoolDirections,
-  listenToTips,
-  updateSchoolDirections,
-  updateTipsInfo,
+
+// Function to fetch resource URLs from Firebase
+export const getResourceURLs = async (): Promise<ResourceURLs | null> => {
+  try {
+    const snapshot = await get(child(ref(database), 'resources'));
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.log('No resource data available');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching resource URLs:', error);
+    return null;
+  }
 };
+
+/**
+ * Listens for updates to mission entries in the Firebase database.
+ * @param callback The function to call with the updated data.
+ * @returns A function to unsubscribe from the real-time updates.
+ */
+export function listenToMissionEntries(callback: (data: Entry[] | null) => void): () => void {
+  const missionsRef = ref(database, 'missions');
+
+  const unsubscribe = onValue(
+    missionsRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
+        callback(missionEntries);
+      } else {
+        console.log('No mission entries available');
+        callback(null);
+      }
+    },
+    (error) => {
+      console.error('Error fetching mission entries:', error);
+      callback(null);
+    }
+  );
+
+  return () => off(missionsRef, 'value', unsubscribe);
+}
+
+// Export the functions for use in other parts of the application.
+export { getSchoolList, updateTipsInfo };

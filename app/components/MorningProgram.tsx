@@ -3,8 +3,8 @@ import React from 'react';
 //import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import ScreenWrapper from './ScreenWrapper';
-import { MORNING_PROGRAM_INFO } from './data/MorningProgramInfo';
+import ScreenWrapper from '../components/ScreenWrapper';
+import { MORNING_PROGRAM_INFO } from '../data/MorningProgramInfo';
 
 const MorningProgram = ({ activity }: { activity: string }) => {
   const navigation = useNavigation();

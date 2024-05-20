@@ -12,9 +12,9 @@ import {
 import { Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import EditText from './components/EditText';
-import { addNewTip, deleteTip, listenToTips, updateTipsInfo } from './firebase/util';
-import LightbulbIcon from './icons/LightbulbIcon';
+import EditText from '../components/EditText';
+import { addNewTip, deleteTip, listenToTips, updateTipsInfo } from '../firebase/util';
+import LightbulbIcon from '../icons/LightbulbIcon';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -29,6 +29,8 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   // Function to handle saving updated tips
   const handleSave = async (schoolName: string, newValue: string, tipID: string) => {
     try {
+      console.log(tipArray);
+      console.log(newValue);
       // Update the tip in the database
       await updateTipsInfo(schoolName, newValue, tipID);
 
@@ -36,6 +38,8 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       setTipArray((prevTips) =>
         prevTips.map((tip) => (tip.id === tipID ? { ...tip, content: newValue } : tip))
       );
+
+      console.log(tipArray);
 
       console.log('Tip updated successfully');
     } catch (error) {
@@ -61,8 +65,9 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       const newTipID = newTipRef.key;
       console.log('New tip added successfully with ID:', newTipID);
 
-      // Add the new tip to the local state
-      setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
+      // setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
+
+      console.log(tipArray);
 
       // Clear the input field after adding the new tip
       setNewTipContent('');
@@ -98,12 +103,8 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   useEffect(() => {
     const unsubscribe = listenToTips(schoolName, (tips) => {
       if (tips) {
-        // Map the tips to include the id for each tip
-        const formattedTips = Object.keys(tips).map((key) => ({
-          id: key,
-          content: tips[key].content,
-        }));
-        setTipArray(formattedTips);
+        console.log(tips);
+        setTipArray(tips);
       } else {
         setError('No tips available for this school.');
       }
@@ -131,7 +132,7 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
               <View style={style.standoutText}>
                 <LightbulbIcon style={style.icon} />
                 <EditText
-                  value={tip.content}
+                  value={tip.content} // Ensure this is a string
                   onSave={(newValue) => handleSave(schoolName, newValue, tip.id)}
                   edit={edit}
                   setEdit={setEdit}
