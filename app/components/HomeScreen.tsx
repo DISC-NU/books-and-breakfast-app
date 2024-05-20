@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Dimensions,
@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 
+import { ResourceURLs, getResourceURLs } from '../firebase/util';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
@@ -40,6 +41,22 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 function HomeScreen() {
   const navigation = useNavigation<any>();
   const { schoolName } = useContext(Context);
+  const [resourceURLs, setResourceURLs] = useState<ResourceURLs | null>(null);
+
+  // Fetch resource URLs from Firebase
+  useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook to fetch the resource URLs.
+    const fetchResourceURLs = async () => {
+      const urls = await getResourceURLs();
+      try {
+        setResourceURLs(urls);
+      } catch (error) {
+        // If an error occurs during fetching, log it to the console.
+        console.error('Failed to fetch urls:', error);
+      }
+    };
+    fetchResourceURLs();
+  }, []);
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
@@ -49,20 +66,22 @@ function HomeScreen() {
           Alert.alert('Please select a school.');
         } else {
           navigation.navigate('Navigation', { schoolName });
+          navigation.navigate('Navigation', { schoolName });
         }
       },
       2: () => {
-        attemptOpenURL(
-          'https://docs.google.com/document/d/17JsIMiF2knKqC4TZqaNPyEhFAvBbVVAbyQA0CX49lGo/edit',
-          'Sorry, it looks like the Tracker cannot be opened'
-        );
+        if (resourceURLs.trackerURL) {
+          attemptOpenURL(
+            resourceURLs.trackerURL,
+            'Sorry, it looks like the Tracker cannot be opened'
+          );
+        }
       },
       3: () => navigation.navigate('Tips'),
       4: () => {
-        attemptOpenURL(
-          'https://groupme.com/join_group/58634493/LJyTEs7U',
-          'Sorry, it looks like GroupMe cannot be opened.'
-        );
+        if (resourceURLs.groupMeURL) {
+          attemptOpenURL(resourceURLs.groupMeURL, 'Sorry, it looks like GroupMe cannot be opened.');
+        }
       },
       5: () => navigation.navigate('Mission'),
     };
