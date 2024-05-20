@@ -155,6 +155,7 @@ export const listenToTips = (
 
   return () => off(tipsRef, 'value', unsubscribe);
 };
+};
 
 // Save function for tips details
 async function updateTipsInfo(schoolName: string, content: string, index: string) {
