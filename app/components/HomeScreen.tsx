@@ -14,7 +14,7 @@ import {
 import { SelectList } from 'react-native-dropdown-select-list';
 import Context from './Context';
 
-import { SchoolKeyPair, getSchoolList } from '../firebase/util';
+import { ResourceURLs, SchoolKeyPair, getResourceURLs, getSchoolList } from '../firebase/util';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
@@ -41,14 +41,30 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 
 function HomeScreen() {
   const navigation = useNavigation<any>();
-  const { selected, setSelected } = useContext(Context);
+  const { schoolName, setSchoolName } = useContext(Context);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
+  const [resourceURLs, setResourceURLs] = useState<ResourceURLs | null>(null);
+
+  // Fetch resource URLs from Firebase
+  useEffect(() => {
+    // Define an asynchronous function inside the useEffect hook to fetch the resource URLs.
+    const fetchResourceURLs = async () => {
+      const urls = await getResourceURLs();
+      try {
+        setResourceURLs(urls);
+      } catch (error) {
+        // If an error occurs during fetching, log it to the console.
+        console.error('Failed to fetch urls:', error);
+      }
+    };
+    fetchResourceURLs();
+  }, []);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
-    setDropdownStyle(selected !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
-  }, [selected]);
+    setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
+  }, [schoolName]);
 
   useEffect(() => {
     // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
@@ -74,10 +90,10 @@ function HomeScreen() {
   const handleButtonPress = (buttonIndex: number) => {
     const actions = {
       1: () => {
-        if (!selected) {
+        if (!schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Navigation', { schoolName: selected });
+          navigation.navigate('Navigation', { schoolName: schoolName });
         }
       },
       2: () => {
@@ -113,7 +129,7 @@ function HomeScreen() {
         </View>
         <View style={styles.dropdownContainer}>
           <SelectList
-            setSelected={(val: string) => setSelected(val)}
+            setSelected={(val: string) => setSchoolName(val)}
             data={schoolOptions}
             inputStyles={styles.selectInput}
             save="value"
