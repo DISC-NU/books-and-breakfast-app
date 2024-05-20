@@ -1,12 +1,12 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Avatar } from 'react-native-elements';
 
 import Context from '../components/Context';
 import ScreenWrapper from '../components/ScreenWrapper';
-import { SchoolKeyPair, getSchoolList } from '../firebase/util';
+import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
 
 export default function ProfileScreen() {
   const { schoolName, setSchoolName, userInfo, setUserInfo } = useContext(Context);
@@ -38,6 +38,20 @@ export default function ProfileScreen() {
     fetchSchools();
   }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
+  // handle continue
+  const handleSetSchool = useCallback(
+    (val: string) => {
+      if (!val) {
+        alert('Please select a school');
+      } else {
+        setSchoolName(val);
+        setUserInfo({ ...userInfo, schoolName: val });
+        updateUserFields(userInfo.id, { ...userInfo, schoolName: val });
+      }
+    },
+    [schoolName]
+  );
+
   const handleSignOut = async () => {
     try {
       await GoogleSignin.signOut();
@@ -67,7 +81,7 @@ export default function ProfileScreen() {
               <View style={styles.dropdownWrapper}>
                 <View style={styles.dropdownContainer}>
                   <SelectList
-                    setSelected={(val: string) => setSchoolName(val)}
+                    setSelected={(val) => handleSetSchool(val)}
                     data={schoolOptions}
                     inputStyles={styles.selectInput}
                     save="value"

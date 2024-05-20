@@ -43,7 +43,6 @@ export default function CustomizationScreen() {
       alert('Please select a school');
     } else {
       setSchoolName(schoolName);
-      console.log(userInfo);
       setUserInfo({ ...userInfo, schoolName });
       updateUserFields(userInfo.id, { ...userInfo, schoolName: schoolName });
       router.replace('/');

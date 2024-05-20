@@ -46,7 +46,7 @@ export interface ResourceURLs {
   groupMeURL: string;
 }
 
-async function getSchoolList() {
+export async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
   return get(ref(database, '/SchoolDirections'))
     .then((snapshot) => {
@@ -134,7 +134,6 @@ export const listenToTips = (
   );
 
   return () => off(tipsRef, 'value', unsubscribe);
-};
 };
 
 // Save function for tips details
