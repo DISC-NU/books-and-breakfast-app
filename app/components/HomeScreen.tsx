@@ -12,12 +12,12 @@ import {
   View,
 } from 'react-native';
 
-import Context from './Context';
-import ScreenWrapper from './ScreenWrapper';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
 import TipsIcon from '../icons/TipsIcon';
+import Context from './Context';
+import ScreenWrapper from './ScreenWrapper';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   subtitle: {
-    marginTop: 10,
     marginBottom: 10,
     fontSize: 20,
     fontWeight: 'bold',

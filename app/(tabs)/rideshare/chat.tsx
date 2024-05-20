@@ -104,7 +104,7 @@ const ChatScreen = () => {
             messages={messages} // Messages to be displayed in the chat
             onSend={(messages) => onSend(messages)} // Function to call when sending messages
             user={{
-              _id: userInfo.email,
+              _id: userInfo.id,
               name: userInfo.name,
             }}
             placeholder="Message"

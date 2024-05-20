@@ -2,6 +2,7 @@
 import { get, off, onValue, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
+import { UserInfo } from '../components/Context';
 import { database } from './firebaseConfig';
 
 // TypeScript interface for representing key-value pairs of school names for school selection dropdown
@@ -99,6 +100,41 @@ async function updateSchoolDirections(schoolName: string, field: string, value: 
     return null;
   }
 }
+
+export const isNewUser = async (userInfo: UserInfo) => {
+  const userRef = ref(database, `users/${userInfo.id}`);
+  const snapshot = await get(userRef);
+  return !snapshot.exists();
+};
+
+export const AddNewUser = async (userInfo: UserInfo) => {
+  const userRef = ref(database, `users/${userInfo.id}`);
+  try {
+    await set(userRef, userInfo);
+  } catch (error) {
+    console.error('Error adding new user: ', error);
+  }
+};
+
+export const getUserInfo = async (userInfo: UserInfo) => {
+  const userRef = ref(database, `users/${userInfo.id}`);
+  const snapshot = await get(userRef);
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    return null;
+  }
+};
+
+// Function to update specific fields for a user
+export const updateUserFields = async (userId: string, fieldsToUpdate: any) => {
+  const userRef = ref(database, `users/${userId}`);
+  try {
+    await set(userRef, fieldsToUpdate);
+  } catch (error) {
+    console.error('Error updating user fields: ', error);
+  }
+};
 
 // Export the functions for use in other parts of the application.
 export { getSchoolList, listenToSchoolDirections, updateSchoolDirections };

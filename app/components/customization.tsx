@@ -1,14 +1,13 @@
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { Avatar } from 'react-native-elements';
 
-import Context from '../components/Context';
-import ScreenWrapper from '../components/ScreenWrapper';
-import { SchoolKeyPair, getSchoolList } from '../firebase/util';
+import { router } from 'expo-router';
+import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
+import Context from './Context';
+import ScreenWrapper from './ScreenWrapper';
 
-export default function ProfileScreen() {
+export default function CustomizationScreen() {
   const { schoolName, setSchoolName, userInfo, setUserInfo } = useContext(Context);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
@@ -38,28 +37,25 @@ export default function ProfileScreen() {
     fetchSchools();
   }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
-  const handleSignOut = async () => {
-    try {
-      await GoogleSignin.signOut();
-      setUserInfo(null);
-    } catch (error) {
-      console.error(error);
+  // handle continue
+  const handleContinue = useCallback(() => {
+    if (!schoolName) {
+      alert('Please select a school');
+    } else {
+      setSchoolName(schoolName);
+      console.log(userInfo);
+      setUserInfo({ ...userInfo, schoolName });
+      updateUserFields(userInfo.id, { ...userInfo, schoolName: schoolName });
+      router.replace('/');
     }
-  };
+  }, [schoolName]);
 
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         <View style={styles.mainContent}>
           <View style={styles.profileContainer}>
-            <Avatar
-              rounded
-              size="xlarge"
-              source={{
-                uri: userInfo.photo,
-              }}
-            />
-            <Text style={styles.nameText}>{userInfo.name}</Text>
+            <Text style={styles.nameText}>Welcome!</Text>
           </View>
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
@@ -71,7 +67,7 @@ export default function ProfileScreen() {
                     data={schoolOptions}
                     inputStyles={styles.selectInput}
                     save="value"
-                    placeholder={schoolName || 'Select School'}
+                    placeholder="Select School"
                     maxHeight={275}
                     search={false}
                     boxStyles={dropdownStyle}
@@ -82,8 +78,8 @@ export default function ProfileScreen() {
           </View>
         </View>
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.logoutButton} onPress={handleSignOut}>
-            <Text style={styles.logoutButtonText}>Logout</Text>
+          <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+            <Text style={styles.continueButtonText}>Continue</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -105,7 +101,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   nameText: {
-    fontSize: 24,
+    fontSize: 36,
     fontWeight: 'bold',
     marginTop: 10,
   },
@@ -154,13 +150,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     paddingBottom: 30,
   },
-  logoutButton: {
+  continueButton: {
     backgroundColor: '#36afbc',
     padding: 15,
     alignItems: 'center',
     borderRadius: 10,
   },
-  logoutButtonText: {
+  continueButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',

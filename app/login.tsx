@@ -1,17 +1,29 @@
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { router } from 'expo-router';
+import { useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Context from './components/Context';
+import { getUserInfo, isNewUser } from './firebase/util';
 
 // WebBrowser.maybeCompleteAuthSession();
 
 GoogleSignin.configure();
 
-export default function LoginScreen({ setUserInfo }) {
+export default function LoginScreen() {
+  const { setUserInfo } = useContext(Context);
   const handleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       if (userInfo.user.email.endsWith('northwestern.edu')) {
-        setUserInfo(userInfo.user);
+        if (await isNewUser(userInfo.user)) {
+          setUserInfo(userInfo.user);
+          router.replace('/components/customization');
+        } else {
+          const user = await getUserInfo(userInfo.user);
+          setUserInfo(user);
+          router.replace('/');
+        }
       } else {
         alert('Please use a Northwestern email to sign in.');
       }
@@ -29,12 +41,13 @@ export default function LoginScreen({ setUserInfo }) {
   };
 
   return (
-    <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+    <View
+      style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: 'white' }}>
       <View style={styles.imageContainer}>
-        <Image source={require('../../assets/logo.png')} style={styles.bbLogo} />
+        <Image source={require('../assets/logo.png')} style={styles.bbLogo} />
       </View>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Image source={require('../../assets/google.png')} style={styles.googleLogo} />
+        <Image source={require('../assets/google.png')} style={styles.googleLogo} />
         <Text style={styles.buttonText}>Sign in with Google</Text>
       </TouchableOpacity>
     </View>

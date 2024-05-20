@@ -1,9 +1,16 @@
 import { FontAwesome } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Redirect, Tabs } from 'expo-router';
+import React, { useContext } from 'react';
+import Context from '../components/Context';
 
 export default function TabLayout() {
+  const { userInfo } = useContext(Context);
+
+  if (!userInfo) {
+    return <Redirect href="/login" />;
+  }
+
   return (
     <Tabs
       screenOptions={{
