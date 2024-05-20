@@ -5,4 +5,7 @@ module.exports = {
   rules: {
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
   },
+  env: {
+    node: true,
+  },
 };

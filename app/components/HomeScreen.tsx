@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import {
   Alert,
   Dimensions,
@@ -11,15 +11,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SelectList } from 'react-native-dropdown-select-list';
-import Context from './Context';
 
-import { SchoolKeyPair, getSchoolList } from '../firebase/util';
+import Context from './Context';
+import ScreenWrapper from './ScreenWrapper';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
 import TipsIcon from '../icons/TipsIcon';
-import ScreenWrapper from './ScreenWrapper';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 
@@ -41,34 +39,7 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 
 function HomeScreen() {
   const navigation = useNavigation<any>();
-  const { schoolName, setSchoolName } = useContext(Context);
-  const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
-  const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
-
-  // Update dropdown styling based on selection state
-  useEffect(() => {
-    setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
-  }, [schoolName]);
-
-  useEffect(() => {
-    // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
-    const fetchSchools = async () => {
-      try {
-        // Attempt to fetch the school list using the getSchoolList function.
-        const schoolList = await getSchoolList();
-        if (schoolList != null) {
-          setSchoolOptions(schoolList);
-        }
-      } catch (error) {
-        // If an error occurs during fetching, log it to the console.
-        console.error('Failed to fetch schools:', error);
-      }
-    };
-
-    // Call the fetchSchools function defined above to execute the fetching process.
-    // This function is called right after the component mounts due to the empty dependency array.
-    fetchSchools();
-  }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
+  const { schoolName } = useContext(Context);
 
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
@@ -77,7 +48,7 @@ function HomeScreen() {
         if (!schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Navigation', { schoolName: schoolName });
+          navigation.navigate('Navigation', { schoolName });
         }
       },
       2: () => {
@@ -109,18 +80,6 @@ function HomeScreen() {
       <ScrollView>
         <View style={styles.imageContainer}>
           <Image source={require('../../assets/logo.png')} style={styles.logo} />
-        </View>
-        <View style={styles.dropdownContainer}>
-          <SelectList
-            setSelected={(val: string) => setSchoolName(val)}
-            data={schoolOptions}
-            inputStyles={styles.selectInput}
-            save="value"
-            placeholder="Select School"
-            maxHeight={275}
-            search={false}
-            boxStyles={dropdownStyle}
-          />
         </View>
         <Text style={styles.subtitle}>Resources</Text>
         <View style={styles.buttonsGrid}>
@@ -173,14 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
   },
-  dropdownContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 0,
-    paddingBottom: 10,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    paddingLeft: screenWidth / 19,
-  },
   subtitle: {
     marginTop: 10,
     marginBottom: 10,
@@ -206,11 +157,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#ffffff',
   },
-  selectInput: {
-    fontSize: 16,
-    width: '81%',
-    color: '#36afbc',
-  },
   buttonIcon: {
     width: 50, // Adjust size as needed
     height: 50, // Adjust size as needed
@@ -219,16 +165,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 300,
     height: 100,
-  },
-  dropdownUnselected: {
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 10,
-  },
-  dropdownSelected: {
-    borderWidth: 1,
-    borderColor: '#36afbc',
-    borderRadius: 10,
   },
   buttonsGrid: {
     flexDirection: 'row',
