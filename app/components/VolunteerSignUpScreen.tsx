@@ -1,34 +1,30 @@
 import { useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import ScreenWrapper from '../components/ScreenWrapper';
-import { getNextThreeMonthsDates } from '../data/siteDates';
-// eslint-disable-next-line import/namespace, import/no-duplicates
-// import { nextThreeMonthsDates } from '../data/siteDates';
+import { nextThreeMonthsDates } from '../data/siteDates';
+import ScreenWrapper from './ScreenWrapper';
 
 const { width: screenWidth } = Dimensions.get('window');
 const { height: screenHeight } = Dimensions.get('window');
 
-const nextThreeMonthsDates = getNextThreeMonthsDates();
-
-export default function SignUpScreen() {
+export function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
 
   const handleRedButtonPress = (buttonIndex: number) => {
     let newDateArray;
-    if (buttonIndex === 1) {
+    if (buttonIndex == 1) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Monday'
       );
-    } else if (buttonIndex === 2) {
+    } else if (buttonIndex == 2) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Tuesday'
       );
-    } else if (buttonIndex === 3) {
+    } else if (buttonIndex == 3) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Wednesday'
       );
-    } else if (buttonIndex === 4) {
+    } else if (buttonIndex == 4) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Thursday'
       );
@@ -46,33 +42,24 @@ export default function SignUpScreen() {
 
   return (
     <ScreenWrapper>
-      <Text style={styles.title}>Volunteering Session Sign Up</Text>
+      <text style={styles.title}>Volunteering Session Sign Up</text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.redButton} onPress={() => handleRedButtonPress(1)}>
-          <Text style={styles.redButtonText}>M</Text>
+          <text style={styles.redButtonText}>M</text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.redButton} onPress={() => handleRedButtonPress(2)}>
-          <Text style={styles.redButtonText}>T</Text>
+          <text style={styles.redButtonText}>T</text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.redButton} onPress={() => handleRedButtonPress(3)}>
-          <Text style={styles.redButtonText}>W</Text>
+          <text style={styles.redButtonText}>W</text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.redButton} onPress={() => handleRedButtonPress(4)}>
-          <Text style={styles.redButtonText}>Th</Text>
+          <text style={styles.redButtonText}>Th</text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.redButton} onPress={() => handleRedButtonPress(5)}>
-          <Text style={styles.redButtonText}>F</Text>
+          <text style={styles.redButtonText}>F</text>
         </TouchableOpacity>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-        {Object.values(dateArray).map((date) => (
-          <View style={styles.datesContainer}>
-            <TouchableOpacity style={styles.dateButton}>
-              <Text>{date.date}</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
     </ScreenWrapper>
   );
 }
@@ -88,32 +75,28 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 15,
     textAlign: 'center', // Ensures the title is centered
     color: '#36afbc',
-    marginTop: 30,
   },
   redButton: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F1375A',
     borderRadius: 50,
-    width: screenWidth * 0.135,
-    height: screenWidth * 0.135,
-    opacity: 0.7,
+    width: screenWidth * 0.125,
+    height: screenWidth * 0.125,
   },
   redButtonText: {
-    fontWeight: 'condensedBold',
-    fontSize: 28,
+    fontWeight: 'bold',
+    fontSize: 30,
     color: 'white',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 30,
-    marginVertical: 15,
   },
   dateButtonSelected: {
     alignItems: 'center',
@@ -132,19 +115,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
     borderColor: 'gray',
-    borderWidth: 2,
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 15,
-    width: 300,
+    borderWidth: 5,
   },
   unselectedText: {
     fontWeight: 'condensedBold',
     fontSize: 25,
     color: 'grey',
-  },
-  datesContainer: {
-    justifyContent: 'space-evenly',
-    backgroundColor: 'white',
   },
 });
