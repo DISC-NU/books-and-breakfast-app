@@ -45,6 +45,12 @@ export interface ResourceURLs {
   groupMeURL: string;
 }
 
+// Save function for school transportation details
+async function updateSchoolDirections(schoolName: string, field: string, value: string) {
+  // Generate a database reference specifically targeting the requested school's directions.
+  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
+}
+
 async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
   return get(ref(database, '/SchoolDirections'))
@@ -155,7 +161,6 @@ export const listenToTips = (
 
   return () => off(tipsRef, 'value', unsubscribe);
 };
-};
 
 // Save function for tips details
 async function updateTipsInfo(schoolName: string, content: string, index: string) {
@@ -242,4 +247,4 @@ export function listenToMissionEntries(callback: (data: Entry[] | null) => void)
 }
 
 // Export the functions for use in other parts of the application.
-export { getSchoolList, updateTipsInfo };
+export { getSchoolList, updateSchoolDirections, updateTipsInfo };
