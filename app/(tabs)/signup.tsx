@@ -15,10 +15,10 @@ export default function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
   // const [dateColor, setDateColor] = useState('#CBCBCB');
   const [selectedDates, setSelectedDates] = useState([-1]);
+  const [editable, setEditable] = useState(false);
   const [lastButtonColor, setLastButtonColor] = useState('#F1375A');
 
   let lastText = 'Edit';
-  let editable = true;
 
   const handleRedButtonPress = (buttonIndex: number) => {
     let newDateArray;
@@ -48,35 +48,28 @@ export default function SignUpScreen() {
   };
 
   const handleDateButtonPress = (index: number) => {
-    if (selectedDates.includes(index)) {
-      const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
-      setSelectedDates(newSelected);
-    } else {
-      setSelectedDates([...selectedDates, index]);
+    if (editable) {
+      if (selectedDates.includes(index)) {
+        const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
+        setSelectedDates(newSelected);
+      } else {
+        setSelectedDates([...selectedDates, index]);
+      }
+      console.log(selectedDates);
     }
-    console.log(selectedDates);
-    // if (editable) {
-    //   if (selectedDates.includes(index)) {
-    //     const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
-    //     setSelectedDates(newSelected);
-    //   } else {
-    //     setSelectedDates([...selectedDates, index]);
-    //   }
-    //   console.log(selectedDates);
-    // }
   };
 
   const handleLastButtonPress = () => {
     if (lastButtonColor === '#F1375A') {
       lastText = 'Submit';
       console.log(lastText);
-      editable = true;
+      setEditable(true);
       console.log(editable);
       setLastButtonColor('#36afbc');
     } else {
       lastText = 'Edit';
       console.log(lastText);
-      editable = false;
+      setEditable(false);
       console.log(editable);
       setLastButtonColor('#F1375A');
     }
