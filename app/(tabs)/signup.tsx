@@ -17,8 +17,9 @@ export default function SignUpScreen() {
   const [selectedDates, setSelectedDates] = useState([-1]);
   const [editable, setEditable] = useState(false);
   const [lastButtonColor, setLastButtonColor] = useState('#F1375A');
+  const [lastButtonText, setLastButtonText] = useState('Editable');
 
-  let lastText = 'Edit';
+  const lastText = 'Edit';
 
   const handleRedButtonPress = (buttonIndex: number) => {
     let newDateArray;
@@ -61,13 +62,13 @@ export default function SignUpScreen() {
 
   const handleLastButtonPress = () => {
     if (lastButtonColor === '#F1375A') {
-      lastText = 'Submit';
+      setLastButtonText('Submit');
       console.log(lastText);
       setEditable(true);
       console.log(editable);
       setLastButtonColor('#36afbc');
     } else {
-      lastText = 'Edit';
+      setLastButtonText('Edit');
       console.log(lastText);
       setEditable(false);
       console.log(editable);
@@ -120,7 +121,7 @@ export default function SignUpScreen() {
         <TouchableOpacity
           style={[styles.finalButton, { backgroundColor: lastButtonColor }]}
           onPress={handleLastButtonPress}>
-          <Text style={styles.finalButtonText}>{lastText}</Text>
+          <Text style={styles.finalButtonText}>{lastButtonText}</Text>
         </TouchableOpacity>
       </View>
     </ScreenWrapper>
