@@ -51,12 +51,6 @@ export async function updateSchoolDirections(schoolName: string, field: string, 
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
 }
 
-// Save function for school transportation details
-export async function updateSchoolDirections(schoolName: string, field: string, value: string) {
-  // Generate a database reference specifically targeting the requested school's directions.
-  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
-}
-
 export async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
   return get(ref(database, '/SchoolDirections'))
