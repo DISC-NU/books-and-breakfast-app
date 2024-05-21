@@ -2,7 +2,6 @@
 import { child, get, off, onValue, push, ref, set } from 'firebase/database';
 
 // Import the pre-configured Firebase database instance.
-import { UserInfo } from '../components/Context';
 import { database } from './firebaseConfig';
 
 // TypeScript interface for representing key-value pairs of school names for school selection dropdown
@@ -44,6 +43,18 @@ export interface Entry {
 export interface ResourceURLs {
   trackerURL: string;
   groupMeURL: string;
+}
+
+// Save function for school transportation details
+export async function updateSchoolDirections(schoolName: string, field: string, value: string) {
+  // Generate a database reference specifically targeting the requested school's directions.
+  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
+}
+
+// Save function for school transportation details
+export async function updateSchoolDirections(schoolName: string, field: string, value: string) {
+  // Generate a database reference specifically targeting the requested school's directions.
+  const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
 }
 
 export async function getSchoolList() {
