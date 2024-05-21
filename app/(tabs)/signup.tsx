@@ -13,7 +13,8 @@ const nextThreeMonthsDates = getNextThreeMonthsDates();
 
 export default function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
-  const [dateColor, setDateColor] = useState('#CBCBCB');
+  // const [dateColor, setDateColor] = useState('#CBCBCB');
+  const [selectedDates, setSelectedDates] = useState([-1]);
   const [lastButtonColor, setLastButtonColor] = useState('#F1375A');
 
   let lastText = 'Edit';
@@ -43,16 +44,26 @@ export default function SignUpScreen() {
       );
     }
     setDateArray(newDateArray);
+    setSelectedDates([-1]);
   };
 
-  const handleDateButtonPress = () => {
-    if (editable) {
-      if (dateColor === '#CBCBCB') {
-        setDateColor('#36afbc');
-      } else {
-        setDateColor('#CBCBCB');
-      }
+  const handleDateButtonPress = (index: number) => {
+    if (selectedDates.includes(index)) {
+      const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
+      setSelectedDates(newSelected);
+    } else {
+      setSelectedDates([...selectedDates, index]);
     }
+    console.log(selectedDates);
+    // if (editable) {
+    //   if (selectedDates.includes(index)) {
+    //     const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
+    //     setSelectedDates(newSelected);
+    //   } else {
+    //     setSelectedDates([...selectedDates, index]);
+    //   }
+    //   console.log(selectedDates);
+    // }
   };
 
   const handleLastButtonPress = () => {
@@ -93,11 +104,19 @@ export default function SignUpScreen() {
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         {Object.values(dateArray).map((date, index) => (
-          <View style={styles.datesContainer}>
+          <View key={index} style={styles.datesContainer}>
             <TouchableOpacity
-              style={[styles.dateButton, { borderColor: dateColor }]}
-              onPress={handleDateButtonPress}>
-              <Text key={index} style={[styles.unselectedText, { color: dateColor }]}>
+              style={[
+                styles.dateButton,
+                selectedDates.includes(index) && { borderColor: '#36afbc' },
+              ]}
+              onPress={() => handleDateButtonPress(index)}>
+              <Text
+                key={index}
+                style={[
+                  styles.unselectedText,
+                  selectedDates.includes(index) && { color: '#36afbc' },
+                ]}>
                 {date.date}
               </Text>
             </TouchableOpacity>
@@ -173,11 +192,13 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
     width: 320,
+    borderColor: '#CBCBCB',
   },
   unselectedText: {
     fontWeight: 'condensedBold',
     fontSize: 22,
     textAlign: 'left',
+    color: '#CBCBCB',
   },
   datesContainer: {
     justifyContent: 'space-evenly',
