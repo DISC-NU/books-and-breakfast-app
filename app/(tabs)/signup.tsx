@@ -3,8 +3,6 @@ import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from
 
 import ScreenWrapper from '../components/ScreenWrapper';
 import { getNextThreeMonthsDates } from '../data/siteDates';
-// eslint-disable-next-line import/namespace, import/no-duplicates
-// import { nextThreeMonthsDates } from '../data/siteDates';
 
 const { width: screenWidth } = Dimensions.get('window');
 const { height: screenHeight } = Dimensions.get('window');
@@ -13,14 +11,14 @@ const nextThreeMonthsDates = getNextThreeMonthsDates();
 
 export default function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
-  const [dateColor, setDateColor] = useState('#CBCBCB');
+  const [dateColors, setDateColors] = useState(Array(nextThreeMonthsDates.length).fill('#CBCBCB'));
   const [lastButtonColor, setLastButtonColor] = useState('#F1375A');
   const [lastText, setLastText] = useState('Edit');
   const [isFilterSelected, setIsFilterSelected] = useState(false);
 
   let editable = true;
 
-  const handleRedButtonPress = (buttonIndex: number) => {
+  const handleRedButtonPress = (buttonIndex) => {
     let newDateArray;
     if (buttonIndex === 1) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
@@ -44,30 +42,25 @@ export default function SignUpScreen() {
       );
     }
     setDateArray(newDateArray);
+    setDateColors(Array(newDateArray.length).fill('#CBCBCB'));
   };
 
-  const handleDateButtonPress = () => {
-    if (isFilterSelected === false) {
-      if (dateColor === '#CBCBCB') {
-        setDateColor('#36afbc');
-      } else {
-        setDateColor('#CBCBCB');
-      }
+  const handleDateButtonPress = (index) => {
+    if (!isFilterSelected) {
+      const newDateColors = [...dateColors];
+      newDateColors[index] = newDateColors[index] === '#CBCBCB' ? '#36afbc' : '#CBCBCB';
+      setDateColors(newDateColors);
     }
   };
 
   const handleLastButtonPress = () => {
     if (lastButtonColor === '#F1375A') {
       setLastText('Submit');
-      console.log(lastText);
       editable = true;
-      console.log(editable);
       setLastButtonColor('#36afbc');
     } else {
       setLastText('Edit');
-      console.log(lastText);
       editable = false;
-      console.log(editable);
       setLastButtonColor('#F1375A');
     }
   };
@@ -94,13 +87,11 @@ export default function SignUpScreen() {
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         {Object.values(dateArray).map((date, index) => (
-          <View style={styles.datesContainer}>
+          <View key={index} style={styles.datesContainer}>
             <TouchableOpacity
-              style={[styles.dateButton, { borderColor: dateColor }]}
-              onPress={handleDateButtonPress}>
-              <Text key={index} style={[styles.unselectedText, { color: dateColor }]}>
-                {date.date}
-              </Text>
+              style={[styles.dateButton, { borderColor: dateColors[index] }]}
+              onPress={() => handleDateButtonPress(index)}>
+              <Text style={[styles.unselectedText, { color: dateColors[index] }]}>{date.date}</Text>
             </TouchableOpacity>
           </View>
         ))}
@@ -130,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 15,
-    textAlign: 'center', // Ensures the title is centered
+    textAlign: 'center',
     color: '#36afbc',
     marginTop: 30,
   },
@@ -144,7 +135,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   redButtonText: {
-    fontWeight: 'condensedBold',
+    fontWeight: 'bold',
     fontSize: 28,
     color: 'white',
   },
@@ -154,18 +145,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     marginVertical: 15,
   },
-  // dateButtonSelected: {
-  //   justifyContent: 'center',
-  //   backgroundColor: 'white',
-  //   borderColor: '#36afbc',
-  //   borderWidth: 5,
-  // },
-  // selectedText: {
-  //   fontWeight: 'condensedBold',
-  //   fontSize: 30,
-  //   color: '#36afbc',
-  //   textAlign: 'left',
-  // },
   dateButton: {
     justifyContent: 'center',
     backgroundColor: 'white',
@@ -176,7 +155,7 @@ const styles = StyleSheet.create({
     width: 320,
   },
   unselectedText: {
-    fontWeight: 'condensedBold',
+    fontWeight: 'bold',
     fontSize: 22,
     textAlign: 'left',
   },
