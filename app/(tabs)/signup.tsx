@@ -11,7 +11,8 @@ const nextThreeMonthsDates = getNextThreeMonthsDates();
 
 export default function SignUpScreen() {
   const [dateArray, setDateArray] = useState(nextThreeMonthsDates);
-  const [dateColors, setDateColors] = useState(Array(nextThreeMonthsDates.length).fill('#CBCBCB'));
+  // const [dateColor, setDateColor] = useState('#CBCBCB');
+  const [selectedDates, setSelectedDates] = useState([-1]);
   const [lastButtonColor, setLastButtonColor] = useState('#F1375A');
   const [lastText, setLastText] = useState('Edit');
   const [isFilterSelected, setIsFilterSelected] = useState(false);
@@ -42,15 +43,26 @@ export default function SignUpScreen() {
       );
     }
     setDateArray(newDateArray);
-    setDateColors(Array(newDateArray.length).fill('#CBCBCB'));
+    setSelectedDates([-1]);
   };
 
-  const handleDateButtonPress = (index) => {
-    if (!isFilterSelected) {
-      const newDateColors = [...dateColors];
-      newDateColors[index] = newDateColors[index] === '#CBCBCB' ? '#36afbc' : '#CBCBCB';
-      setDateColors(newDateColors);
+  const handleDateButtonPress = (index: number) => {
+    if (selectedDates.includes(index)) {
+      const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
+      setSelectedDates(newSelected);
+    } else {
+      setSelectedDates([...selectedDates, index]);
     }
+    console.log(selectedDates);
+    // if (editable) {
+    //   if (selectedDates.includes(index)) {
+    //     const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
+    //     setSelectedDates(newSelected);
+    //   } else {
+    //     setSelectedDates([...selectedDates, index]);
+    //   }
+    //   console.log(selectedDates);
+    // }
   };
 
   const handleLastButtonPress = () => {
@@ -89,9 +101,19 @@ export default function SignUpScreen() {
         {Object.values(dateArray).map((date, index) => (
           <View key={index} style={styles.datesContainer}>
             <TouchableOpacity
-              style={[styles.dateButton, { borderColor: dateColors[index] }]}
+              style={[
+                styles.dateButton,
+                selectedDates.includes(index) && { borderColor: '#36afbc' },
+              ]}
               onPress={() => handleDateButtonPress(index)}>
-              <Text style={[styles.unselectedText, { color: dateColors[index] }]}>{date.date}</Text>
+              <Text
+                key={index}
+                style={[
+                  styles.unselectedText,
+                  selectedDates.includes(index) && { color: '#36afbc' },
+                ]}>
+                {date.date}
+              </Text>
             </TouchableOpacity>
           </View>
         ))}
@@ -153,11 +175,13 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
     width: 320,
+    borderColor: '#CBCBCB',
   },
   unselectedText: {
     fontWeight: 'bold',
     fontSize: 22,
     textAlign: 'left',
+    color: '#CBCBCB',
   },
   datesContainer: {
     justifyContent: 'space-evenly',
