@@ -16,7 +16,7 @@ PODS:
   - EXJSONUtils (0.13.1)
   - EXManifests (0.14.3):
     - ExpoModulesCore
-  - Expo (51.0.2):
+  - Expo (51.0.5):
     - ExpoModulesCore
   - expo-dev-client (4.0.14):
     - EXManifests
@@ -235,9 +235,9 @@ PODS:
     - ExpoModulesCore
   - ExpoFileSystem (17.0.1):
     - ExpoModulesCore
-  - ExpoFont (12.0.4):
+  - ExpoFont (12.0.5):
     - ExpoModulesCore
-  - ExpoHead (3.5.11):
+  - ExpoHead (3.5.12):
     - ExpoModulesCore
   - ExpoKeepAwake (13.0.1):
     - ExpoModulesCore
@@ -1836,7 +1836,7 @@ SPEC CHECKSUMS:
   EXConstants: 9a008dbf262550884e6280dea95b81b51f65ea6f
   EXJSONUtils: 30c17fd9cc364d722c0946a550dfbf1be92ef6a4
   EXManifests: c1fab4c3237675e7b0299ea8df0bcb14baca4f42
-  Expo: a615f2b4d9412683c7c63ce20b376a3ab0c8af83
+  Expo: a3177f18e97260de9ec29802d28d29c130871e94
   expo-dev-client: 5a76dfdc64875a076212f9d3ee9a897bdd735105
   expo-dev-launcher: 752312abcf346045aac32cf1bde006f45faf4a04
   expo-dev-menu: 8559d77f4037c6105b21a424dec68f235496c391
@@ -1845,8 +1845,8 @@ SPEC CHECKSUMS:
   ExpoAsset: 9b7433ecc5f1b608ccbb823492e062bde944abd2
   ExpoCrypto: 156078f266bf28f80ecf5e2a9c3a0d6ffce07a1c
   ExpoFileSystem: 80bfe850b1f9922c16905822ecbf97acd711dc51
-  ExpoFont: 331cf28d549edc7b6300d3be19302fc5069d9bb1
-  ExpoHead: 0c169e19f59dc46d6c7d2617866532589d225c72
+  ExpoFont: 690b76008be824e47907f200cb0764870108dfd1
+  ExpoHead: 1403ab1219f4f95f0a288f27312a9ef2863eebc7
   ExpoKeepAwake: f3a7b0ff4b4911957264dad8cb584ef688326a22
   ExpoModulesCore: 4c5576eec261d09549d78b751ccd62d94d4506ac
   ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e

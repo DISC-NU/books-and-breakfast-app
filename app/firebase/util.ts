@@ -52,6 +52,13 @@ export interface ResourceURLs {
 export async function updateSchoolDirections(schoolName: string, field: string, value: string) {
   // Generate a database reference specifically targeting the requested school's directions.
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
+  try {
+    await set(schoolRef, value);
+    return true;
+  } catch (error) {
+    console.error('Error updating school directions: ', error);
+    return null;
+  }
 }
 
 export async function getSchoolList() {
@@ -145,7 +152,7 @@ export const listenToTips = (
 };
 
 // Save function for tips details
-async function updateTipsInfo(schoolName: string, content: string, index: string) {
+export const updateTipsInfo = async (schoolName: string, content: string, index: string) => {
   const tipsRef = ref(database, `/TipsInfo/${schoolName}/${index}`);
   try {
     set(tipsRef, { content });
@@ -154,7 +161,7 @@ async function updateTipsInfo(schoolName: string, content: string, index: string
     console.error('Error updating school tips: ', error);
     return null;
   }
-}
+};
 
 export const addNewTip = async (schoolName, newTip) => {
   const tipsRef = ref(database, `/TipsInfo/${schoolName}`);
