@@ -2,11 +2,13 @@ import { FontAwesome } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Redirect, Tabs } from 'expo-router';
 import React, { useContext } from 'react';
+
 import Context from '../components/Context';
 
 export default function TabLayout() {
   const { userInfo } = useContext(Context);
 
+  // If user is not signed in, redirect to login page
   if (!userInfo) {
     return <Redirect href="/login" />;
   }

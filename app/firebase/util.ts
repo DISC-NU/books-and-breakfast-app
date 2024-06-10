@@ -1,8 +1,11 @@
 // Imports the necessary functions from the Firebase database module.
 import { child, get, off, onValue, push, ref, set } from 'firebase/database';
 
-// Import the pre-configured Firebase database instance.
+import { UserInfo } from '../components/Context';
+import { Tips } from '../data/TipsInfo';
 import { database } from './firebaseConfig';
+
+// Import the pre-configured Firebase database instance.
 
 // TypeScript interface for representing key-value pairs of school names for school selection dropdown
 export interface SchoolKeyPair {
@@ -121,7 +124,7 @@ export const listenToTips = (
     tipsRef,
     (snapshot) => {
       if (snapshot.exists()) {
-        const tipsData = snapshot.val();
+        const tipsData = snapshot.val() as Tips;
         const tips = Object.entries(tipsData).map(([id, tip]) => ({
           id,
           content: tip.content,

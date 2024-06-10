@@ -62,4 +62,4 @@ export const getNextThreeMonthsDates: () => DateArray = () => {
 };
 
 export const nextThreeMonthsDates = getNextThreeMonthsDates();
-console.log(nextThreeMonthsDates);
+// console.log(nextThreeMonthsDates);

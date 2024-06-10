@@ -53,7 +53,7 @@ export default function SignUpScreen() {
     } else {
       setSelectedDates([...selectedDates, index]);
     }
-    console.log(selectedDates);
+    // console.log(selectedDates);
     // if (editable) {
     //   if (selectedDates.includes(index)) {
     //     const newSelected = selectedDates.filter((dateIndex) => dateIndex !== index);
