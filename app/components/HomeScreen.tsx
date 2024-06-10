@@ -11,9 +11,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SelectList } from 'react-native-dropdown-select-list';
 
-import { ResourceURLs, SchoolKeyPair, getResourceURLs, getSchoolList } from '../firebase/util';
+import { ResourceURLs, getResourceURLs } from '../firebase/util';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
@@ -41,9 +40,7 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 
 function HomeScreen() {
   const navigation = useNavigation<any>();
-  const { schoolName, setSchoolName } = useContext(Context);
-  const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
-  const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
+  const { schoolName } = useContext(Context);
   const [resourceURLs, setResourceURLs] = useState<ResourceURLs | null>(null);
 
   // Fetch resource URLs from Firebase
@@ -61,31 +58,6 @@ function HomeScreen() {
     fetchResourceURLs();
   }, []);
 
-  // Update dropdown styling based on selection state
-  useEffect(() => {
-    setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
-  }, [schoolName]);
-
-  useEffect(() => {
-    // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
-    const fetchSchools = async () => {
-      try {
-        // Attempt to fetch the school list using the getSchoolList function.
-        const schoolList = await getSchoolList();
-        if (schoolList != null) {
-          setSchoolOptions(schoolList);
-        }
-      } catch (error) {
-        // If an error occurs during fetching, log it to the console.
-        console.error('Failed to fetch schools:', error);
-      }
-    };
-
-    // Call the fetchSchools function defined above to execute the fetching process.
-    // This function is called right after the component mounts due to the empty dependency array.
-    fetchSchools();
-  }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
-
   // Button press handler for navigation and action buttons
   const handleButtonPress = (buttonIndex: number) => {
     const actions = {
@@ -93,6 +65,7 @@ function HomeScreen() {
         if (!schoolName) {
           Alert.alert('Please select a school.');
         } else {
+          navigation.navigate('Navigation', { schoolName });
           navigation.navigate('Navigation', { schoolName });
         }
       },
@@ -134,18 +107,6 @@ function HomeScreen() {
       <ScrollView>
         <View style={styles.imageContainer}>
           <Image source={require('../../assets/logo.png')} style={styles.logo} />
-        </View>
-        <View style={styles.dropdownContainer}>
-          <SelectList
-            setSelected={(val: string) => setSchoolName(val)}
-            data={schoolOptions}
-            inputStyles={styles.selectInput}
-            save="value"
-            placeholder="Select School"
-            maxHeight={275}
-            search={false}
-            boxStyles={dropdownStyle}
-          />
         </View>
         <Text style={styles.subtitle}>Resources</Text>
         <View style={styles.buttonsGrid}>
@@ -198,16 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
   },
-  dropdownContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 0,
-    paddingBottom: 10,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    paddingLeft: screenWidth / 19,
-  },
   subtitle: {
-    marginTop: 10,
     marginBottom: 10,
     fontSize: 20,
     fontWeight: 'bold',
@@ -231,11 +183,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#ffffff',
   },
-  selectInput: {
-    fontSize: 16,
-    width: '81%',
-    color: '#36afbc',
-  },
   buttonIcon: {
     width: 50, // Adjust size as needed
     height: 50, // Adjust size as needed
@@ -244,16 +191,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 300,
     height: 100,
-  },
-  dropdownUnselected: {
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 10,
-  },
-  dropdownSelected: {
-    borderWidth: 2,
-    borderColor: '#36afbc',
-    borderRadius: 10,
   },
   buttonsGrid: {
     flexDirection: 'row',

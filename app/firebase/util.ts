@@ -1,8 +1,11 @@
 // Imports the necessary functions from the Firebase database module.
 import { child, get, off, onValue, push, ref, set } from 'firebase/database';
 
-// Import the pre-configured Firebase database instance.
+import { UserInfo } from '../components/Context';
+import { Tips } from '../data/TipsInfo';
 import { database } from './firebaseConfig';
+
+// Import the pre-configured Firebase database instance.
 
 // TypeScript interface for representing key-value pairs of school names for school selection dropdown
 export interface SchoolKeyPair {
@@ -46,12 +49,12 @@ export interface ResourceURLs {
 }
 
 // Save function for school transportation details
-async function updateSchoolDirections(schoolName: string, field: string, value: string) {
+export async function updateSchoolDirections(schoolName: string, field: string, value: string) {
   // Generate a database reference specifically targeting the requested school's directions.
   const schoolRef = ref(database, `/SchoolDirections/${schoolName}/${field}`);
 }
 
-async function getSchoolList() {
+export async function getSchoolList() {
   // Create a reference to the SchoolDirections node in Firebase database.
   return get(ref(database, '/SchoolDirections'))
     .then((snapshot) => {
@@ -111,27 +114,6 @@ export function listenToSchoolDirections(
   return () => off(schoolRef, 'value', unsubscribe);
 }
 
-/**
- * Fetches all mission entries from the Firebase database.
- * @returns A promise resolving to an array of Entry objects or null if no data is found.
- */
-export async function getMissionEntries(): Promise<Entry[] | null> {
-  try {
-    const snapshot = await get(child(ref(database), 'missions'));
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
-      return missionEntries;
-    } else {
-      console.log('No data available');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error fetching mission entries:', error);
-    return null;
-  }
-}
-
 export const listenToTips = (
   schoolName: string,
   callback: (tips: { id: string; content: string }[]) => void
@@ -142,7 +124,7 @@ export const listenToTips = (
     tipsRef,
     (snapshot) => {
       if (snapshot.exists()) {
-        const tipsData = snapshot.val();
+        const tipsData = snapshot.val() as Tips;
         const tips = Object.entries(tipsData).map(([id, tip]) => ({
           id,
           content: tip.content,
@@ -246,5 +228,58 @@ export function listenToMissionEntries(callback: (data: Entry[] | null) => void)
   return () => off(missionsRef, 'value', unsubscribe);
 }
 
-// Export the functions for use in other parts of the application.
-export { getSchoolList, updateSchoolDirections, updateTipsInfo };
+/**
+ * Fetches all mission entries from the Firebase database.
+ * @returns A promise resolving to an array of Entry objects or null if no data is found.
+ */
+export async function getMissionEntries(): Promise<Entry[] | null> {
+  try {
+    const snapshot = await get(child(ref(database), 'missions'));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
+      return missionEntries;
+    } else {
+      console.log('No data available');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching mission entries:', error);
+    return null;
+  }
+}
+
+export const isNewUser = async (userInfo: UserInfo) => {
+  const userRef = ref(database, `users/${userInfo.id}`);
+  const snapshot = await get(userRef);
+  return !snapshot.exists();
+};
+
+export const AddNewUser = async (userInfo: UserInfo) => {
+  const userRef = ref(database, `users/${userInfo.id}`);
+  try {
+    await set(userRef, userInfo);
+  } catch (error) {
+    console.error('Error adding new user: ', error);
+  }
+};
+
+export const getUserInfo = async (userInfo: UserInfo) => {
+  const userRef = ref(database, `users/${userInfo.id}`);
+  const snapshot = await get(userRef);
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    return null;
+  }
+};
+
+// Function to update specific fields for a user
+export const updateUserFields = async (userId: string, fieldsToUpdate: any) => {
+  const userRef = ref(database, `users/${userId}`);
+  try {
+    await set(userRef, fieldsToUpdate);
+  } catch (error) {
+    console.error('Error updating user fields: ', error);
+  }
+};
