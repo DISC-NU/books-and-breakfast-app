@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import EditText from './EditText';
-import { SchoolDirections } from '../data/SchoolDirections';
 import { listenToSchoolDirections, updateSchoolDirections } from '../firebase/util';
+import EditText from './EditText';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -61,6 +60,7 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
   const handleSave = async (schoolName: string, field: string, value: string) => {
     try {
       await updateSchoolDirections(schoolName, field, value);
+      setDirectionsInfo((prev) => ({ ...prev, [field]: value })); // Update local state
     } catch (error) {
       console.error('Failed to update school directions', error);
       setError('Failed to update school directions. Please try again later.');

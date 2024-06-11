@@ -1,17 +1,15 @@
-import { Stack } from 'expo-router/stack';
+import { Slot } from 'expo-router';
 import { useState } from 'react';
 
-import Context, { User, defaultUser } from './components/Context';
+import Context, { UserInfo } from './components/Context';
 
 export default function AppLayout() {
   const [schoolName, setSchoolName] = useState<string>('');
-  const [user, setUser] = useState<User>(defaultUser);
+  const [userInfo, setUserInfo] = useState<UserInfo>(null);
 
   return (
-    <Context.Provider value={{ schoolName, setSchoolName, user, setUser }}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+    <Context.Provider value={{ schoolName, setSchoolName, userInfo, setUserInfo }}>
+      <Slot />
     </Context.Provider>
   );
 }
