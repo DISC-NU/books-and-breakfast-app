@@ -58,7 +58,7 @@ export default function CustomizationScreen() {
           </View>
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
-              <Text style={styles.subtitle}>Your Volunteering Site</Text>
+              <Text style={styles.subtitle}>Your Assigned Volunteering Site</Text>
               <View style={styles.dropdownWrapper}>
                 <View style={styles.dropdownContainer}>
                   <SelectList
