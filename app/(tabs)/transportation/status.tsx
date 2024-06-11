@@ -9,15 +9,15 @@ import { SelectList } from 'react-native-dropdown-select-list';
 // }
 
 interface StatusHeaderProps {
-  date: string;
-  totalGoing: number;
+  day: string;
+  volunteerNum: number;
 }
 
-const StatusHeader: React.FC<StatusHeaderProps> = ({ date, totalGoing }) => (
+const StatusHeader: React.FC<StatusHeaderProps> = ({ day, volunteerNum }) => (
   <View style={styles.headerContainer}>
     <Text style={styles.headerTitle}>Your Upcoming Volunteering Session:</Text>
     <Text style={styles.headerInfo}>
-      {date} | Total Going: {totalGoing}
+      {day} | Volunteers Expected: {volunteerNum}
     </Text>
   </View>
 );
@@ -26,7 +26,7 @@ const SectionHeader: React.FC<{ text: string }> = ({ text }) => (
   <Text style={styles.sectionHeader}>{text}</Text>
 );
 
-const SectionCircleIcons: React.FC = () => (
+const SectionCircleIcons = () => (
   <View style={styles.circleIconsContainer}>
     <Icon name="circle" size={110} color="#D9D9D9" />
     <Icon name="circle" size={110} color="#D9D9D9" />
@@ -34,22 +34,23 @@ const SectionCircleIcons: React.FC = () => (
   </View>
 );
 
-interface StatusScreenDetailsProps {
-  schoolName: string;
-}
+// interface StatusScreenDetailsProps {
+//   schoolName: string; // update later
+// }
 
-export const StatusScreenDetails: React.FC<StatusScreenDetailsProps> = ({ schoolName }) => {
+export const StatusScreenDetails = () => {
   const [status, setStatus] = useState('');
 
   const statusSelections = [
-    { key: '0', value: 'Willing to Drive!' },
-    { key: '1', value: 'Looking for Carpool!' },
-    { key: '2', value: "I'm Good!" },
+    { key: '0', value: 'Looking for Walking Buddy!' },
+    { key: '1', value: 'Looking for CTA Buddy!' },
+    { key: '2', value: 'Looking for Carpool!' },
+    { key: '3', value: 'Willing to Drive!' },
   ];
 
   return (
     <View style={styles.container}>
-      <StatusHeader date="May 20, 2024" totalGoing="10" />
+      <StatusHeader day="Monday" volunteerNum={10} />
       <View style={styles.dropdownContainer}>
         <SelectList
           setSelected={setStatus}
@@ -58,17 +59,18 @@ export const StatusScreenDetails: React.FC<StatusScreenDetailsProps> = ({ school
           dropdownStyles={styles.dropdownStyles}
           boxStyles={styles.dropdownBox}
           inputStyles={styles.dropdownInput}
-          maxHeight={122}
+          maxHeight={140}
           search={false}
         />
       </View>
       <View style={styles.section}>
-        <SectionHeader text="Looking For Carpool" />
+        <SectionHeader text="Looking for Walking Buddy" />
+        <SectionCircleIcons />
+        <SectionHeader text="Looking for CTA Buddy" />
+        <SectionCircleIcons />
+        <SectionHeader text="Looking for Carpool" />
         <SectionCircleIcons />
         <SectionHeader text="Can Drive People" />
-        <SectionCircleIcons />
-        <SectionHeader text="I'm Good :)" />
-        <SectionCircleIcons />
       </View>
     </View>
   );
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     borderColor: '#27530B',
     backgroundColor: '#5ED217',
   },
-  
+
   dropdownInput: {
     fontSize: 18,
     fontWeight: '600',

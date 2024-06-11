@@ -1,12 +1,11 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import moment from 'moment';
 import React, { useCallback, useContext, useState } from 'react';
-import { Dimensions, ScrollView, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import Context from '../../components/Context';
 import { StatusScreenDetails } from './status';
+import Context from '../../components/Context';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -39,7 +38,7 @@ const DatePickerScreen: React.FC = () => {
         {/* <View style={styles.datePickerContainer}>
           <DateTimePicker value={date} mode="date" display="default" onChange={onChange} /> */}
         {/* </View> */}
-        <StatusScreenDetails date={date} totalGoing={10} />
+        <StatusScreenDetails />
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
