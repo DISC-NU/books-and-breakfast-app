@@ -15,7 +15,7 @@ interface StatusHeaderProps {
 
 const StatusHeader: React.FC<StatusHeaderProps> = ({ day, volunteerNum }) => (
   <View style={styles.headerContainer}>
-    <Text style={styles.headerTitle}>Your Upcoming Volunteering Session:</Text>
+    <Text style={styles.headerTitle}>Your Next Volunteer Adventure:</Text>
     <Text style={styles.headerInfo}>
       {day} | Volunteers Expected: {volunteerNum}
     </Text>
