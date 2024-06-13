@@ -2,6 +2,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { router } from 'expo-router';
 import { useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
 import Context from './components/Context';
 import { getUserInfo, isNewUser } from './firebase/util';
 
@@ -41,15 +42,24 @@ export default function LoginScreen() {
   };
 
   return (
-    <View
-      style={{ justifyContent: 'center', alignItems: 'center', flex: 1, backgroundColor: 'white' }}>
-      <View style={styles.imageContainer}>
-        <Image source={require('../assets/logo.png')} style={styles.bbLogo} />
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.imageContainer}>
+          <Image source={require('../assets/logo.png')} style={styles.bbLogo} />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Image source={require('../assets/google.png')} style={styles.googleLogo} />
+          <Text style={styles.buttonText}>Sign in with Google</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Image source={require('../assets/google.png')} style={styles.googleLogo} />
-        <Text style={styles.buttonText}>Sign in with Google</Text>
-      </TouchableOpacity>
+      <View style={{ paddingBottom: 20 }}>
+        <Text style={styles.disclaimer}>
+          Disclaimer: Books and Breakfast is a nonprofit education volunteering program based in
+          Evanston, IL. This app is intended exclusively for Northwestern University student
+          volunteers participating in the program.
+        </Text>
+        <Text style={styles.disclaimer}>Please use your Northwestern email to sign in.</Text>
+      </View>
     </View>
   );
 }
@@ -84,5 +94,13 @@ const styles = StyleSheet.create({
   googleLogo: {
     width: 24,
     height: 24,
+  },
+  disclaimer: {
+    textAlign: 'center',
+    paddingHorizontal: 40,
+    paddingTop: 20,
+    color: 'gray',
+    fontSize: 14,
+    paddingBottom: 10,
   },
 });

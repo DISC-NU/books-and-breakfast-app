@@ -1,8 +1,8 @@
+import { router } from 'expo-router';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
-import { router } from 'expo-router';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
 import Context from './Context';
 import ScreenWrapper from './ScreenWrapper';
@@ -44,7 +44,7 @@ export default function CustomizationScreen() {
     } else {
       setSchoolName(schoolName);
       setUserInfo({ ...userInfo, schoolName });
-      updateUserFields(userInfo.id, { ...userInfo, schoolName: schoolName });
+      updateUserFields(userInfo.id, { ...userInfo, schoolName });
       router.replace('/');
     }
   }, [schoolName]);
