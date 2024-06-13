@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
 import moment from 'moment';
 import React, { useCallback, useContext, useState } from 'react';
-import { Dimensions, ScrollView, Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { StatusScreenDetails } from './status';
 import Context from '../../components/Context';
+import ScreenWrapper from '../../components/ScreenWrapper';
+import { StatusScreenDetails } from './status';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -33,19 +34,21 @@ const DatePickerScreen: React.FC = () => {
   }, [date, schoolName]);
 
   return (
-    <View>
-      <ScrollView contentContainerStyle={styles.container}>
-        {/* <View style={styles.datePickerContainer}>
+    <ScreenWrapper>
+      <View>
+        <ScrollView contentContainerStyle={styles.container}>
+          {/* <View style={styles.datePickerContainer}>
           <DateTimePicker value={date} mode="date" display="default" onChange={onChange} /> */}
-        {/* </View> */}
-        <StatusScreenDetails />
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
-          <Icon name="chat" size={35} color="white" />
-        </TouchableOpacity>
+          {/* </View> */}
+          <StatusScreenDetails />
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
+            <Icon name="chat" size={35} color="white" />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScreenWrapper>
   );
 };
 
@@ -56,7 +59,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     minHeight: screenHeight,
-    marginVertical: 22,
     backgroundColor: 'white',
   },
   datePickerContainer: {

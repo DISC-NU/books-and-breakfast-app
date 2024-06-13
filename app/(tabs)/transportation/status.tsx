@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // interface StatusScreenProps {
 //   date: string;
@@ -71,6 +71,7 @@ export const StatusScreenDetails = () => {
         <SectionHeader text="Looking for Carpool" />
         <SectionCircleIcons />
         <SectionHeader text="Can Drive People" />
+        <SectionCircleIcons />
       </View>
     </View>
   );
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
     backgroundColor: 'white',
   },
   headerContainer: {
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   },
   headerInfo: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
   },
   dropdownContainer: {
