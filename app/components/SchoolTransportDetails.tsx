@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { showLocation } from 'react-native-map-link';
+import FaIcon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { listenToSchoolDirections, updateSchoolDirections } from '../firebase/util';
@@ -11,13 +14,34 @@ const screenHeight = Dimensions.get('window').height;
 interface ArticleHeaderProps {
   schoolName: string;
   location: string;
+  latitude: number;
+  longitude: number;
 }
 
 // Component to display the header with school name and location
-const ArticleHeader: React.FC<ArticleHeaderProps> = ({ schoolName, location }) => (
+const ArticleHeader: React.FC<ArticleHeaderProps> = ({
+  schoolName,
+  location,
+  latitude,
+  longitude,
+}) => (
   <View style={styles.headerContainer}>
     <Text style={styles.headerTitle}>{schoolName}</Text>
-    <Text style={styles.headerLocation}>{location}</Text>
+    <TouchableOpacity
+      onPress={() =>
+        showLocation({
+          latitude,
+          longitude,
+          googleForceLatLon: true, // force GoogleMaps to use the latitude and longitude for the query instead of the title
+          alwaysIncludeGoogle: true, // include Google Maps
+          title: schoolName, // display school name as the title in the map location
+        })
+      }>
+      <View style={styles.row}>
+        <FaIcon name="map-marker" size={20} color="#36afbc" />
+        <Text style={[styles.headerLocation]}>{location}</Text>
+      </View>
+    </TouchableOpacity>
   </View>
 );
 
@@ -97,6 +121,8 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
             <ArticleHeader
               schoolName={directionsInfo.schoolName}
               location={directionsInfo.address}
+              latitude={directionsInfo.geoLat}
+              longitude={directionsInfo.geoLong}
             />
             <View style={styles.section}>
               <Text style={styles.header}>Directions</Text>
@@ -188,7 +214,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   headerLocation: {
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    color: '#36afbc',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   button: {
     position: 'absolute',
