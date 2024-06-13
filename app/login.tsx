@@ -51,6 +51,7 @@ export default function LoginScreen() {
           <Image source={require('../assets/google.png')} style={styles.googleLogo} />
           <Text style={styles.buttonText}>Sign in with Google</Text>
         </TouchableOpacity>
+        <Text style={styles.signInMessage}>Please use your Northwestern email to sign in.</Text>
       </View>
       <View style={{ paddingBottom: 20 }}>
         <Text style={styles.disclaimer}>
@@ -58,7 +59,6 @@ export default function LoginScreen() {
           Evanston, IL. This app is intended exclusively for Northwestern University student
           volunteers participating in the program.
         </Text>
-        <Text style={styles.disclaimer}>Please use your Northwestern email to sign in.</Text>
       </View>
     </View>
   );
@@ -95,12 +95,21 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  signInMessage: {
+    textAlign: 'center',
+    paddingHorizontal: 40,
+    paddingTop: 5,
+    color: '#696969',
+    fontSize: 14,
+    fontWeight: '500',
+  },
   disclaimer: {
     textAlign: 'center',
     paddingHorizontal: 40,
     paddingTop: 20,
     color: 'gray',
     fontSize: 14,
-    paddingBottom: 10,
+    paddingBottom: 20,
+    fontWeight: '500',
   },
 });
