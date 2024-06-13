@@ -19,7 +19,7 @@ import LightbulbIcon from '../icons/LightbulbIcon';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
+export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEdit?: boolean }) => {
   const [tipArray, setTipArray] = useState<{ id: string; content: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,8 +29,6 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   // Function to handle saving updated tips
   const handleSave = async (schoolName: string, newValue: string, tipID: string) => {
     try {
-      console.log(tipArray);
-      console.log(newValue);
       // Update the tip in the database
       await updateTipsInfo(schoolName, newValue, tipID);
 
@@ -38,10 +36,6 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
       setTipArray((prevTips) =>
         prevTips.map((tip) => (tip.id === tipID ? { ...tip, content: newValue } : tip))
       );
-
-      console.log(tipArray);
-
-      console.log('Tip updated successfully');
     } catch (error) {
       console.error('Failed to update school tips', error);
       setError('Failed to update school tips. Please try again later.');
@@ -56,20 +50,10 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
     }
     try {
       const newTip = { content: newTipContent };
-      console.log('Adding new tip:', newTip);
 
       // Generate a new reference with a unique key
-      const newTipRef = await addNewTip(schoolName, newTip);
+      await addNewTip(schoolName, newTip);
 
-      // Capture the unique key
-      const newTipID = newTipRef.key;
-      console.log('New tip added successfully with ID:', newTipID);
-
-      // setTipArray((prevTips) => [...prevTips, { id: newTipID, content: newTipContent }]);
-
-      console.log(tipArray);
-
-      // Clear the input field after adding the new tip
       setNewTipContent('');
     } catch (error) {
       console.error('Failed to add new tip:', error);
@@ -80,10 +64,8 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   // Function to handle deleting a tip
   const handleDelete = async (tipID: string) => {
     try {
-      console.log('Attempting to delete tip with ID:', tipID); // Log the tipID being deleted
       await deleteTip(schoolName, tipID);
       setTipArray((prevTips) => prevTips.filter((tip) => tip.id !== tipID));
-      console.log('Tip deleted successfully:', tipID);
     } catch (error) {
       console.error('Failed to delete tip:', error);
       setError('Failed to delete tip. Please try again later.');
@@ -103,7 +85,6 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
   useEffect(() => {
     const unsubscribe = listenToTips(schoolName, (tips) => {
       if (tips) {
-        console.log(tips);
         setTipArray(tips);
       } else {
         setError('No tips available for this school.');
@@ -141,20 +122,24 @@ export const TipsDetails = ({ schoolName }: { schoolName: string }) => {
               </View>
             </Swipeable>
           ))}
-          {/* Input field for adding a new tip */}
-          <TextInput
-            style={style.input}
-            placeholder="Add a new tip"
-            value={newTipContent}
-            onChangeText={(text) => setNewTipContent(text)}
-          />
-          {/* Button to add the new tip */}
-          <Pressable style={style.addButton} onPress={handleAddTip}>
-            <Text style={style.addButtonText}>Add Tip</Text>
-          </Pressable>
+          {canEdit && (
+            <>
+              {/* Input field for adding a new tip */}
+              <TextInput
+                style={style.input}
+                placeholder="Add a new tip"
+                value={newTipContent}
+                onChangeText={(text) => setNewTipContent(text)}
+              />
+              {/* Button to add the new tip */}
+              <Pressable style={style.addButton} onPress={handleAddTip}>
+                <Text style={style.addButtonText}>Add Tip</Text>
+              </Pressable>
+            </>
+          )}
         </View>
       </ScrollView>
-      {!edit && (
+      {!edit && canEdit && (
         <Pressable
           style={({ pressed }) => [
             {

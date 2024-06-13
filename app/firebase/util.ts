@@ -77,7 +77,6 @@ export async function getSchoolList() {
         }));
         return schoolOptions;
       } else {
-        console.log('No data available');
         return null; // Return null to indicate no data was found.
       }
     })
@@ -107,7 +106,7 @@ export function listenToSchoolDirections(
         // If data exists, call the callback with the entire data object for this school.
         callback(snapshot.val());
       } else {
-        console.log('No data available for:', schoolName);
+        console.error('No data available for:', schoolName);
         callback(null); // Call the callback with null if no data is found.
       }
     },
@@ -138,7 +137,7 @@ export const listenToTips = (
         }));
         callback(tips);
       } else {
-        console.log('No tips available for:', schoolName);
+        console.error('No tips available for:', schoolName);
         callback([]);
       }
     },
@@ -179,7 +178,6 @@ export const deleteTip = async (schoolName: string, tipID: string) => {
     if (snapshot.exists()) {
       // Remove the tip
       await set(tipRef, null);
-      console.log('Tip deleted successfully:', tipID);
     } else {
       console.error('Tip not found:', tipID);
       throw new Error('Tip not found');
@@ -197,7 +195,7 @@ export const getResourceURLs = async (): Promise<ResourceURLs | null> => {
     if (snapshot.exists()) {
       return snapshot.val();
     } else {
-      console.log('No resource data available');
+      console.error('No resource data available');
       return null;
     }
   } catch (error) {
@@ -222,7 +220,7 @@ export function listenToMissionEntries(callback: (data: Entry[] | null) => void)
         const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
         callback(missionEntries);
       } else {
-        console.log('No mission entries available');
+        console.error('No mission entries available');
         callback(null);
       }
     },
@@ -247,7 +245,7 @@ export async function getMissionEntries(): Promise<Entry[] | null> {
       const missionEntries: Entry[] = Object.keys(data).map((key) => data[key]);
       return missionEntries;
     } else {
-      console.log('No data available');
+      console.error('No data available');
       return null;
     }
   } catch (error) {
