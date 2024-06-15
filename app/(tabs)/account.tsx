@@ -61,6 +61,15 @@ export default function ProfileScreen() {
     }
   };
 
+  const [status, setStatus] = useState('');
+
+  const statusSelections = [
+    { key: '0', value: 'Looking for Walking Buddy!' },
+    { key: '1', value: 'Looking for CTA Buddy!' },
+    { key: '2', value: 'Looking for Carpool!' },
+    { key: '3', value: 'Willing to Drive!' },
+  ];
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
@@ -70,16 +79,16 @@ export default function ProfileScreen() {
               rounded
               size="xlarge"
               source={{
-                uri: userInfo.photo,
+                uri: userInfo?.photo,
               }}
             />
-            <Text style={styles.nameText}>{userInfo.name}</Text>
+            <Text style={styles.nameText}>{userInfo?.name}</Text>
           </View>
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
               <Text style={styles.subtitle}>Your Volunteering Site</Text>
               <View style={styles.dropdownWrapper}>
-                <View style={styles.dropdownContainer}>
+                <View style={styles.schoolDropdown}>
                   <SelectList
                     setSelected={(val) => handleSetSchool(val)}
                     data={schoolOptions}
@@ -92,6 +101,22 @@ export default function ProfileScreen() {
                   />
                 </View>
               </View>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.subtitle}>Your Status</Text>
+              <View style={styles.dropdownWrapper}>
+                <View style={styles.dropdownContainer}>
+                  <SelectList
+                    setSelected={setStatus}
+                    data={statusSelections}
+                    placeholder="Select your status"
+                    boxStyles={styles.dropdownStyle}
+                    inputStyles={styles.selectInput}
+                    maxHeight={180}
+                    search={false}
+                  />
+                </View>
+              </View> 
             </View>
           </View>
         </View>
@@ -144,10 +169,14 @@ const styles = StyleSheet.create({
   dropdownWrapper: {
     position: 'relative',
     zIndex: 1, // Ensure dropdown appears above other elements
+    marginBottom: 10, 
   },
   dropdownContainer: {
     position: 'absolute',
     width: '100%',
+  },
+  schoolDropdown: {
+    backgroundColor: '#fff',
   },
   selectInput: {
     fontSize: 16,

@@ -9,9 +9,9 @@ export default function TabLayout() {
   const { userInfo } = useContext(Context);
 
   // If user is not signed in, redirect to login page
-  if (!userInfo) {
-    return <Redirect href="/login" />;
-  }
+  // if (!userInfo) {
+  //   return <Redirect href="/login" />;
+  // }
 
   return (
     <Tabs
