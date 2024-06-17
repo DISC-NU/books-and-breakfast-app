@@ -19,9 +19,22 @@ export type RootStackParamList = {
 };
 
 function AppNavigation() {
+  // const [assigned, setAssigned] = useState(false);
+
+  // //callback function to receive data from the Question screen (is the volunteer assigned or not)
+  // getAssigned = (assignedData) => {
+  //   //update assigned state based on results from Question screen
+  //   setAssigned(assignedData);
+  // };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator initialRouteName="Home">
+        {/* <Stack.Screen 
+          options={{ headerShown: false }} 
+          name="Question" 
+          component={QuestionScreen}
+          initialParams={} /> */}
         <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
         <Stack.Screen
           name="Navigation"

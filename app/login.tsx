@@ -19,7 +19,7 @@ export default function LoginScreen() {
       if (userInfo.user.email.endsWith('northwestern.edu')) {
         if (await isNewUser(userInfo.user)) {
           setUserInfo(userInfo.user);
-          router.replace('/components/customization');
+          router.replace('/initial_question');
         } else {
           const user = await getUserInfo(userInfo.user);
           setUserInfo(user);

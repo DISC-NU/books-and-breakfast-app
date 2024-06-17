@@ -1,5 +1,5 @@
 import { Slot } from 'expo-router';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import Context, { UserInfo } from './components/Context';
 

@@ -19,6 +19,7 @@ export type UserInfo = {
   photo: string; // url
   name: string; // full name
   schoolName?: string;
+  assigned?: boolean;
   volunteeringDays?: VolunteeringDays; // days of the week
   transportMethod?: TransportMethod;
 };
