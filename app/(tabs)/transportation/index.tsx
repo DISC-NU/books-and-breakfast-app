@@ -33,6 +33,22 @@ const DatePickerScreen: React.FC = () => {
     }
   }, [date, schoolName]);
 
+  // // fetch users in real time and group them by transport method and unsubscribe in useeffect. wrap it in async function
+  // useEffect(() => {
+  //   let unsubscribe;
+
+  //   const fetchUsers = async () => {
+  //     unsubscribe = fetchAndGroupUsersForTransportationScreen(schoolName, 'Monday', (users) => {});
+  //   };
+
+  //   fetchUsers();
+
+  //   // Cleanup function to unsubscribe
+  //   return () => {
+  //     if (unsubscribe) unsubscribe();
+  //   };
+  // }, [date, schoolName]);
+
   return (
     <ScreenWrapper>
       <View>
