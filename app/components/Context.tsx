@@ -7,7 +7,7 @@ export enum TransportMethods {
   good,
 }
 
-type VolunteeringDays = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
+type VolunteeringDay = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
 type TransportMethod = 'Willing to Drive' | 'Looking for Carpool' | `I'm good`;
 
 // types.ts
@@ -19,7 +19,7 @@ export type UserInfo = {
   photo: string; // url
   name: string; // full name
   schoolName?: string;
-  volunteeringDays?: VolunteeringDays; // days of the week
+  volunteeringDay?: VolunteeringDay; // days of the week
   transportMethod?: TransportMethod;
 };
 

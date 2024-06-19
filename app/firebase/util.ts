@@ -1,5 +1,16 @@
 // Imports the necessary functions from the Firebase database module.
-import { child, get, off, onValue, push, ref, set } from 'firebase/database';
+import {
+  child,
+  equalTo,
+  get,
+  off,
+  onValue,
+  orderByChild,
+  push,
+  query,
+  ref,
+  set,
+} from 'firebase/database';
 
 import { UserInfo } from '../components/Context';
 import { Tips } from '../data/TipsInfo';
@@ -385,4 +396,53 @@ export const updateTransportationStatus = async (userId: string, transportationS
   } catch (error) {
     console.error('Error updating user transportation status:', error);
   }
+};
+
+// Fetch users for transportation screen
+export const fetchAndGroupUsersForTransportationScreen = async (
+  schoolName: string,
+  volunteeringDay: string,
+  callback: (groupedUsers: { [key: string]: UserInfo[] }) => void
+) => {
+  const usersRef = ref(database, 'users');
+  const q = query(usersRef, orderByChild('schoolName'), equalTo(schoolName));
+
+  const unsubscribe = onValue(
+    q,
+    (snapshot) => {
+      try {
+        const users: { [key: string]: UserInfo } = snapshot.val() || {};
+        const groupedUsers: { [key: string]: UserInfo[] } = {};
+
+        // Filter and group users based on transportMethod
+        for (const userId in users) {
+          if (users.hasOwnProperty(userId)) {
+            const user = users[userId];
+            // Only include users with a volunteering day and transport method
+            if (
+              user.volunteeringDay &&
+              user.volunteeringDay.toLowerCase() === volunteeringDay.toLowerCase() &&
+              user.transportMethod
+            ) {
+              const transportMethod = user.transportMethod;
+              if (!groupedUsers[transportMethod]) {
+                groupedUsers[transportMethod] = [];
+              }
+              groupedUsers[transportMethod].push(user);
+            }
+          }
+        }
+
+        // Call the callback function with the grouped users
+        callback(groupedUsers);
+      } catch (error) {
+        console.error('Error processing user data:', error);
+      }
+    },
+    (error) => {
+      console.error('Error processing user data:', error);
+    }
+  );
+
+  return () => off(q, 'value', unsubscribe);
 };
