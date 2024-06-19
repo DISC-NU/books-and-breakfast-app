@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // interface StatusScreenProps {
@@ -25,19 +25,30 @@ const SectionHeader: React.FC<{ text: string }> = ({ text }) => (
   <Text style={styles.sectionHeader}>{text}</Text>
 );
 
+const ProfileImage = ({ source }) => (
+  <View style={styles.pfpContainer}>
+    <Image source={source} style={styles.circleImage} />
+  </View>
+);
+
+//hardcoded pfps for now
+const pfpSources = [
+  require('../../../assets/circle-icon.png'),
+  require('../../../assets/circle-icon.png'),
+  require('../../../assets/circle-icon.png'),
+  require('../../../assets/circle-icon.png'),
+];
+
 const SectionCircleIcons = () => (
   <ScrollView
     contentContainerStyle={styles.scrollViewContainer}
     horizontal={true}
-    showsHorizontalScrollIndicator={false}
-  >
-  <View style={styles.circleIconsContainer}>
-    {/* <Image source={require('../../assets/circle-icon.png')} style={styles.circleImage} /> */}
-    <Icon name="circle" size={110} color="#D9D9D9" />
-    <Icon name="circle" size={110} color="#D9D9D9" />
-    <Icon name="circle" size={110} color="#D9D9D9" />
-    <Icon name="circle" size={110} color="#D9D9D9" />
-  </View>
+    showsHorizontalScrollIndicator={false}>
+    <View style={styles.circleIconsContainer}>
+      {pfpSources.map((source, index) => (
+        <ProfileImage key={index} source={source} />
+      ))}
+    </View>
   </ScrollView>
 );
 
@@ -133,11 +144,24 @@ const styles = StyleSheet.create({
   // },
   circleIconsContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 10,
     alignItems: 'flex-start',
   },
+  pfpContainer: {
+    width: 95,
+    height: 95,
+    borderRadius: 50,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20,
+    marginTop: 15,
+    marginBottom: 15,
+  },
   circleImage: {
-    width: 110,
+    width: 95,
+    height: 95,
+    resizeMode: 'cover',
   },
   section: {
     width: '100%',

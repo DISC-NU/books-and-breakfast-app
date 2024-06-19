@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-between', // Space out elements with space between them
     alignItems: 'center',
-    padding: 16,
-    minHeight: screenHeight,
+    padding: 20,
+    minHeight: screenHeight + 50,
     backgroundColor: 'white',
   },
   datePickerContainer: {
