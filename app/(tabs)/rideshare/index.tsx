@@ -1,8 +1,7 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import moment from 'moment';
 import React, { useCallback, useContext, useState } from 'react';
-import { Dimensions, ScrollView, Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Context from '../../components/Context';
@@ -32,6 +31,22 @@ const DatePickerScreen: React.FC = () => {
       });
     }
   }, [date, schoolName]);
+
+  // // fetch users in real time and group them by transport method and unsubscribe in useeffect. wrap it in async function
+  // useEffect(() => {
+  //   let unsubscribe;
+
+  //   const fetchUsers = async () => {
+  //     unsubscribe = fetchAndGroupUsersForTransportationScreen(schoolName, 'Monday', (users) => {});
+  //   };
+
+  //   fetchUsers();
+
+  //   // Cleanup function to unsubscribe
+  //   return () => {
+  //     if (unsubscribe) unsubscribe();
+  //   };
+  // }, [date, schoolName]);
 
   return (
     <View>

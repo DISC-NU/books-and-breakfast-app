@@ -1,5 +1,16 @@
 // Imports the necessary functions from the Firebase database module.
-import { child, get, off, onValue, push, ref, set } from 'firebase/database';
+import {
+  child,
+  equalTo,
+  get,
+  off,
+  onValue,
+  orderByChild,
+  push,
+  query,
+  ref,
+  set,
+} from 'firebase/database';
 
 import { UserInfo } from '../components/Context';
 import { Tips } from '../data/TipsInfo';
@@ -287,4 +298,149 @@ export const updateUserFields = async (userId: string, fieldsToUpdate: any) => {
   } catch (error) {
     console.error('Error updating user fields: ', error);
   }
+};
+
+export const getSchoolName = (userId: string, callback: (schoolName: string) => void) => {
+  const userRef = ref(database, `users/${userId}/schoolName`);
+
+  const unsubscribe = onValue(
+    userRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        console.log('No school data available for user:', userId);
+        callback('');
+      }
+    },
+    (error) => {
+      console.error('Error fetching user school:', error);
+      callback('');
+    }
+  );
+
+  return () => off(userRef, 'value', unsubscribe);
+};
+
+export const updateSchoolName = async (userId: string, schoolName: string) => {
+  const userRef = ref(database, `users/${userId}/schoolName`);
+  try {
+    await set(userRef, schoolName);
+  } catch (error) {
+    console.error('Error updating user school:', error);
+  }
+};
+
+export const getVolunteeringDay = (userId: string, callback: (volunteeringDay: string) => void) => {
+  const userRef = ref(database, `users/${userId}/volunteeringDay`);
+
+  const unsubscribe = onValue(
+    userRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        console.log('No volunteering day data available for user:', userId);
+        callback('');
+      }
+    },
+    (error) => {
+      console.error('Error fetching user volunteering day:', error);
+      callback('');
+    }
+  );
+
+  return () => off(userRef, 'value', unsubscribe);
+};
+
+export const updateVolunteeringDay = async (userId: string, volunteeringDay: string) => {
+  const userRef = ref(database, `users/${userId}/volunteeringDay`);
+  try {
+    await set(userRef, volunteeringDay);
+  } catch (error) {
+    console.error('Error updating user volunteering day:', error);
+  }
+};
+
+export const getTransportationStatus = (
+  userId: string,
+  callback: (transportationStatus: string) => void
+) => {
+  const userRef = ref(database, `users/${userId}/transportationStatus`);
+
+  const unsubscribe = onValue(
+    userRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        console.log('No transportation status data available for user:', userId);
+        callback('');
+      }
+    },
+    (error) => {
+      console.error('Error fetching user transportation status:', error);
+      callback('');
+    }
+  );
+
+  return () => off(userRef, 'value', unsubscribe);
+};
+
+export const updateTransportationStatus = async (userId: string, transportationStatus: string) => {
+  const userRef = ref(database, `users/${userId}/transportationStatus`);
+  try {
+    await set(userRef, transportationStatus);
+  } catch (error) {
+    console.error('Error updating user transportation status:', error);
+  }
+};
+
+// Fetch users for transportation screen
+export const fetchAndGroupUsersForTransportationScreen = async (
+  schoolName: string,
+  volunteeringDay: string,
+  callback: (groupedUsers: { [key: string]: UserInfo[] }) => void
+) => {
+  const usersRef = ref(database, 'users');
+  const q = query(usersRef, orderByChild('schoolName'), equalTo(schoolName));
+
+  const unsubscribe = onValue(
+    q,
+    (snapshot) => {
+      try {
+        const users: { [key: string]: UserInfo } = snapshot.val() || {};
+        const groupedUsers: { [key: string]: UserInfo[] } = {};
+
+        // Filter and group users based on transportMethod
+        for (const userId in users) {
+          if (users.hasOwnProperty(userId)) {
+            const user = users[userId];
+            // Only include users with a volunteering day and transport method
+            if (
+              user.volunteeringDay &&
+              user.volunteeringDay.toLowerCase() === volunteeringDay.toLowerCase() &&
+              user.transportMethod
+            ) {
+              const transportMethod = user.transportMethod;
+              if (!groupedUsers[transportMethod]) {
+                groupedUsers[transportMethod] = [];
+              }
+              groupedUsers[transportMethod].push(user);
+            }
+          }
+        }
+
+        // Call the callback function with the grouped users
+        callback(groupedUsers);
+      } catch (error) {
+        console.error('Error processing user data:', error);
+      }
+    },
+    (error) => {
+      console.error('Error processing user data:', error);
+    }
+  );
+
+  return () => off(q, 'value', unsubscribe);
 };
