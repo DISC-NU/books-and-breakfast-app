@@ -51,18 +51,16 @@ const DatePickerScreen: React.FC = () => {
 
   return (
     <ScreenWrapper>
-      <View>
-        <ScrollView contentContainerStyle={styles.container}>
-          {/* <View style={styles.datePickerContainer}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* <View style={styles.datePickerContainer}>
           <DateTimePicker value={date} mode="date" display="default" onChange={onChange} /> */}
-          {/* </View> */}
-          <StatusScreenDetails />
-        </ScrollView>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
-            <Icon name="chat" size={35} color="white" />
-          </TouchableOpacity>
-        </View>
+        {/* </View> */}
+        <StatusScreenDetails />
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
+          <Icon name="chat" size={35} color="white" />
+        </TouchableOpacity>
       </View>
     </ScreenWrapper>
   );
@@ -71,11 +69,13 @@ const DatePickerScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: 'space-between', // Space out elements with space between them
+    justifyContent: 'flex-start', // Space out elements with space between them
     alignItems: 'center',
     padding: 20,
-    minHeight: screenHeight + 50,
+    paddingBottom: 30,
+    minHeight: screenHeight,
     backgroundColor: 'white',
+    position: 'relative',
   },
   datePickerContainer: {
     marginTop: 50, // Adjust as needed to position at the top

@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // interface StatusScreenProps {
 //   date: string;
 //   schoolName: string;
 // }
+const screenHeight = Dimensions.get('window').height;
 
 interface StatusHeaderProps {
   day: string;
@@ -82,6 +83,7 @@ export const StatusScreenDetails = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    minHeight: screenHeight,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 20,
