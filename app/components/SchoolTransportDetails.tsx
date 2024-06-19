@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { listenToSchoolDirections, updateSchoolDirections } from '../firebase/util';
+import {
+  SchoolDirections,
+  listenToSchoolDirections,
+  updateSchoolDirections,
+} from '../firebase/util';
 import EditText from './EditText';
 
 const screenHeight = Dimensions.get('window').height;
@@ -47,10 +51,14 @@ const Divider: React.FC<DividerProps> = ({
 // Props interface for SchoolTransportDetails component
 interface SchoolTransportDetailsProps {
   schoolName: string;
+  canEdit?: boolean;
 }
 
 // Main component to display and edit school transportation details
-export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ schoolName }) => {
+export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({
+  schoolName,
+  canEdit,
+}) => {
   const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -139,7 +147,7 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
           </>
         )}
       </ScrollView>
-      {!edit && (
+      {!edit && canEdit && (
         <Pressable
           style={({ pressed }) => [
             {
