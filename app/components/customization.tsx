@@ -66,7 +66,7 @@ export default function CustomizationScreen() {
                     data={schoolOptions}
                     inputStyles={styles.selectInput}
                     save="value"
-                    placeholder="Select School"
+                    placeholder={schoolName || 'Select School'}
                     maxHeight={275}
                     search={false}
                     boxStyles={dropdownStyle}

@@ -21,6 +21,7 @@ export type UserInfo = {
   schoolName?: string;
   volunteeringDays?: VolunteeringDays; // days of the week
   transportMethod?: TransportMethod;
+  isAdmin?: boolean;
 };
 
 export interface SharedContextType {

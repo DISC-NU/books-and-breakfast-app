@@ -13,14 +13,14 @@ const NavigationScreen = ({ route, navigation }) => {
   navigation = useNavigation();
 
   //passing in school name to article page from dropdown selection
-  const { schoolName } = route.params;
+  const { schoolName, canEdit } = route.params;
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 85 : 0}>
-      <SchoolTransportDetails schoolName={schoolName} />
+      <SchoolTransportDetails schoolName={schoolName} canEdit={canEdit} />
     </KeyboardAvoidingView>
   );
 };
