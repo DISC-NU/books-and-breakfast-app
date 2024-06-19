@@ -5,7 +5,11 @@ import { showLocation } from 'react-native-map-link';
 import FaIcon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { listenToSchoolDirections, updateSchoolDirections } from '../firebase/util';
+import {
+  SchoolDirections,
+  listenToSchoolDirections,
+  updateSchoolDirections,
+} from '../firebase/util';
 import EditText from './EditText';
 
 const screenHeight = Dimensions.get('window').height;
@@ -14,8 +18,8 @@ const screenHeight = Dimensions.get('window').height;
 interface ArticleHeaderProps {
   schoolName: string;
   location: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 }
 
 // Component to display the header with school name and location
@@ -218,6 +222,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingLeft: 10,
     color: '#36afbc',
+    textDecorationLine: 'underline',
   },
   row: {
     flexDirection: 'row',
