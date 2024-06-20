@@ -9,6 +9,7 @@ import {
   push,
   query,
   ref,
+  remove,
   set,
 } from 'firebase/database';
 
@@ -443,4 +444,54 @@ export const fetchAndGroupUsersForTransportationScreen = async (
   );
 
   return () => off(q, 'value', unsubscribe);
+};
+
+// Delete all user data except Val's data
+
+// export const deleteTip = async (schoolName: string, tipID: string) => {
+//   try {
+//     const tipRef = ref(database, `/TipsInfo/${schoolName}/${tipID}`);
+
+//     // Check if the tip exists
+//     const snapshot = await get(tipRef);
+//     if (snapshot.exists()) {
+//       // Remove the tip
+//       await set(tipRef, null);
+//     } else {
+//       console.error('Tip not found:', tipID);
+//       throw new Error('Tip not found');
+//     }
+//   } catch (error) {
+//     console.error('Error deleting tip:', error);
+//     throw error;
+//   }
+// };
+
+export const wipeData = async () => {
+  try {
+    const usersRef = ref(database, 'users');
+
+    //fetch data for all users
+    const usersSnapshot = await get(usersRef);
+
+    const allPromises: Promise<void>[] = [];
+
+    // going through each child snapshot and adding to promises if not val
+    usersSnapshot.forEach((childSnapshot) => {
+      const key = childSnapshot.key;
+      const value = childSnapshot.val();
+
+      if (value.givenName !== 'Val') {
+        const userRef = ref(database, 'users/' + key);
+        allPromises.push(remove(userRef));
+        console.log('User with key ${key} added to final promise');
+      }
+    });
+
+    await Promise.all(allPromises);
+    console.log('All users except Val were deleted!');
+  } catch (error) {
+    console.error('Error deleting all user data: ', error);
+    throw error;
+  }
 };
