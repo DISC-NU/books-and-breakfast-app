@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // interface StatusScreenProps {
 //   date: string;
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     borderColor: '#27530B',
     backgroundColor: '#5ED217',
   },
-  
+
   dropdownInput: {
     fontSize: 18,
     fontWeight: '600',
