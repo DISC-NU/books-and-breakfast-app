@@ -106,7 +106,7 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           {admin && (
             <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
-              <Text style={styles.logoutButtonText}>DELETE ALL DATA</Text>
+              <Text style={styles.logoutButtonText}>DELETE ALL USER DATA</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     borderRadius: 10,
+    margin: 10,
   },
   logoutButtonText: {
     color: '#fff',
@@ -194,5 +195,6 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     borderRadius: 10,
+    margin: 10,
   },
 });

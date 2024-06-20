@@ -481,7 +481,8 @@ export const wipeData = async () => {
       const key = childSnapshot.key;
       const value = childSnapshot.val();
 
-      if (value.givenName !== 'Val') {
+      //check for email instead
+      if (value.givenName !== 'Michelle') {
         const userRef = ref(database, 'users/' + key);
         allPromises.push(remove(userRef));
         console.log('User with key ${key} added to final promise');
