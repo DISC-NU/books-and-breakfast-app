@@ -4,13 +4,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Avatar } from 'react-native-elements';
 
-import Context from '../components/Context';
+import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import ScreenWrapper from '../components/ScreenWrapper';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
 
+const TRANSPORT_METHOD_SELECTION = [
+  'Willing to Drive',
+  'Looking for Carpool',
+  'Looking for CTA Buddy',
+  'Looking for Walking Buddy',
+];
+
+const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
 export default function ProfileScreen() {
-  const { schoolName, setSchoolName, userInfo, setUserInfo } = useContext(Context);
+  const { userInfo, setUserInfo } = useContext(Context);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
+  const [schoolName, setSchoolName] = useState<string>(userInfo.schoolName);
+  const [transportStatus, setTransportStatus] = useState<TransportStatus>(userInfo.transportStatus);
+  const [volunteeringDay, setVolunteeringDay] = useState<VolunteeringDay>(userInfo.volunteeringDay);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
   // Update dropdown styling based on selection state
@@ -18,38 +30,45 @@ export default function ProfileScreen() {
     setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [schoolName]);
 
-  useEffect(() => {
-    // Define an asynchronous function inside the useEffect hook to fetch the list of schools.
-    const fetchSchools = async () => {
-      try {
-        // Attempt to fetch the school list using the getSchoolList function.
-        const schoolList = await getSchoolList();
-        if (schoolList != null) {
-          setSchoolOptions(schoolList);
-        }
-      } catch (error) {
-        // If an error occurs during fetching, log it to the console.
-        console.error('Failed to fetch schools:', error);
+  const fetchSchools = useCallback(async () => {
+    try {
+      // Attempt to fetch the school list using the getSchoolList function.
+      const schoolList = await getSchoolList();
+      if (schoolList != null) {
+        setSchoolOptions(schoolList);
       }
-    };
+    } catch (error) {
+      // If an error occurs during fetching, log it to the console.
+      console.error('Failed to fetch schools:', error);
+    }
+  }, []);
 
-    // Call the fetchSchools function defined above to execute the fetching process.
-    // This function is called right after the component mounts due to the empty dependency array.
+  useEffect(() => {
     fetchSchools();
   }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
 
-  // handle continue
   const handleSetSchool = useCallback(
     (val: string) => {
-      if (!val) {
-        alert('Please select a school');
-      } else {
-        setSchoolName(val);
-        setUserInfo({ ...userInfo, schoolName: val });
-        updateUserFields(userInfo.id, { ...userInfo, schoolName: val });
-      }
+      setUserInfo({ ...userInfo, schoolName: val });
+      updateUserFields(userInfo.id, { ...userInfo, schoolName: val });
     },
     [schoolName]
+  );
+
+  const handleSetVolunteeringDay = useCallback(
+    (val: VolunteeringDay) => {
+      setUserInfo({ ...userInfo, volunteeringDay: val });
+      updateUserFields(userInfo.id, { ...userInfo, volunteeringDay: val });
+    },
+    [volunteeringDay]
+  );
+
+  const handleSetTransportStatus = useCallback(
+    (val: TransportStatus) => {
+      setUserInfo({ ...userInfo, transportStatus: val });
+      updateUserFields(userInfo.id, { ...userInfo, transportStatus: val });
+    },
+    [transportStatus]
   );
 
   const handleSignOut = async () => {
@@ -60,15 +79,6 @@ export default function ProfileScreen() {
       console.error(error);
     }
   };
-
-  const [status, setStatus] = useState('');
-
-  const statusSelections = [
-    { key: '0', value: 'Looking for Walking Buddy!' },
-    { key: '1', value: 'Looking for CTA Buddy!' },
-    { key: '2', value: 'Looking for Carpool!' },
-    { key: '3', value: 'Willing to Drive!' },
-  ];
 
   return (
     <ScreenWrapper>
@@ -88,13 +98,14 @@ export default function ProfileScreen() {
             <View style={styles.infoRow}>
               <Text style={styles.subtitle}>Your Volunteering Site</Text>
               <View style={styles.dropdownWrapper}>
-                <View style={styles.schoolDropdown}>
+                <View style={styles.dropdownContainer}>
                   <SelectList
-                    setSelected={(val) => handleSetSchool(val)}
+                    setSelected={setSchoolName}
+                    onSelect={() => handleSetSchool(schoolName)}
                     data={schoolOptions}
                     inputStyles={styles.selectInput}
                     save="value"
-                    placeholder={schoolName || 'Select School'}
+                    placeholder={userInfo.schoolName || 'Select School'}
                     maxHeight={275}
                     search={false}
                     boxStyles={dropdownStyle}
@@ -103,20 +114,38 @@ export default function ProfileScreen() {
               </View>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.subtitle}>Your Status</Text>
+              <Text style={styles.subtitle}>Your Assigned Day</Text>
               <View style={styles.dropdownWrapper}>
                 <View style={styles.dropdownContainer}>
                   <SelectList
-                    setSelected={setStatus}
-                    data={statusSelections}
-                    placeholder="Select your status"
-                    boxStyles={styles.dropdownStyle}
+                    setSelected={setVolunteeringDay}
+                    onSelect={() => handleSetVolunteeringDay(volunteeringDay)}
+                    data={DAYS_OF_WEEK}
+                    placeholder={userInfo.volunteeringDay || 'Select your assigned day'}
                     inputStyles={styles.selectInput}
                     maxHeight={180}
                     search={false}
+                    boxStyles={dropdownStyle}
                   />
                 </View>
-              </View> 
+              </View>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.subtitle}>Your Transport Status</Text>
+              <View style={styles.dropdownWrapper}>
+                <View style={styles.dropdownContainer}>
+                  <SelectList
+                    setSelected={setTransportStatus}
+                    onSelect={() => handleSetTransportStatus(transportStatus)}
+                    data={TRANSPORT_METHOD_SELECTION}
+                    placeholder={userInfo.transportStatus || 'Select your transport status'}
+                    inputStyles={styles.selectInput}
+                    maxHeight={180}
+                    search={false}
+                    boxStyles={dropdownStyle}
+                  />
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -153,6 +182,7 @@ const styles = StyleSheet.create({
   },
   infoRow: {
     marginBottom: 15,
+    position: 'relative',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -162,26 +192,21 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    color: '#36afbc',
+    color: 'black',
     marginBottom: 10,
     fontWeight: 'bold',
   },
   dropdownWrapper: {
     position: 'relative',
-    zIndex: 1, // Ensure dropdown appears above other elements
-    marginBottom: 10, 
+    zIndex: 998, // Ensure dropdown appears above other elements
   },
   dropdownContainer: {
-    position: 'absolute',
     width: '100%',
-  },
-  schoolDropdown: {
-    backgroundColor: '#fff',
   },
   selectInput: {
     fontSize: 16,
     width: '100%',
-    color: '#36afbc',
+    color: 'black',
   },
   dropdownUnselected: {
     borderWidth: 1,
@@ -190,7 +215,6 @@ const styles = StyleSheet.create({
   },
   dropdownSelected: {
     borderWidth: 1,
-    borderColor: '#36afbc',
     borderRadius: 10,
   },
   footer: {

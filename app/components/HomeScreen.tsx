@@ -40,7 +40,7 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
 
 function HomeScreen() {
   const navigation = useNavigation<any>();
-  const { schoolName, userInfo } = useContext(Context);
+  const { userInfo } = useContext(Context);
   const [resourceURLs, setResourceURLs] = useState<ResourceURLs | null>(null);
 
   // Fetch resource URLs from Firebase
@@ -62,10 +62,13 @@ function HomeScreen() {
   const handleButtonPress = (buttonIndex: number) => {
     const actions = {
       1: () => {
-        if (!schoolName) {
+        if (!userInfo.schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Navigation', { schoolName, canEdit: userInfo?.isAdmin });
+          navigation.navigate('Navigation', {
+            schoolName: userInfo.schoolName,
+            canEdit: userInfo?.isAdmin,
+          });
         }
       },
       2: () => {
@@ -77,10 +80,13 @@ function HomeScreen() {
         }
       },
       3: () => {
-        if (!schoolName) {
+        if (!userInfo.schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Tips', { schoolName, canEdit: userInfo?.isAdmin });
+          navigation.navigate('Tips', {
+            schoolName: userInfo.schoolName,
+            canEdit: userInfo?.isAdmin,
+          });
         }
       },
 
