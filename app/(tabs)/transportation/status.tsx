@@ -1,11 +1,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, View, ScrollView, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
-// interface StatusScreenProps {
-//   date: string;
-//   schoolName: string;
-// }
 const screenHeight = Dimensions.get('window').height;
 
 interface StatusHeaderProps {
@@ -28,36 +23,27 @@ const SectionHeader: React.FC<{ text: string }> = ({ text }) => (
 
 const ProfileImage = ({ source }) => (
   <View style={styles.pfpContainer}>
+    // there might be an issue with how source is passed, might have to use uri: photo_url
     <Image source={source} style={styles.circleImage} />
   </View>
 );
 
-//hardcoded pfps for now
-const pfpSources = [
-  require('../../../assets/circle-icon.png'),
-  require('../../../assets/circle-icon.png'),
-  require('../../../assets/circle-icon.png'),
-  require('../../../assets/circle-icon.png'),
-];
-
-const SectionCircleIcons = () => (
+const SectionCircleIcons = ({ users }) => (
   <ScrollView
     contentContainerStyle={styles.scrollViewContainer}
     horizontal={true}
+    showsVerticalScrollIndicator={false}
+    alwaysBounceVertical={false}
     showsHorizontalScrollIndicator={false}>
     <View style={styles.circleIconsContainer}>
-      {pfpSources.map((source, index) => (
-        <ProfileImage key={index} source={source} />
+      {users.map((user, index) => (
+        <ProfileImage key={index} source={user.photo} />
       ))}
     </View>
   </ScrollView>
 );
 
-// interface StatusScreenDetailsProps {
-//   schoolName: string; // update later
-// }
-
-export const StatusScreenDetails = () => {
+export const StatusScreenDetails = ({ day, groupedUsers }) => {
   const statusSelections = [
     { key: '0', value: 'Looking for Walking Buddy' },
     { key: '1', value: 'Looking for CTA Buddy' },
@@ -67,12 +53,13 @@ export const StatusScreenDetails = () => {
 
   return (
     <View style={styles.container}>
-      <StatusHeader day="Monday" volunteerNum={10} />
+      <StatusHeader day={day} volunteerNum={Object.keys(groupedUsers).length} />
       <View style={styles.section}>
         {statusSelections.map((status) => (
           <View key={status.key}>
             <SectionHeader text={status.value} />
-            <SectionCircleIcons />
+            //pass in users for each status
+            <SectionCircleIcons users={groupedUsers[status.key]} />
           </View>
         ))}
       </View>
@@ -112,38 +99,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
   },
-  // dropdownContainer: {
-  //   padding: 10,
-  //   borderRadius: 20,
-  //   width: '80%',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   marginVertical: 20,
-  // },
-  // dropdownStyles: {
-  //   color: '#fff',
-  //   fontSize: 18,
-  //   alignContent: 'center',
-  // },
-  // dropdownBox: {
-  //   borderRadius: 10,
-  //   borderColor: '#27530B',
-  //   backgroundColor: '#5ED217',
-  // },
-
-  // dropdownInput: {
-  //   fontSize: 18,
-  //   fontWeight: '600',
-  //   color: 'white',
-  // },
-  // dropdownText: {
-  //   fontSize: 15,
-  //   color: 'black',
-  //   fontWeight: 'semibold',
-  // },
-  // carIcon: {
-  //   marginRight: 10,
-  // },
   circleIconsContainer: {
     flexDirection: 'row',
     marginBottom: 10,

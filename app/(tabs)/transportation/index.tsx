@@ -1,18 +1,20 @@
 import { router } from 'expo-router';
 import moment from 'moment';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useEffect, useCallback, useContext, useState } from 'react';
 import { Alert, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { StatusScreenDetails } from './status';
 import Context from '../../components/Context';
 import ScreenWrapper from '../../components/ScreenWrapper';
-import { StatusScreenDetails } from './status';
+import { fetchAndGroupUsersForTransportationScreen } from '../../firebase/util';
 
 const screenHeight = Dimensions.get('window').height;
 
 const DatePickerScreen: React.FC = () => {
   const [date, setDate] = useState(new Date());
   const { userInfo } = useContext(Context);
+  const [groupedUsers, setGroupedUsers] = useState<{ [key: string]: UserInfo[] }>({});
 
   const onChange = useCallback((event: any, selectedDate?: Date) => {
     if (selectedDate) {
@@ -33,21 +35,27 @@ const DatePickerScreen: React.FC = () => {
     }
   }, [date, userInfo.schoolName]);
 
-  // // fetch users in real time and group them by transport status and unsubscribe in useeffect. wrap it in async function
-  // useEffect(() => {
-  //   let unsubscribe;
+  // fetch users in real time and group them by transport status and unsubscribe in useeffect. wrap it in async function
+  useEffect(() => {
+    let unsubscribe;
 
-  //   const fetchUsers = async () => {
-  //     unsubscribe = fetchAndGroupUsersForTransportationScreen(schoolName, 'Monday', (users) => {});
-  //   };
+    const fetchUsers = async () => {
+      unsubscribe = fetchAndGroupUsersForTransportationScreen(
+        userInfo.schoolName,
+        userInfo.volunteeringDay,
+        (users) => {
+          setGroupedUsers(users);
+        }
+      );
+    };
 
-  //   fetchUsers();
+    fetchUsers();
 
-  //   // Cleanup function to unsubscribe
-  //   return () => {
-  //     if (unsubscribe) unsubscribe();
-  //   };
-  // }, [date, schoolName]);
+    // Cleanup function to unsubscribe
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [date, schoolName]);
 
   return (
     <ScreenWrapper>
@@ -55,7 +63,7 @@ const DatePickerScreen: React.FC = () => {
         {/* <View style={styles.datePickerContainer}>
           <DateTimePicker value={date} mode="date" display="default" onChange={onChange} /> */}
         {/* </View> */}
-        <StatusScreenDetails />
+        <StatusScreenDetails day={userInfo.volunteeringDay} groupedUsers={groupedUsers} />
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
