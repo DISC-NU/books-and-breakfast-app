@@ -11,7 +11,7 @@ const screenHeight = Dimensions.get('window').height;
 
 const DatePickerScreen: React.FC = () => {
   const [date, setDate] = useState(new Date());
-  const { schoolName } = useContext(Context);
+  const { userInfo } = useContext(Context);
 
   const onChange = useCallback((event: any, selectedDate?: Date) => {
     if (selectedDate) {
@@ -20,7 +20,7 @@ const DatePickerScreen: React.FC = () => {
   }, []);
 
   const handleEnterChat = useCallback(() => {
-    if (!schoolName) {
+    if (!userInfo.schoolName) {
       Alert.alert('Please select a school.');
     } else if (!date) {
       Alert.alert('Please select a date.');
@@ -30,9 +30,9 @@ const DatePickerScreen: React.FC = () => {
         params: { selectedDate: moment(date).format('YYYY-MM-DD') },
       });
     }
-  }, [date, schoolName]);
+  }, [date, userInfo.schoolName]);
 
-  // // fetch users in real time and group them by transport method and unsubscribe in useeffect. wrap it in async function
+  // // fetch users in real time and group them by transport status and unsubscribe in useeffect. wrap it in async function
   // useEffect(() => {
   //   let unsubscribe;
 

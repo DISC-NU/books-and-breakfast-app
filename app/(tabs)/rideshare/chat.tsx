@@ -10,7 +10,7 @@ import { database } from '../../firebase/firebaseConfig';
 const ChatScreen = () => {
   // State to store chat messages
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const { schoolName, userInfo } = useContext(Context);
+  const { userInfo } = useContext(Context);
   const { selectedDate } = useLocalSearchParams<{ selectedDate: string }>();
 
   const navigation = useNavigation();
@@ -22,7 +22,7 @@ const ChatScreen = () => {
   // @TO-DO: Put logic in firebase/util
   // useEffect to fetch messages from Firebase when the component mounts
   useEffect(() => {
-    const messagesRef = ref(database, `chat/${schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
+    const messagesRef = ref(database, `chat/${userInfo.schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
 
     // Function to handle data changes in Firebase
     const onValueChange = onValue(messagesRef, (snapshot) => {
@@ -44,12 +44,12 @@ const ChatScreen = () => {
     return () => {
       unsubscribe();
     };
-  }, [schoolName, selectedDate]);
+  }, [userInfo.schoolName, selectedDate]);
 
   // Function to handle sending new messages
   const onSend = useCallback(
     (newMessages = []) => {
-      const messagesRef = ref(database, `chat/${schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
+      const messagesRef = ref(database, `chat/${userInfo.schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
 
       newMessages.forEach((message) => {
         const messageData = {
@@ -63,7 +63,7 @@ const ChatScreen = () => {
       // Append the new messages to the existing messages
       setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
     },
-    [schoolName, selectedDate]
+    [userInfo.schoolName, selectedDate]
   );
 
   const renderBubble = useCallback(
@@ -93,12 +93,12 @@ const ChatScreen = () => {
 
   return (
     <>
-      {(!schoolName || !selectedDate) && (
+      {(!userInfo.schoolName || !selectedDate) && (
         <View>
           <Text>Please select a school to view the chat.</Text>
         </View>
       )}
-      {schoolName && selectedDate && (
+      {userInfo.schoolName && selectedDate && (
         <View style={{ backgroundColor: '#ffffff', flex: 1 }}>
           <GiftedChat
             messages={messages} // Messages to be displayed in the chat
