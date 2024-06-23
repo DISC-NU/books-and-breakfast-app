@@ -11,7 +11,7 @@ export type VolunteeringDay = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 
 export type TransportStatus =
   | 'Willing to Drive'
   | 'Looking for Carpool'
-  | 'Looking for CTA Buddy'
+  | 'Looking for CTA/Shuttle Buddy'
   | 'Looking for Walking Buddy';
 
 // types.ts
