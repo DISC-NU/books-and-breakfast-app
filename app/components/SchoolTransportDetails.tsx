@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScreenWidth } from 'react-native-elements/dist/helpers';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { showLocation } from 'react-native-map-link';
 import FaIcon from 'react-native-vector-icons/FontAwesome';
@@ -11,7 +12,6 @@ import {
   updateSchoolDirections,
 } from '../firebase/util';
 import EditText from './EditText';
-import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -127,7 +127,7 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         {directionsInfo && (
           <>
-            <Image source={require('../../assets/bus-header.jpg')} style={styles.articleHeader}/>
+            <Image source={require('../../assets/bus-header.jpg')} style={styles.articleHeader} />
             <View style={styles.overlay}>
               <ArticleHeader
                 schoolName={directionsInfo.schoolName}
@@ -146,6 +146,18 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({
                 display="directions"
               />
             </View>
+            {directionsInfo.schoolName === 'Washington Elementary School' && (
+              <Image
+                source={require('../../assets/washington-1.png')}
+                style={styles.washingtonImage}
+              />
+            )}
+            {directionsInfo.schoolName === 'Washington Elementary School' && (
+              <Image
+                source={require('../../assets/washington-2.png')}
+                style={styles.washingtonImage}
+              />
+            )}
             {directionsInfo.driving && (
               <View style={styles.section}>
                 <Divider />
@@ -173,18 +185,6 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({
                   display="directions"
                 />
               </View>
-            )}
-            {directionsInfo.schoolName === 'Washington Elementary School' && (
-              <Image
-                source={require('../../assets/washington-1.png')}
-                style={styles.washingtonImage}
-              />
-            )}
-            {directionsInfo.schoolName === 'Washington Elementary School' && (
-              <Image
-                source={require('../../assets/washington-2.png')}
-                style={styles.washingtonImage}
-              />
             )}
           </>
         )}
