@@ -19,6 +19,8 @@ import { database } from './firebaseConfig';
 
 // Import the pre-configured Firebase database instance.
 
+const ADMIN_EMAIL = 'val.buchanan@northwestern.edu';
+
 // TypeScript interface for representing key-value pairs of school names for school selection dropdown
 export interface SchoolKeyPair {
   key: string;
@@ -446,27 +448,7 @@ export const fetchAndGroupUsersForTransportationScreen = async (
   return { unsubscribe: () => off(q, 'value', unsubscribe) };
 };
 
-// Delete all user data except Val's data
-
-// export const deleteTip = async (schoolName: string, tipID: string) => {
-//   try {
-//     const tipRef = ref(database, `/TipsInfo/${schoolName}/${tipID}`);
-
-//     // Check if the tip exists
-//     const snapshot = await get(tipRef);
-//     if (snapshot.exists()) {
-//       // Remove the tip
-//       await set(tipRef, null);
-//     } else {
-//       console.error('Tip not found:', tipID);
-//       throw new Error('Tip not found');
-//     }
-//   } catch (error) {
-//     console.error('Error deleting tip:', error);
-//     throw error;
-//   }
-// };
-
+// Delete all user data except admin's data
 export const wipeData = async () => {
   try {
     const usersRef = ref(database, 'users');
@@ -482,7 +464,7 @@ export const wipeData = async () => {
       const value = childSnapshot.val();
 
       //check for email instead
-      if (value.givenName !== 'Michelle') {
+      if (value.email !== ADMIN_EMAIL) {
         const userRef = ref(database, 'users/' + key);
         allPromises.push(remove(userRef));
         console.log('User with key ${key} added to final promise');
@@ -490,7 +472,7 @@ export const wipeData = async () => {
     });
 
     await Promise.all(allPromises);
-    console.log('All users except Val were deleted!');
+    console.log('All users except admin were deleted!');
   } catch (error) {
     console.error('Error deleting all user data: ', error);
     throw error;

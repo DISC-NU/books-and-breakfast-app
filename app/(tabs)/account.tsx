@@ -80,9 +80,8 @@ export default function ProfileScreen() {
     }
   };
 
-  const admin = userInfo.isAdmin;
   const handleDelete = async () => {
-    wipeData();
+    await wipeData();
   };
 
   return (
@@ -158,7 +157,7 @@ export default function ProfileScreen() {
           <TouchableOpacity style={styles.logoutButton} onPress={handleSignOut}>
             <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
-          {admin && (
+          {userInfo.isAdmin && (
             <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
               <Text style={styles.logoutButtonText}>DELETE ALL USER DATA</Text>
             </TouchableOpacity>
