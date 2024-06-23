@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { showLocation } from 'react-native-map-link';
 import FaIcon from 'react-native-vector-icons/FontAwesome';
@@ -11,7 +11,6 @@ import {
   updateSchoolDirections,
 } from '../firebase/util';
 import EditText from './EditText';
-import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -127,16 +126,13 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         {directionsInfo && (
           <>
-            <Image source={require('../../assets/bus-header.jpg')} style={styles.articleHeader}/>
-            <View style={styles.overlay}>
-              <ArticleHeader
-                schoolName={directionsInfo.schoolName}
-                location={directionsInfo.address}
-                latitude={directionsInfo.geoLat}
-                longitude={directionsInfo.geoLong}
-              />
-            </View>
-            <View style={styles.firstSection}>
+            <ArticleHeader
+              schoolName={directionsInfo.schoolName}
+              location={directionsInfo.address}
+              latitude={directionsInfo.geoLat}
+              longitude={directionsInfo.geoLong}
+            />
+            <View style={styles.section}>
               <Text style={styles.header}>Directions</Text>
               <EditText
                 value={directionsInfo.specifics}
@@ -174,18 +170,6 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({
                 />
               </View>
             )}
-            {directionsInfo.schoolName === 'Washington Elementary School' && (
-              <Image
-                source={require('../../assets/washington-1.png')}
-                style={styles.washingtonImage}
-              />
-            )}
-            {directionsInfo.schoolName === 'Washington Elementary School' && (
-              <Image
-                source={require('../../assets/washington-2.png')}
-                style={styles.washingtonImage}
-              />
-            )}
           </>
         )}
       </ScrollView>
@@ -210,31 +194,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 30,
-    paddingBottom: 30,
+    padding: 30,
     minHeight: screenHeight,
     flexGrow: 1,
     position: 'relative',
   },
-  firstSection: {
-    paddingTop: 100,
-    width: '100%',
-  },
   section: {
+    margin: 0,
     width: '100%',
-  },
-  articleHeader: {
-    height: 350,
-    width: ScreenWidth,
-  },
-  overlay: {
-    position: 'absolute',
-    alignItems: 'center',
-    marginBottom: 150,
-    top: 300,
-    left: 20,
-    right: 20,
-    zIndex: 1,
   },
   header: {
     fontSize: 20,
@@ -246,11 +213,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     width: '95%',
-    backgroundColor: 'rgba(255,228,181, 0.6)',
+    backgroundColor: 'rgba(255,228,181, 0.2)',
     marginBottom: 25,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 15,
   },
@@ -275,10 +242,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 25,
     backgroundColor: 'black',
-  },
-  washingtonImage: {
-    width: 350,
-    height: 275,
-    marginTop: 20,
   },
 });
