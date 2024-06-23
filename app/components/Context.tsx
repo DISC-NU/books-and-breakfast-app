@@ -1,14 +1,18 @@
 // Context.tsx
 import React, { createContext } from 'react';
 
-export enum TransportMethods {
+export enum TransportStatuses {
   driving,
   carpool,
   good,
 }
 
-type VolunteeringDay = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
-type TransportMethod = 'Willing to Drive' | 'Looking for Carpool' | `I'm good`;
+export type VolunteeringDay = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
+export type TransportStatus =
+  | 'Willing to Drive'
+  | 'Looking for Carpool'
+  | 'Looking for CTA/Shuttle Buddy'
+  | 'Looking for Walking Buddy';
 
 // types.ts
 export type UserInfo = {
@@ -20,21 +24,16 @@ export type UserInfo = {
   name: string; // full name
   schoolName?: string;
   volunteeringDay?: VolunteeringDay; // days of the week
-  transportMethod?: TransportMethod;
+  transportStatus?: TransportStatus;
   isAdmin?: boolean;
 };
 
 export interface SharedContextType {
-  schoolName: string;
-  setSchoolName: React.Dispatch<React.SetStateAction<string>>;
   userInfo: UserInfo;
   setUserInfo: React.Dispatch<React.SetStateAction<UserInfo>>;
 }
 
 const Context = createContext<SharedContextType>({
-  // @TODO: Get school name data from user selection/preference
-  schoolName: '',
-  setSchoolName: () => {},
   userInfo: null,
   setUserInfo: () => {},
 });
