@@ -11,7 +11,7 @@ import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util
 const TRANSPORT_METHOD_SELECTION = [
   'Willing to Drive',
   'Looking for Carpool',
-  'Looking for CTA Buddy',
+  'Looking for CTA/Shuttle Buddy',
   'Looking for Walking Buddy',
 ];
 
