@@ -420,13 +420,13 @@ export const fetchAndGroupUsersForTransportationScreen = async (
             if (
               user.volunteeringDay &&
               user.volunteeringDay.toLowerCase() === volunteeringDay.toLowerCase() &&
-              user.transportMethod
+              user.transportStatus
             ) {
-              const transportMethod = user.transportMethod;
-              if (!groupedUsers[transportMethod]) {
-                groupedUsers[transportMethod] = [];
+              const transportStatus = user.transportStatus;
+              if (!groupedUsers[transportStatus]) {
+                groupedUsers[transportStatus] = [];
               }
-              groupedUsers[transportMethod].push(user);
+              groupedUsers[transportStatus].push(user);
             }
           }
         }
@@ -442,5 +442,5 @@ export const fetchAndGroupUsersForTransportationScreen = async (
     }
   );
 
-  return () => off(q, 'value', unsubscribe);
+  return { unsubscribe: () => off(q, 'value', unsubscribe) };
 };

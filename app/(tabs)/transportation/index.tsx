@@ -1,69 +1,65 @@
 import { router } from 'expo-router';
-import moment from 'moment';
-import React, { useEffect, useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Alert, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { StatusScreenDetails } from './status';
-import Context from '../../components/Context';
+import Context, { UserInfo } from '../../components/Context';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import { fetchAndGroupUsersForTransportationScreen } from '../../firebase/util';
+import { StatusScreenDetails } from './status';
 
 const screenHeight = Dimensions.get('window').height;
 
-const DatePickerScreen: React.FC = () => {
-  const [date, setDate] = useState(new Date());
+const TransportationScreen: React.FC = () => {
   const { userInfo } = useContext(Context);
   const [groupedUsers, setGroupedUsers] = useState<{ [key: string]: UserInfo[] }>({});
-
-  const onChange = useCallback((event: any, selectedDate?: Date) => {
-    if (selectedDate) {
-      setDate(selectedDate);
-    }
-  }, []);
 
   const handleEnterChat = useCallback(() => {
     if (!userInfo.schoolName) {
       Alert.alert('Please select a school.');
-    } else if (!date) {
-      Alert.alert('Please select a date.');
+    } else if (!userInfo.volunteeringDay) {
+      Alert.alert('Please select a volunteering day.');
     } else {
       router.push({
-        pathname: '/(tabs)/rideshare/chat',
-        params: { selectedDate: moment(date).format('YYYY-MM-DD') },
+        pathname: '/(tabs)/transportation/chat',
       });
     }
-  }, [date, userInfo.schoolName]);
+  }, [userInfo.volunteeringDay, userInfo.schoolName]);
 
   // fetch users in real time and group them by transport status and unsubscribe in useeffect. wrap it in async function
   useEffect(() => {
     let unsubscribe;
 
     const fetchUsers = async () => {
-      unsubscribe = fetchAndGroupUsersForTransportationScreen(
+      const subscription = await fetchAndGroupUsersForTransportationScreen(
         userInfo.schoolName,
         userInfo.volunteeringDay,
         (users) => {
           setGroupedUsers(users);
         }
       );
+      unsubscribe = subscription.unsubscribe;
     };
 
     fetchUsers();
 
     // Cleanup function to unsubscribe
     return () => {
-      if (unsubscribe) unsubscribe();
+      if (unsubscribe) {
+        unsubscribe();
+      }
     };
-  }, [date, schoolName]);
+  }, []);
 
   return (
     <ScreenWrapper>
-      <ScrollView contentContainerStyle={styles.container}>
-        {/* <View style={styles.datePickerContainer}>
-          <DateTimePicker value={date} mode="date" display="default" onChange={onChange} /> */}
-        {/* </View> */}
-        <StatusScreenDetails day={userInfo.volunteeringDay} groupedUsers={groupedUsers} />
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}>
+        {groupedUsers && (
+          <StatusScreenDetails day={userInfo.volunteeringDay} groupedUsers={groupedUsers} />
+        )}
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleEnterChat}>
@@ -76,18 +72,11 @@ const DatePickerScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
     justifyContent: 'flex-start', // Space out elements with space between them
     alignItems: 'center',
     padding: 20,
-    paddingBottom: 30,
-    minHeight: screenHeight,
     backgroundColor: 'white',
     position: 'relative',
-  },
-  datePickerContainer: {
-    marginTop: 50, // Adjust as needed to position at the top
-    alignItems: 'center', // Center the date picker horizontally
   },
   buttonContainer: {
     width: '100%', // Make the button container full width
@@ -113,4 +102,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DatePickerScreen;
+export default TransportationScreen;

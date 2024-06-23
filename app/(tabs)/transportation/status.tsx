@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View, ScrollView, Image } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -23,30 +23,32 @@ const SectionHeader: React.FC<{ text: string }> = ({ text }) => (
 
 const ProfileImage = ({ source }) => (
   <View style={styles.pfpContainer}>
-    // there might be an issue with how source is passed, might have to use uri: photo_url
     <Image source={source} style={styles.circleImage} />
   </View>
 );
 
-const SectionCircleIcons = ({ users }) => (
-  <ScrollView
-    contentContainerStyle={styles.scrollViewContainer}
-    horizontal={true}
-    showsVerticalScrollIndicator={false}
-    alwaysBounceVertical={false}
-    showsHorizontalScrollIndicator={false}>
-    <View style={styles.circleIconsContainer}>
-      {users.map((user, index) => (
-        <ProfileImage key={index} source={user.photo} />
-      ))}
-    </View>
-  </ScrollView>
-);
+const SectionCircleIcons = ({ users }) => {
+  return (
+    <ScrollView
+      contentContainerStyle={styles.scrollViewContainer}
+      horizontal
+      showsVerticalScrollIndicator={false}
+      alwaysBounceVertical={false}
+      showsHorizontalScrollIndicator={false}>
+      <View style={styles.circleIconsContainer}>
+        {users &&
+          users.map(
+            (user, index) => user && <ProfileImage key={index} source={{ uri: user?.photo }} />
+          )}
+      </View>
+    </ScrollView>
+  );
+};
 
 export const StatusScreenDetails = ({ day, groupedUsers }) => {
   const statusSelections = [
     { key: '0', value: 'Looking for Walking Buddy' },
-    { key: '1', value: 'Looking for CTA Buddy' },
+    { key: '1', value: 'Looking for CTA/Shuttle Buddy' },
     { key: '2', value: 'Looking for Carpool' },
     { key: '3', value: 'Can Drive People' },
   ];
@@ -55,13 +57,16 @@ export const StatusScreenDetails = ({ day, groupedUsers }) => {
     <View style={styles.container}>
       <StatusHeader day={day} volunteerNum={Object.keys(groupedUsers).length} />
       <View style={styles.section}>
-        {statusSelections.map((status) => (
-          <View key={status.key}>
-            <SectionHeader text={status.value} />
-            //pass in users for each status
-            <SectionCircleIcons users={groupedUsers[status.key]} />
-          </View>
-        ))}
+        {statusSelections.map(
+          (status, index) =>
+            groupedUsers[status.value] &&
+            groupedUsers[status.value].length >= 0 && (
+              <React.Fragment key={status.value}>
+                <SectionHeader text={status.value} />
+                <SectionCircleIcons users={groupedUsers[status.value]} />
+              </React.Fragment>
+            )
+        )}
       </View>
     </View>
   );
@@ -70,14 +75,13 @@ export const StatusScreenDetails = ({ day, groupedUsers }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    minHeight: screenHeight,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 20,
     backgroundColor: 'white',
   },
   scrollViewContainer: {
-    marginBottom: -125,
+    marginBottom: 20,
   },
   headerContainer: {
     padding: 30,
@@ -113,7 +117,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 20,
     marginTop: 15,
-    marginBottom: 15,
   },
   circleImage: {
     width: 95,

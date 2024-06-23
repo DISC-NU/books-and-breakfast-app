@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import { onValue, push, ref, serverTimestamp } from 'firebase/database';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
@@ -11,18 +11,17 @@ const ChatScreen = () => {
   // State to store chat messages
   const [messages, setMessages] = useState<IMessage[]>([]);
   const { userInfo } = useContext(Context);
-  const { selectedDate } = useLocalSearchParams<{ selectedDate: string }>();
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    navigation.setOptions({ headerTitle: `${selectedDate}` });
+    navigation.setOptions({ headerTitle: `${userInfo.volunteeringDay}` });
   }, [navigation]);
 
   // @TO-DO: Put logic in firebase/util
   // useEffect to fetch messages from Firebase when the component mounts
   useEffect(() => {
-    const messagesRef = ref(database, `chat/${userInfo.schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
+    const messagesRef = ref(database, `chat/${userInfo.schoolName}/${userInfo.volunteeringDay}`); // Reference to the messages node in Firebase
 
     // Function to handle data changes in Firebase
     const onValueChange = onValue(messagesRef, (snapshot) => {
@@ -44,12 +43,12 @@ const ChatScreen = () => {
     return () => {
       unsubscribe();
     };
-  }, [userInfo.schoolName, selectedDate]);
+  }, [userInfo.schoolName, userInfo.volunteeringDay]);
 
   // Function to handle sending new messages
   const onSend = useCallback(
     (newMessages = []) => {
-      const messagesRef = ref(database, `chat/${userInfo.schoolName}/${selectedDate}`); // Reference to the messages node in Firebase
+      const messagesRef = ref(database, `chat/${userInfo.schoolName}/${userInfo.volunteeringDay}`); // Reference to the messages node in Firebase
 
       newMessages.forEach((message) => {
         const messageData = {
@@ -63,7 +62,7 @@ const ChatScreen = () => {
       // Append the new messages to the existing messages
       setMessages((previousMessages) => GiftedChat.append(previousMessages, newMessages));
     },
-    [userInfo.schoolName, selectedDate]
+    [userInfo.schoolName, userInfo.volunteeringDay]
   );
 
   const renderBubble = useCallback(
@@ -93,12 +92,12 @@ const ChatScreen = () => {
 
   return (
     <>
-      {(!userInfo.schoolName || !selectedDate) && (
+      {(!userInfo.schoolName || !userInfo.volunteeringDay) && (
         <View>
           <Text>Please select a school to view the chat.</Text>
         </View>
       )}
-      {userInfo.schoolName && selectedDate && (
+      {userInfo.schoolName && userInfo.volunteeringDay && (
         <View style={{ backgroundColor: '#ffffff', flex: 1 }}>
           <GiftedChat
             messages={messages} // Messages to be displayed in the chat
