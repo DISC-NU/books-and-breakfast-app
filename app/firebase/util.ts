@@ -283,6 +283,7 @@ export const AddNewUser = async (userInfo: UserInfo) => {
 export const getUserInfo = async (userInfo: UserInfo) => {
   const userRef = ref(database, `users/${userInfo.id}`);
   const snapshot = await get(userRef);
+  console.log('snapshot:', snapshot);
   if (snapshot.exists()) {
     return snapshot.val();
   } else {
@@ -412,11 +413,11 @@ export const fetchAndGroupUsersForTransportationScreen = async (
         const users: { [key: string]: UserInfo } = snapshot.val() || {};
         const groupedUsers: { [key: string]: UserInfo[] } = {};
 
-        // Filter and group users based on transportMethod
+        // Filter and group users based on transportStatus
         for (const userId in users) {
           if (users.hasOwnProperty(userId)) {
             const user = users[userId];
-            // Only include users with a volunteering day and transport method
+            // Only include users with a volunteering day and transport status
             if (
               user.volunteeringDay &&
               user.volunteeringDay.toLowerCase() === volunteeringDay.toLowerCase() &&
@@ -442,5 +443,5 @@ export const fetchAndGroupUsersForTransportationScreen = async (
     }
   );
 
-  return { unsubscribe: () => off(q, 'value', unsubscribe) };
+  return () => off(q, 'value', unsubscribe);
 };
