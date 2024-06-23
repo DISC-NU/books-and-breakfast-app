@@ -1,7 +1,5 @@
 import React from 'react';
-import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-
-const screenHeight = Dimensions.get('window').height;
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 interface StatusHeaderProps {
   day: string;
