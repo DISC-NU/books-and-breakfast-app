@@ -21,9 +21,12 @@ const SectionHeader: React.FC<{ text: string }> = ({ text }) => (
   <Text style={styles.sectionHeader}>{text}</Text>
 );
 
-const ProfileImage = ({ source }) => (
-  <View style={styles.pfpContainer}>
-    <Image source={source} style={styles.circleImage} />
+const ProfileImage = ({ name, source }) => (
+  <View>
+    <View style={styles.pfpContainer}>
+      <Image source={source} style={styles.circleImage} />
+    </View>
+    <Text>{name}</Text>
   </View>
 );
 
@@ -38,7 +41,13 @@ const SectionCircleIcons = ({ users }) => {
       <View style={styles.circleIconsContainer}>
         {users &&
           users.map(
-            (user, index) => user && <ProfileImage key={index} source={{ uri: user?.photo }} />
+            (user, index) =>
+              user &&
+              user.name && (
+                <React.Fragment key={index}>
+                  <ProfileImage name={user.name} source={{ uri: user.photo }} />
+                </React.Fragment>
+              )
           )}
       </View>
     </ScrollView>
@@ -106,7 +115,7 @@ const styles = StyleSheet.create({
   circleIconsContainer: {
     flexDirection: 'row',
     marginBottom: 10,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   pfpContainer: {
     width: 95,
@@ -115,8 +124,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 20,
+    marginRight: 30,
     marginTop: 15,
+    marginBottom: 10,
   },
   circleImage: {
     width: 95,
