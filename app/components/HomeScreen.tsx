@@ -45,7 +45,6 @@ const sendEmail = () => {
 
 function HomeScreen() {
   const navigation = useNavigation<any>();
-  const { schoolName } = useContext(Context);
   const { userInfo } = useContext(Context);
   const [resourceURLs, setResourceURLs] = useState<ResourceURLs | null>(null);
 
@@ -68,10 +67,13 @@ function HomeScreen() {
   const handleButtonPress = (buttonIndex: number) => {
     const actions = {
       1: () => {
-        if (!schoolName) {
+        if (!userInfo.schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Navigation', { schoolName });
+          navigation.navigate('Navigation', {
+            schoolName: userInfo.schoolName,
+            canEdit: userInfo?.isAdmin,
+          });
         }
       },
       2: () => {
@@ -83,10 +85,13 @@ function HomeScreen() {
         }
       },
       3: () => {
-        if (!schoolName) {
+        if (!userInfo.schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Tips', { schoolName });
+          navigation.navigate('Tips', {
+            schoolName: userInfo.schoolName,
+            canEdit: userInfo?.isAdmin,
+          });
         }
       },
 
@@ -103,7 +108,7 @@ function HomeScreen() {
     if (action) {
       action();
     } else {
-      console.log(`Button ${buttonIndex} pressed with no action defined.`);
+      console.error(`Button ${buttonIndex} pressed with no action defined.`);
     }
   };
 

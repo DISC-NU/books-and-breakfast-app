@@ -8,13 +8,16 @@ import Context from './Context';
 import ScreenWrapper from './ScreenWrapper';
 
 export default function CustomizationScreen() {
-  const { schoolName, setSchoolName, userInfo, setUserInfo } = useContext(Context);
+  const { userInfo, setUserInfo } = useContext(Context);
+  const [schoolName, setSchoolName] = useState<string>(userInfo.schoolName);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
   // Update dropdown styling based on selection state
   useEffect(() => {
-    setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
+    setDropdownStyle(
+      userInfo.schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected
+    );
   }, [schoolName]);
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export default function CustomizationScreen() {
           </View>
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
-              <Text style={styles.subtitle}>Your Volunteering Site</Text>
+              <Text style={styles.subtitle}>Your Assigned Volunteering Site</Text>
               <View style={styles.dropdownWrapper}>
                 <View style={styles.dropdownContainer}>
                   <SelectList
@@ -66,7 +69,7 @@ export default function CustomizationScreen() {
                     data={schoolOptions}
                     inputStyles={styles.selectInput}
                     save="value"
-                    placeholder="Select School"
+                    placeholder={schoolName || 'Select School'}
                     maxHeight={275}
                     search={false}
                     boxStyles={dropdownStyle}

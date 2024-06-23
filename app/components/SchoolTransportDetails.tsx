@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScreenWidth } from 'react-native-elements/dist/helpers';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { showLocation } from 'react-native-map-link';
+import FaIcon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { listenToSchoolDirections, updateSchoolDirections } from '../firebase/util';
+import {
+  SchoolDirections,
+  listenToSchoolDirections,
+  updateSchoolDirections,
+} from '../firebase/util';
 import EditText from './EditText';
 
 const screenHeight = Dimensions.get('window').height;
@@ -11,13 +19,34 @@ const screenHeight = Dimensions.get('window').height;
 interface ArticleHeaderProps {
   schoolName: string;
   location: string;
+  latitude: string;
+  longitude: string;
 }
 
 // Component to display the header with school name and location
-const ArticleHeader: React.FC<ArticleHeaderProps> = ({ schoolName, location }) => (
+const ArticleHeader: React.FC<ArticleHeaderProps> = ({
+  schoolName,
+  location,
+  latitude,
+  longitude,
+}) => (
   <View style={styles.headerContainer}>
     <Text style={styles.headerTitle}>{schoolName}</Text>
-    <Text style={styles.headerLocation}>{location}</Text>
+    <TouchableOpacity
+      onPress={() =>
+        showLocation({
+          latitude,
+          longitude,
+          googleForceLatLon: true, // force GoogleMaps to use the latitude and longitude for the query instead of the title
+          alwaysIncludeGoogle: true, // include Google Maps
+          title: schoolName, // display school name as the title in the map location
+        })
+      }>
+      <View style={styles.row}>
+        <FaIcon name="map-marker" size={20} color="#36afbc" />
+        <Text style={[styles.headerLocation]}>{location}</Text>
+      </View>
+    </TouchableOpacity>
   </View>
 );
 
@@ -47,10 +76,14 @@ const Divider: React.FC<DividerProps> = ({
 // Props interface for SchoolTransportDetails component
 interface SchoolTransportDetailsProps {
   schoolName: string;
+  canEdit?: boolean;
 }
 
 // Main component to display and edit school transportation details
-export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ schoolName }) => {
+export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({
+  schoolName,
+  canEdit,
+}) => {
   const [directionsInfo, setDirectionsInfo] = useState<SchoolDirections | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,11 +127,16 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         {directionsInfo && (
           <>
-            <ArticleHeader
-              schoolName={directionsInfo.schoolName}
-              location={directionsInfo.address}
-            />
-            <View style={styles.section}>
+            <Image source={require('../../assets/bus-header.jpg')} style={styles.articleHeader} />
+            <View style={styles.overlay}>
+              <ArticleHeader
+                schoolName={directionsInfo.schoolName}
+                location={directionsInfo.address}
+                latitude={directionsInfo.geoLat}
+                longitude={directionsInfo.geoLong}
+              />
+            </View>
+            <View style={styles.firstSection}>
               <Text style={styles.header}>Directions</Text>
               <EditText
                 value={directionsInfo.specifics}
@@ -108,6 +146,18 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
                 display="directions"
               />
             </View>
+            {directionsInfo.schoolName === 'Washington Elementary School' && (
+              <Image
+                source={require('../../assets/washington-1.png')}
+                style={styles.washingtonImage}
+              />
+            )}
+            {directionsInfo.schoolName === 'Washington Elementary School' && (
+              <Image
+                source={require('../../assets/washington-2.png')}
+                style={styles.washingtonImage}
+              />
+            )}
             {directionsInfo.driving && (
               <View style={styles.section}>
                 <Divider />
@@ -139,7 +189,7 @@ export const SchoolTransportDetails: React.FC<SchoolTransportDetailsProps> = ({ 
           </>
         )}
       </ScrollView>
-      {!edit && (
+      {!edit && canEdit && (
         <Pressable
           style={({ pressed }) => [
             {
@@ -160,14 +210,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingBottom: 30,
     minHeight: screenHeight,
     flexGrow: 1,
     position: 'relative',
   },
-  section: {
-    margin: 0,
+  firstSection: {
+    paddingTop: 100,
     width: '100%',
+  },
+  section: {
+    width: '100%',
+  },
+  articleHeader: {
+    height: 350,
+    width: ScreenWidth,
+  },
+  overlay: {
+    position: 'absolute',
+    alignItems: 'center',
+    marginBottom: 150,
+    top: 300,
+    left: 20,
+    right: 20,
+    zIndex: 1,
   },
   header: {
     fontSize: 20,
@@ -179,16 +246,24 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     width: '95%',
-    backgroundColor: 'rgba(255,228,181, 0.2)',
+    backgroundColor: 'rgba(255,228,181, 0.6)',
     marginBottom: 25,
   },
   headerTitle: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 15,
   },
   headerLocation: {
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: 'bold',
+    paddingLeft: 10,
+    color: '#36afbc',
+    textDecorationLine: 'underline',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   button: {
     position: 'absolute',
@@ -200,5 +275,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 25,
     backgroundColor: 'black',
+  },
+  washingtonImage: {
+    width: 350,
+    height: 275,
+    marginTop: 20,
   },
 });

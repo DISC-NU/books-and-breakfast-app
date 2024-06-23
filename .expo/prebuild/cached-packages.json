@@ -1,4 +1,8 @@
 {
+<<<<<<< HEAD
   "dependencies": "f1658ccf34067aa227530ed79f44726c5dae8826",
+=======
+  "dependencies": "86b5d5c092fc62f645cd5d9dff45cf2b6a379704",
+>>>>>>> main
   "devDependencies": "381c21c424c14f73cfb2f94504ee6850fabd6f32"
 }

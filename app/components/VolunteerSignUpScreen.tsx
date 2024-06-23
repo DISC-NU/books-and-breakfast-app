@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { nextThreeMonthsDates } from '../data/siteDates';
@@ -12,19 +12,19 @@ export default function SignUpScreen() {
 
   const handleRedButtonPress = (buttonIndex: number) => {
     let newDateArray;
-    if (buttonIndex == 1) {
+    if (buttonIndex === 1) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Monday'
       );
-    } else if (buttonIndex == 2) {
+    } else if (buttonIndex === 2) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Tuesday'
       );
-    } else if (buttonIndex == 3) {
+    } else if (buttonIndex === 3) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Wednesday'
       );
-    } else if (buttonIndex == 4) {
+    } else if (buttonIndex === 4) {
       newDateArray = Object.values(nextThreeMonthsDates).filter(
         (date) => date.dayOfWeek === 'Thursday'
       );

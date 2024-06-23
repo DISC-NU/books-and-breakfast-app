@@ -6,14 +6,14 @@ import TipsDetails from './TipsDetails';
 const TipsScreen = ({ route, navigation }) => {
   navigation = useNavigation();
 
-  const { schoolName } = route.params;
+  const { schoolName, canEdit } = route.params;
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 85 : 0}>
-      <TipsDetails schoolName={schoolName} />
+      <TipsDetails schoolName={schoolName} canEdit={canEdit} />
     </KeyboardAvoidingView>
   );
 };
