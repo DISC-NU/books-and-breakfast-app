@@ -52,11 +52,9 @@ export default function CustomizationScreen() {
     } else {
       setSchoolName(schoolName);
       setUserInfo({ ...userInfo, schoolName, volunteeringDay });
-      console.log(userInfo);
       updateUserFields(userInfo.id, {
         ...userInfo,
         schoolName,
-        transportStatus,
         volunteeringDay,
         isRegistered: true,
       });
@@ -66,7 +64,7 @@ export default function CustomizationScreen() {
       }
       router.replace('/');
     }
-  }, [schoolName]);
+  }, [schoolName, volunteeringDay, transportStatus, userInfo]);
 
   return (
     <ScreenWrapper>

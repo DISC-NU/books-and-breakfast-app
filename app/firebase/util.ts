@@ -419,10 +419,9 @@ export const fetchAndGroupUsersForTransportationScreen = async (
             // Only include users with a volunteering day and transport method
             if (
               user.volunteeringDay &&
-              user.volunteeringDay.toLowerCase() === volunteeringDay.toLowerCase() &&
-              user.transportStatus
+              user.volunteeringDay.toLowerCase() === volunteeringDay.toLowerCase()
             ) {
-              const transportStatus = user.transportStatus;
+              const transportStatus = user.transportStatus ? user.transportStatus : 'No Status';
               if (!groupedUsers[transportStatus]) {
                 groupedUsers[transportStatus] = [];
               }
