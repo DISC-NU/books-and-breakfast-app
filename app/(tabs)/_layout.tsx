@@ -8,8 +8,6 @@ import Context from '../components/Context';
 export default function TabLayout() {
   const { userInfo } = useContext(Context);
 
-  console.log(userInfo);
-
   // If user is not signed in, redirect to login page
   if (!userInfo) {
     return <Redirect href="/login" />;
@@ -22,6 +20,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           paddingTop: 5,
+          display: !userInfo?.isRegistered ? 'none' : 'flex', // hide tab bar if user is not registered
         },
       }}>
       <Tabs.Screen

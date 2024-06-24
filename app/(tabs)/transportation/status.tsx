@@ -68,7 +68,7 @@ export const StatusScreenDetails = ({ day, groupedUsers }) => {
           (status, index) =>
             groupedUsers[status.value] &&
             groupedUsers[status.value].length >= 0 && (
-              <React.Fragment key={status.value}>
+              <React.Fragment key={index}>
                 <SectionHeader text={status.value} />
                 <SectionCircleIcons users={groupedUsers[status.value]} />
               </React.Fragment>

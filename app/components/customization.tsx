@@ -3,13 +3,16 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
+import { DAYS_OF_WEEK, TRANSPORT_METHOD_SELECTION } from '../(tabs)/account';
+import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
-import Context from './Context';
 import ScreenWrapper from './ScreenWrapper';
 
 export default function CustomizationScreen() {
   const { userInfo, setUserInfo } = useContext(Context);
   const [schoolName, setSchoolName] = useState<string>(userInfo.schoolName);
+  const [transportStatus, setTransportStatus] = useState<TransportStatus>(userInfo.transportStatus);
+  const [volunteeringDay, setVolunteeringDay] = useState<VolunteeringDay>(userInfo.volunteeringDay);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
@@ -44,13 +47,24 @@ export default function CustomizationScreen() {
   const handleContinue = useCallback(() => {
     if (!schoolName) {
       alert('Please select a school');
+    } else if (!volunteeringDay) {
+      alert('Please select a volunteering day');
     } else {
       setSchoolName(schoolName);
-      setUserInfo({ ...userInfo, schoolName });
-      updateUserFields(userInfo.id, { ...userInfo, schoolName });
+      setUserInfo({ ...userInfo, schoolName, volunteeringDay });
+      updateUserFields(userInfo.id, {
+        ...userInfo,
+        schoolName,
+        volunteeringDay,
+        isRegistered: true,
+      });
+      if (transportStatus) {
+        setUserInfo({ ...userInfo, transportStatus });
+        updateUserFields(userInfo.id, { ...userInfo, transportStatus });
+      }
       router.replace('/');
     }
-  }, [schoolName]);
+  }, [schoolName, volunteeringDay, transportStatus, userInfo]);
 
   return (
     <ScreenWrapper>
@@ -69,8 +83,40 @@ export default function CustomizationScreen() {
                     data={schoolOptions}
                     inputStyles={styles.selectInput}
                     save="value"
-                    placeholder={schoolName || 'Select School'}
+                    placeholder="Select School"
                     maxHeight={275}
+                    search={false}
+                    boxStyles={dropdownStyle}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.subtitle}>Your Assigned Day</Text>
+              <View style={styles.dropdownWrapper}>
+                <View style={styles.dropdownContainer}>
+                  <SelectList
+                    setSelected={(val: VolunteeringDay) => setVolunteeringDay(val)}
+                    data={DAYS_OF_WEEK}
+                    placeholder="Select your assigned day"
+                    inputStyles={styles.selectInput}
+                    maxHeight={180}
+                    search={false}
+                    boxStyles={dropdownStyle}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.subtitle}>Your Transport Status</Text>
+              <View style={styles.dropdownWrapper}>
+                <View style={styles.dropdownContainer}>
+                  <SelectList
+                    setSelected={(val: TransportStatus) => setTransportStatus(val)}
+                    data={TRANSPORT_METHOD_SELECTION}
+                    placeholder="Select your transport status"
+                    inputStyles={styles.selectInput}
+                    maxHeight={180}
                     search={false}
                     boxStyles={dropdownStyle}
                   />
@@ -79,11 +125,11 @@ export default function CustomizationScreen() {
             </View>
           </View>
         </View>
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+          <Text style={styles.continueButtonText}>Continue</Text>
+        </TouchableOpacity>
       </View>
     </ScreenWrapper>
   );
@@ -103,7 +149,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   nameText: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: 'bold',
     marginTop: 10,
   },
@@ -112,6 +158,7 @@ const styles = StyleSheet.create({
   },
   infoRow: {
     marginBottom: 15,
+    position: 'relative',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -130,7 +177,6 @@ const styles = StyleSheet.create({
     zIndex: 1, // Ensure dropdown appears above other elements
   },
   dropdownContainer: {
-    position: 'absolute',
     width: '100%',
   },
   selectInput: {
@@ -145,7 +191,6 @@ const styles = StyleSheet.create({
   },
   dropdownSelected: {
     borderWidth: 1,
-    borderColor: '#36afbc',
     borderRadius: 10,
   },
   footer: {

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Dimensions,
@@ -36,6 +36,11 @@ const attemptOpenURL = async (url: string, failureMessage: string): Promise<void
   } else {
     Alert.alert('Error', failureMessage);
   }
+};
+
+// function to open Mail To link for Val
+const sendEmail = () => {
+  Linking.openURL('mailto:val.buchanan@northwestern.edu');
 };
 
 function HomeScreen() {
@@ -107,45 +112,76 @@ function HomeScreen() {
     }
   };
 
-  return (
-    <ScreenWrapper>
-      <ScrollView>
-        <View style={styles.imageContainer}>
-          <Image source={require('../../assets/logo.png')} style={styles.logo} />
-        </View>
-        <Text style={styles.subtitle}>Resources</Text>
-        <View style={styles.buttonsGrid}>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
-            <MapIcon />
-            <Text style={styles.bigButtonText}>Directions</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
-            <ClockIcon />
-            <Text style={styles.bigButtonText}>Tracker</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(3)}>
-            <TipsIcon />
-            <Text style={styles.bigButtonText}>Tips</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(4)}>
-            <GroupMeIcon />
-            <Text style={styles.bigButtonText}>GroupMe</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.subtitle}>Program Info</Text>
-        <View style={styles.buttonsGrid}>
-          {SMALLBUTTONS.map((button) => (
-            <TouchableOpacity
-              key={button.index}
-              style={styles.button}
-              onPress={() => handleButtonPress(4 + button.index)}>
-              <Text style={styles.buttonText}>{button.label}</Text>
+  if (!userInfo.isRegistered) {
+    return (
+      <ScreenWrapper>
+        <ScrollView>
+          <View style={styles.messageContainer}>
+            <Text style={styles.messageTitle}>**IMPORTANT**</Text>
+            <View style={styles.messageTextContainer}>
+              <Text style={styles.messageText}>
+                If you have not applied but are interested in volunteering, please email Val.
+              </Text>
+              <TouchableOpacity onPress={sendEmail}>
+                <Text style={styles.emailLinkText}>SEND EMAIL HERE</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Text style={styles.subtitle}>Program Info</Text>
+          <View style={styles.buttonsGrid}>
+            {SMALLBUTTONS.map((button) => (
+              <TouchableOpacity
+                key={button.index}
+                style={styles.button}
+                onPress={() => handleButtonPress(4 + button.index)}>
+                <Text style={styles.buttonText}>{button.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </ScreenWrapper>
+    );
+  } else {
+    return (
+      <ScreenWrapper>
+        <ScrollView>
+          <View style={styles.imageContainer}>
+            <Image source={require('../../assets/logo.png')} style={styles.logo} />
+          </View>
+          <Text style={styles.subtitle}>Resources</Text>
+          <View style={styles.buttonsGrid}>
+            <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(1)}>
+              <MapIcon />
+              <Text style={styles.bigButtonText}>Directions</Text>
             </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
-    </ScreenWrapper>
-  );
+            <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(2)}>
+              <ClockIcon />
+              <Text style={styles.bigButtonText}>Tracker</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(3)}>
+              <TipsIcon />
+              <Text style={styles.bigButtonText}>Tips</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.bigButton} onPress={() => handleButtonPress(4)}>
+              <GroupMeIcon />
+              <Text style={styles.bigButtonText}>GroupMe</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.subtitle}>Program Info</Text>
+          <View style={styles.buttonsGrid}>
+            {SMALLBUTTONS.map((button) => (
+              <TouchableOpacity
+                key={button.index}
+                style={styles.button}
+                onPress={() => handleButtonPress(4 + button.index)}>
+                <Text style={styles.buttonText}>{button.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </ScreenWrapper>
+    );
+  }
 }
 
 const layoutConstants = {
@@ -171,6 +207,43 @@ const styles = StyleSheet.create({
     color: '#36afbc',
     textAlign: 'left', // Align text to the left within the Text component
     paddingLeft: layoutConstants.subtitlePaddingLeft,
+  },
+  messageContainer: {
+    paddingTop: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 50,
+  },
+  messageTextContainer: {
+    paddingHorizontal: 20,
+    marginHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    marginTop: 20,
+    marginBottom: 100,
+    alignItems: 'center',
+    backgroundColor: '#36afbc',
+    borderRadius: 20,
+  },
+  messageTitle: {
+    margin: 20,
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#F1375A',
+    textAlign: 'center',
+  },
+  messageText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    margin: 10,
+  },
+  emailLinkText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    textDecorationLine: 'underline',
+    padding: 20,
   },
   bigButton: {
     margin: layoutConstants.buttonMargin,

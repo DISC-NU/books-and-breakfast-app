@@ -49,7 +49,7 @@ const TransportationScreen: React.FC = () => {
         unsubscribe();
       }
     };
-  }, []);
+  }, [userInfo]);
 
   return (
     <ScreenWrapper>
@@ -58,7 +58,7 @@ const TransportationScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         alwaysBounceVertical={false}>
         {groupedUsers && (
-          <StatusScreenDetails day={userInfo.volunteeringDay} groupedUsers={groupedUsers} />
+          <StatusScreenDetails day={userInfo?.volunteeringDay} groupedUsers={groupedUsers} />
         )}
       </ScrollView>
       <View style={styles.buttonContainer}>
