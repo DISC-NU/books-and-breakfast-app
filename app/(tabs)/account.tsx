@@ -6,7 +6,7 @@ import { Avatar } from 'react-native-elements';
 
 import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import ScreenWrapper from '../components/ScreenWrapper';
-import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
+import { SchoolKeyPair, getSchoolList, updateUserFields, wipeData } from '../firebase/util';
 
 export const TRANSPORT_METHOD_SELECTION = [
   'Willing to Drive',
@@ -78,6 +78,10 @@ export default function ProfileScreen() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleDelete = async () => {
+    await wipeData();
   };
 
   return (
@@ -153,6 +157,11 @@ export default function ProfileScreen() {
           <TouchableOpacity style={styles.logoutButton} onPress={handleSignOut}>
             <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
+          {userInfo.isAdmin && (
+            <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+              <Text style={styles.logoutButtonText}>DELETE ALL USER DATA</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </ScreenWrapper>
@@ -226,10 +235,18 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     borderRadius: 10,
+    margin: 10,
   },
   logoutButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  deleteButton: {
+    backgroundColor: '#F1375A',
+    padding: 15,
+    alignItems: 'center',
+    borderRadius: 10,
+    margin: 10,
   },
 });

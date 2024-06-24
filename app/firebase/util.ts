@@ -9,6 +9,7 @@ import {
   push,
   query,
   ref,
+  remove,
   set,
 } from 'firebase/database';
 
@@ -17,6 +18,8 @@ import { Tips } from '../data/TipsInfo';
 import { database } from './firebaseConfig';
 
 // Import the pre-configured Firebase database instance.
+
+const ADMIN_EMAIL = 'val.buchanan@northwestern.edu';
 
 // TypeScript interface for representing key-value pairs of school names for school selection dropdown
 export interface SchoolKeyPair {
@@ -57,6 +60,13 @@ export interface Entry {
 export interface ResourceURLs {
   trackerURL: string;
   groupMeURL: string;
+}
+
+// Typescript interface for Morning Program content
+export interface MorningProgram {
+  title: string;
+  description: string;
+  helpInfo?: string; //optional for extras section
 }
 
 // Save function for school transportation details
@@ -265,6 +275,26 @@ export async function getMissionEntries(): Promise<Entry[] | null> {
   }
 }
 
+/** Gets all Morning Program information from the Firebase database.
+ * Returns a promise resolving to an erray of MorningProgram objects or null if no data is found.
+ */
+export async function getMorningProgramInfo(): Promise<MorningProgram[] | null> {
+  try {
+    const snapshot = await get(child(ref(database), 'MorningProgram'));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const morningProgramEntries: MorningProgram[] = Object.keys(data).map((key) => data[key]);
+      return morningProgramEntries;
+    } else {
+      console.error('No data available');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching morning program information:', error);
+    return null;
+  }
+}
+
 export const isNewUser = async (userInfo: UserInfo) => {
   const userRef = ref(database, `users/${userInfo.id}`);
   const snapshot = await get(userRef);
@@ -442,4 +472,35 @@ export const fetchAndGroupUsersForTransportationScreen = async (
   );
 
   return { unsubscribe: () => off(q, 'value', unsubscribe) };
+};
+
+// Delete all user data except admin's data
+export const wipeData = async () => {
+  try {
+    const usersRef = ref(database, 'users');
+
+    //fetch data for all users
+    const usersSnapshot = await get(usersRef);
+
+    const allPromises: Promise<void>[] = [];
+
+    // going through each child snapshot and adding to promises if not val
+    usersSnapshot.forEach((childSnapshot) => {
+      const key = childSnapshot.key;
+      const value = childSnapshot.val();
+
+      //check for email instead
+      if (value.email !== ADMIN_EMAIL) {
+        const userRef = ref(database, 'users/' + key);
+        allPromises.push(remove(userRef));
+        console.log('User with key ${key} added to final promise');
+      }
+    });
+
+    await Promise.all(allPromises);
+    console.log('All users except admin were deleted!');
+  } catch (error) {
+    console.error('Error deleting all user data: ', error);
+    throw error;
+  }
 };

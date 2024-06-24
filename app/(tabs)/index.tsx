@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from '../components/HomeScreen';
 import MissionScreen from '../components/MissionScreen';
-import MorningProgram from '../components/MorningProgram';
+import MorningProgramScreen from '../components/MorningProgram';
 import NavigationScreen from '../components/NavigationScreen';
 import TipsScreen from '../components/TipsScreen';
 
@@ -85,7 +85,7 @@ function AppNavigation() {
         />
         <Stack.Screen
           name="Morning"
-          component={MorningProgram}
+          component={MorningProgramScreen}
           options={({ navigation }) => ({
             headerTitle: '', // Remove title
             headerLeft: () => (
