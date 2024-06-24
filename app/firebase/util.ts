@@ -62,6 +62,13 @@ export interface ResourceURLs {
   groupMeURL: string;
 }
 
+// Typescript interface for Morning Program content
+export interface MorningProgram {
+  title: string;
+  description: string;
+  helpInfo?: string; //optional for extras section
+}
+
 // Save function for school transportation details
 export async function updateSchoolDirections(schoolName: string, field: string, value: string) {
   // Generate a database reference specifically targeting the requested school's directions.
@@ -264,6 +271,26 @@ export async function getMissionEntries(): Promise<Entry[] | null> {
     }
   } catch (error) {
     console.error('Error fetching mission entries:', error);
+    return null;
+  }
+}
+
+/** Gets all Morning Program information from the Firebase database.
+ * Returns a promise resolving to an erray of MorningProgram objects or null if no data is found.
+ */
+export async function getMorningProgramInfo(): Promise<MorningProgram[] | null> {
+  try {
+    const snapshot = await get(child(ref(database), 'MorningProgram'));
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const morningProgramEntries: MorningProgram[] = Object.keys(data).map((key) => data[key]);
+      return morningProgramEntries;
+    } else {
+      console.error('No data available');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching morning program information:', error);
     return null;
   }
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 const QuestionIcon: React.FC = () => (
-  <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" width="55" height="55">
+  <Svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" width="32" height="32">
     <Path
       strokeLinecap="round"
       strokeLinejoin="round"
