@@ -3,13 +3,15 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
+import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
-import Context from './Context';
 import ScreenWrapper from './ScreenWrapper';
 
 export default function CustomizationScreen() {
   const { userInfo, setUserInfo } = useContext(Context);
   const [schoolName, setSchoolName] = useState<string>(userInfo.schoolName);
+  const [transportStatus, setTransportStatus] = useState<TransportStatus>(userInfo.transportStatus);
+  const [volunteeringDay, setVolunteeringDay] = useState<VolunteeringDay>(userInfo.volunteeringDay);
   const [schoolOptions, setSchoolOptions] = useState<SchoolKeyPair[]>([]);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
@@ -47,7 +49,7 @@ export default function CustomizationScreen() {
     } else {
       setSchoolName(schoolName);
       setUserInfo({ ...userInfo, schoolName });
-      updateUserFields(userInfo.id, { ...userInfo, schoolName });
+      updateUserFields(userInfo.id, { ...userInfo, schoolName, isRegistered: true });
       router.replace('/');
     }
   }, [schoolName]);

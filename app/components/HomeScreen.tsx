@@ -112,7 +112,7 @@ function HomeScreen() {
     }
   };
 
-  if (!userInfo.assigned) {
+  if (!userInfo.isRegistered) {
     return (
       <ScreenWrapper>
         <ScrollView>
@@ -120,10 +120,10 @@ function HomeScreen() {
             <Text style={styles.messageTitle}>**IMPORTANT**</Text>
             <View style={styles.messageTextContainer}>
               <Text style={styles.messageText}>
-                If you have not yet been assigned, email Val please.
+                If you have not applied but are interested in volunteering, please email Val.
               </Text>
               <TouchableOpacity onPress={sendEmail}>
-                <Text style={styles.emailLinkText}>SEND EMAIL.</Text>
+                <Text style={styles.emailLinkText}>SEND EMAIL HERE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -215,7 +215,8 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   messageTextContainer: {
-    paddingHorizontal: layoutConstants.padding,
+    paddingHorizontal: 20,
+    marginHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 20,
     marginTop: 20,

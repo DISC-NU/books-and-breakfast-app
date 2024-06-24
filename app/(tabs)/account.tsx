@@ -121,7 +121,7 @@ export default function ProfileScreen() {
                     setSelected={setVolunteeringDay}
                     onSelect={() => handleSetVolunteeringDay(volunteeringDay)}
                     data={DAYS_OF_WEEK}
-                    placeholder={userInfo.volunteeringDay || 'Select your assigned day'}
+                    placeholder={userInfo.volunteeringDay || 'Select your isRegistered day'}
                     inputStyles={styles.selectInput}
                     maxHeight={180}
                     search={false}
