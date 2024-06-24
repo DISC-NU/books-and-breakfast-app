@@ -8,14 +8,14 @@ import Context, { TransportStatus, VolunteeringDay } from '../components/Context
 import ScreenWrapper from '../components/ScreenWrapper';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
 
-const TRANSPORT_METHOD_SELECTION = [
+export const TRANSPORT_METHOD_SELECTION = [
   'Willing to Drive',
   'Looking for Carpool',
   'Looking for CTA/Shuttle Buddy',
   'Looking for Walking Buddy',
 ];
 
-const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+export const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 export default function ProfileScreen() {
   const { userInfo, setUserInfo } = useContext(Context);
@@ -121,7 +121,7 @@ export default function ProfileScreen() {
                     setSelected={setVolunteeringDay}
                     onSelect={() => handleSetVolunteeringDay(volunteeringDay)}
                     data={DAYS_OF_WEEK}
-                    placeholder={userInfo.volunteeringDay || 'Select your isRegistered day'}
+                    placeholder={userInfo.volunteeringDay || 'Select your assigned day'}
                     inputStyles={styles.selectInput}
                     maxHeight={180}
                     search={false}
