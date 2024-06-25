@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 5,
     height: 500,
-    marginBottom: 20,
+    marginBottom: 60,
     padding: 30,
   },
   title: {
@@ -126,7 +126,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingVertical: 15,
+    marginTop: 10,
     backgroundColor: 'white',
   },
   dotStyle: {
