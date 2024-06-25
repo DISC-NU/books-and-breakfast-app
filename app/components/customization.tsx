@@ -51,16 +51,23 @@ export default function CustomizationScreen() {
       alert('Please select a volunteering day');
     } else {
       setSchoolName(schoolName);
-      setUserInfo({ ...userInfo, schoolName, volunteeringDay });
-      updateUserFields(userInfo.id, {
-        ...userInfo,
-        schoolName,
-        volunteeringDay,
-        isRegistered: true,
-      });
       if (transportStatus) {
-        setUserInfo({ ...userInfo, transportStatus });
-        updateUserFields(userInfo.id, { ...userInfo, transportStatus });
+        setUserInfo({ ...userInfo, schoolName, volunteeringDay, transportStatus });
+        updateUserFields(userInfo.id, {
+          ...userInfo,
+          schoolName,
+          volunteeringDay,
+          transportStatus,
+          isRegistered: true,
+        });
+      } else {
+        setUserInfo({ ...userInfo, schoolName, volunteeringDay });
+        updateUserFields(userInfo.id, {
+          ...userInfo,
+          schoolName,
+          volunteeringDay,
+          isRegistered: true,
+        });
       }
       router.replace('/');
     }
