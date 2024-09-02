@@ -70,10 +70,7 @@ function HomeScreen() {
         if (!userInfo.schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Navigation', {
-            schoolName: userInfo.schoolName,
-            canEdit: userInfo?.isAdmin,
-          });
+          navigation.navigate('Navigation');
         }
       },
       2: () => {
@@ -88,10 +85,7 @@ function HomeScreen() {
         if (!userInfo.schoolName) {
           Alert.alert('Please select a school.');
         } else {
-          navigation.navigate('Tips', {
-            schoolName: userInfo.schoolName,
-            canEdit: userInfo?.isAdmin,
-          });
+          navigation.navigate('Tips');
         }
       },
 

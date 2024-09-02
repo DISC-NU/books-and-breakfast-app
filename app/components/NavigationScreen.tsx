@@ -1,26 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
+import { useContext } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 
+import Context from './Context';
 import { SchoolTransportDetails } from './SchoolTransportDetails';
 
-// // Define your navigation stack types as needed
-// type NavigationScreenRouteParams = {
-//   schoolName: string;
-// };
-
-const NavigationScreen = ({ route, navigation }) => {
+const NavigationScreen = ({ navigation }) => {
   // Using the useNavigation hook to access navigation in this component
   navigation = useNavigation();
-
-  //passing in school name to article page from dropdown selection
-  const { schoolName, canEdit } = route.params;
+  const { userInfo } = useContext(Context);
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 85 : 0}>
-      <SchoolTransportDetails schoolName={schoolName} canEdit={canEdit} />
+      <SchoolTransportDetails schoolName={userInfo.schoolName} canEdit={userInfo.isAdmin} />
     </KeyboardAvoidingView>
   );
 };
