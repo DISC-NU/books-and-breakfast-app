@@ -9,7 +9,7 @@ import { listenToUserInfo } from '../firebase/util';
 export default function TabLayout() {
   const { userInfo, setUserInfo } = useContext(Context);
 
-  // Listen for changes in user info when user exists and is registered
+  // Listen for changes in userInfo when user exists and is registered, logs user out if their data is cleared in database
   useEffect(() => {
     if (userInfo && userInfo.isRegistered) {
       const unsubscribe = listenToUserInfo(userInfo.id, (userInfo) => {
