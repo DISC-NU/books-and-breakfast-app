@@ -13,9 +13,9 @@ import {
   set,
 } from 'firebase/database';
 
+import { database } from './firebaseConfig';
 import { UserInfo } from '../components/Context';
 import { Tips } from '../data/TipsInfo';
-import { database } from './firebaseConfig';
 
 // Import the pre-configured Firebase database instance.
 
