@@ -7,6 +7,7 @@ import { DAYS_OF_WEEK, TRANSPORT_METHOD_SELECTION } from '../(tabs)/account';
 import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
 import ScreenWrapper from './ScreenWrapper';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function CustomizationScreen() {
   const { userInfo, setUserInfo } = useContext(Context);
@@ -73,8 +74,27 @@ export default function CustomizationScreen() {
     }
   }, [schoolName, volunteeringDay, transportStatus, userInfo]);
 
+  const handleBack = () => {
+    setUserInfo({ ...userInfo, schoolName: '', transportStatus: null, volunteeringDay: null, isRegistered: false });
+    
+    updateUserFields(userInfo.id, {
+      ...userInfo,
+      schoolName: '',
+      transportStatus: null,
+      volunteeringDay: null,
+      isRegistered: false,
+    });
+    
+    router.replace('UserScreening');
+  }
+
   return (
     <ScreenWrapper>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleBack}>
+          <Icon name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
       <View style={styles.container}>
         <View style={styles.mainContent}>
           <View style={styles.profileContainer}>
@@ -214,5 +234,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
