@@ -74,30 +74,10 @@ export default function CustomizationScreen() {
     }
   }, [schoolName, volunteeringDay, transportStatus, userInfo]);
 
-  const handleBack = () => {
-    setUserInfo({
-      ...userInfo,
-      schoolName: '',
-      transportStatus: null,
-      volunteeringDay: null,
-      isRegistered: false,
-    });
-
-    updateUserFields(userInfo.id, {
-      ...userInfo,
-      schoolName: '',
-      transportStatus: null,
-      volunteeringDay: null,
-      isRegistered: false,
-    });
-
-    router.replace('UserScreening');
-  };
-
   return (
     <ScreenWrapper>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack}>
+        <TouchableOpacity onPress={() => router.replace('UserScreening')}>
           <Icon name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       </View>
