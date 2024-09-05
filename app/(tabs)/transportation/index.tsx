@@ -3,10 +3,10 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Alert, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { StatusScreenDetails } from './status';
 import Context, { UserInfo } from '../../components/Context';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import { fetchAndGroupUsersForTransportationScreen } from '../../firebase/util';
-import { StatusScreenDetails } from './status';
 
 const screenHeight = Dimensions.get('window').height;
 

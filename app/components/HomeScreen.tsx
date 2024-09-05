@@ -12,15 +12,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
+import Context from './Context';
+import ScreenWrapper from './ScreenWrapper';
 import { ResourceURLs, getResourceURLs } from '../firebase/util';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
 import TipsIcon from '../icons/TipsIcon';
-import Context from './Context';
-import ScreenWrapper from './ScreenWrapper';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 

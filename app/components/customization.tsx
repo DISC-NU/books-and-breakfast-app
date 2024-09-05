@@ -2,12 +2,12 @@ import { router } from 'expo-router';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import Icon from 'react-native-vector-icons/Ionicons';
 
+import ScreenWrapper from './ScreenWrapper';
 import { DAYS_OF_WEEK, TRANSPORT_METHOD_SELECTION } from '../(tabs)/account';
 import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
-import ScreenWrapper from './ScreenWrapper';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function CustomizationScreen() {
   const { userInfo, setUserInfo } = useContext(Context);
@@ -75,8 +75,14 @@ export default function CustomizationScreen() {
   }, [schoolName, volunteeringDay, transportStatus, userInfo]);
 
   const handleBack = () => {
-    setUserInfo({ ...userInfo, schoolName: '', transportStatus: null, volunteeringDay: null, isRegistered: false });
-    
+    setUserInfo({
+      ...userInfo,
+      schoolName: '',
+      transportStatus: null,
+      volunteeringDay: null,
+      isRegistered: false,
+    });
+
     updateUserFields(userInfo.id, {
       ...userInfo,
       schoolName: '',
@@ -84,9 +90,9 @@ export default function CustomizationScreen() {
       volunteeringDay: null,
       isRegistered: false,
     });
-    
+
     router.replace('UserScreening');
-  }
+  };
 
   return (
     <ScreenWrapper>
