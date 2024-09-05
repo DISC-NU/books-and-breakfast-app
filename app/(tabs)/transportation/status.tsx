@@ -62,14 +62,14 @@ export const StatusScreenDetails = ({ day, groupedUsers }) => {
     { key: '3', value: 'Willing to Drive' },
   ];
 
-  const totalVolunteers = Object.values(groupedUsers).reduce<number>(
+  const getTotalVolunteerCount = Object.values(groupedUsers).reduce<number>(
     (sum, array) => sum + (array as UserInfo[]).length,
     0
   );
 
   return (
     <View style={styles.container}>
-      <StatusHeader day={day} volunteerNum={totalVolunteers} />
+      <StatusHeader day={day} volunteerNum={getTotalVolunteerCount} />
       <View style={styles.section}>
         {statusSelections.map(
           (status, index) =>
