@@ -13,9 +13,9 @@ import {
   set,
 } from 'firebase/database';
 
+import { database } from './firebaseConfig';
 import { UserInfo } from '../components/Context';
 import { Tips } from '../data/TipsInfo';
-import { database } from './firebaseConfig';
 
 // Import the pre-configured Firebase database instance.
 
@@ -472,6 +472,12 @@ export const fetchAndGroupUsersForTransportationScreen = async (
   );
 
   return { unsubscribe: () => off(q, 'value', unsubscribe) };
+};
+
+// Delete single user
+export const deleteUser = async (userId: string) => {
+  const userRef = ref(database, `users/${userId}`);
+  await remove(userRef);
 };
 
 // Delete all user data except admin's data

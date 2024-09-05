@@ -6,12 +6,12 @@ import { showLocation } from 'react-native-map-link';
 import FaIcon from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import EditText from './EditText';
 import {
   SchoolDirections,
   listenToSchoolDirections,
   updateSchoolDirections,
 } from '../firebase/util';
-import EditText from './EditText';
 
 const screenHeight = Dimensions.get('window').height;
 
