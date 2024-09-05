@@ -509,6 +509,12 @@ export const listenToChatMessages = (
   return () => off(messagesRef, 'value', unsubscribe);
 };
 
+// Delete single user
+export const deleteUser = async (userId: string) => {
+  const userRef = ref(database, `users/${userId}`);
+  await remove(userRef);
+};
+
 // Delete all user data except admin's data
 export const wipeData = async () => {
   try {
