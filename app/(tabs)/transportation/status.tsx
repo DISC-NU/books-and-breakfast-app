@@ -57,17 +57,12 @@ export const StatusScreenDetails = ({ day, groupedUsers }) => {
     { key: '0', value: 'Looking for Walking Buddy' },
     { key: '1', value: 'Looking for CTA/Shuttle Buddy' },
     { key: '2', value: 'Looking for Carpool' },
-    { key: '3', value: 'Willing to Drive' },
+    { key: '3', value: 'Can Drive People' },
   ];
-
-  const totalVolunteers = Object.values(groupedUsers).reduce<number>(
-    (sum, array) => sum + (array as any[]).length,
-    0
-  );
 
   return (
     <View style={styles.container}>
-      <StatusHeader day={day} volunteerNum={totalVolunteers} />
+      <StatusHeader day={day} volunteerNum={Object.keys(groupedUsers).length} />
       <View style={styles.section}>
         {statusSelections.map(
           (status, index) =>
@@ -94,7 +89,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     marginBottom: 20,
-    width: '100%',
   },
   headerContainer: {
     padding: 30,
