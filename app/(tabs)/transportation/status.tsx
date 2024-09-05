@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { UserInfo } from '../../components/Context';
+
 interface StatusHeaderProps {
   day: string;
   volunteerNum: number;
@@ -61,7 +63,7 @@ export const StatusScreenDetails = ({ day, groupedUsers }) => {
   ];
 
   const totalVolunteers = Object.values(groupedUsers).reduce<number>(
-    (sum, array) => sum + (array as any[]).length,
+    (sum, array) => sum + (array as UserInfo[]).length,
     0
   );
 
