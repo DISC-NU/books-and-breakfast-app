@@ -43,7 +43,7 @@ export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEd
     }
   };
 
-  // Function to handle adding new tip
+  // Function to handle adding a new tip
   const handleAddTip = async () => {
     if (newTipContent.length === 0) {
       Alert.alert('Please enter text for your tip.');
@@ -51,8 +51,6 @@ export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEd
     }
     try {
       const newTip = { content: newTipContent };
-
-      // Generate a new reference with a unique key
       await addNewTip(schoolName, newTip);
       setNewTipContent('');
     } catch (error) {
@@ -72,16 +70,35 @@ export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEd
     }
   };
 
-  // Render the delete action if the user is an admin
-  const renderRightActions = (tipID: string) => {
-    if (userInfo?.isAdmin) {
-      return (
-        <Pressable style={style.deleteButton} onPress={() => handleDelete(tipID)}>
-          <Text style={style.deleteButtonText}>Delete</Text>
-        </Pressable>
-      );
-    }
-    return null;
+  // Render the child component
+  const ChildComponent = ({ tip }: { tip: { id: string; content: string } }) => (
+    <View style={style.standoutText}>
+      <LightbulbIcon style={style.icon} />
+      <EditText
+        value={tip.content}
+        onSave={(newValue) => handleSave(schoolName, newValue, tip.id)}
+        edit={edit}
+        setEdit={setEdit}
+        display="tips"
+      />
+    </View>
+  );
+
+  // Conditionally render Swipeable or just the child component
+  const renderTip = (tip: { id: string; content: string }) => {
+    return userInfo?.isAdmin ? (
+      <Swipeable
+        key={tip.id}
+        renderRightActions={() => (
+          <Pressable style={style.deleteButton} onPress={() => handleDelete(tip.id)}>
+            <Text style={style.deleteButtonText}>Delete</Text>
+          </Pressable>
+        )}>
+        <ChildComponent tip={tip} />
+      </Swipeable>
+    ) : (
+      <ChildComponent key={tip.id} tip={tip} />
+    );
   };
 
   useEffect(() => {
@@ -111,20 +128,7 @@ export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEd
       <ScrollView contentContainerStyle={style.scrollViewContentContainer}>
         <Text style={style.title}>Tips!</Text>
         <View style={style.section}>
-          {tipArray.map((tip) => (
-            <Swipeable key={tip.id} renderRightActions={() => renderRightActions(tip.id)}>
-              <View style={style.standoutText}>
-                <LightbulbIcon style={style.icon} />
-                <EditText
-                  value={tip.content}
-                  onSave={(newValue) => handleSave(schoolName, newValue, tip.id)}
-                  edit={edit}
-                  setEdit={setEdit}
-                  display="tips"
-                />
-              </View>
-            </Swipeable>
-          ))}
+          {tipArray.map((tip) => renderTip(tip))}
           {canEdit && (
             <>
               <TextInput
