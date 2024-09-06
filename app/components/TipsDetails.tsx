@@ -21,7 +21,7 @@ const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEdit?: boolean }) => {
-  const { userInfo } = useContext(Context); // Assuming userInfo contains isAdmin property
+  const { userInfo } = useContext(Context);
   const [tipArray, setTipArray] = useState<{ id: string; content: string }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,10 +63,6 @@ export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEd
 
   // Function to handle deleting a tip
   const handleDelete = async (tipID: string) => {
-    if (!userInfo?.isAdmin) {
-      Alert.alert('Permission Denied', 'You do not have permission to delete this tip.');
-      return;
-    }
     try {
       await deleteTip(schoolName, tipID);
       setTipArray((prevTips) => prevTips.filter((tip) => tip.id !== tipID));
@@ -85,7 +81,7 @@ export const TipsDetails = ({ schoolName, canEdit }: { schoolName: string; canEd
         </Pressable>
       );
     }
-    return null; // No delete button for non-admins
+    return null;
   };
 
   useEffect(() => {
