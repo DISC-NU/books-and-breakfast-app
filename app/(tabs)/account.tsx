@@ -1,6 +1,6 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Avatar } from 'react-native-elements';
 
@@ -31,27 +31,24 @@ export default function ProfileScreen() {
   const [volunteeringDay, setVolunteeringDay] = useState<VolunteeringDay>(userInfo.volunteeringDay);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
-  // Update dropdown styling based on selection state
   useEffect(() => {
     setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [schoolName]);
 
   const fetchSchools = useCallback(async () => {
     try {
-      // Attempt to fetch the school list using the getSchoolList function.
       const schoolList = await getSchoolList();
       if (schoolList != null) {
         setSchoolOptions(schoolList);
       }
     } catch (error) {
-      // If an error occurs during fetching, log it to the console.
       console.error('Failed to fetch schools:', error);
     }
   }, []);
 
   useEffect(() => {
     fetchSchools();
-  }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
+  }, []);
 
   const handleSetSchool = useCallback(
     (val: string) => {
@@ -97,7 +94,7 @@ export default function ProfileScreen() {
 
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.mainContent}>
           <View style={styles.profileContainer}>
             <Avatar
@@ -178,14 +175,14 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           )}
         </View>
-      </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'space-between',
   },
   mainContent: {
@@ -206,13 +203,6 @@ const styles = StyleSheet.create({
   },
   infoRow: {
     marginBottom: 15,
-    position: 'relative',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: '#ccc',
-    padding: 5,
   },
   subtitle: {
     fontSize: 14,
@@ -221,7 +211,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   dropdownWrapper: {
-    position: 'relative',
     zIndex: 998, // Ensure dropdown appears above other elements
   },
   dropdownContainer: {
