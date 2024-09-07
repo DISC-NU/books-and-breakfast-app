@@ -1,12 +1,18 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Avatar } from 'react-native-elements';
 
 import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import ScreenWrapper from '../components/ScreenWrapper';
-import { SchoolKeyPair, getSchoolList, updateUserFields, wipeData } from '../firebase/util';
+import {
+  SchoolKeyPair,
+  deleteUser,
+  getSchoolList,
+  updateUserFields,
+  wipeData,
+} from '../firebase/util';
 
 export const TRANSPORT_METHOD_SELECTION = [
   'Willing to Drive',
@@ -25,27 +31,24 @@ export default function ProfileScreen() {
   const [volunteeringDay, setVolunteeringDay] = useState<VolunteeringDay>(userInfo.volunteeringDay);
   const [dropdownStyle, setDropdownStyle] = useState<object>(styles.dropdownUnselected);
 
-  // Update dropdown styling based on selection state
   useEffect(() => {
     setDropdownStyle(schoolName !== '' ? styles.dropdownSelected : styles.dropdownUnselected);
   }, [schoolName]);
 
   const fetchSchools = useCallback(async () => {
     try {
-      // Attempt to fetch the school list using the getSchoolList function.
       const schoolList = await getSchoolList();
       if (schoolList != null) {
         setSchoolOptions(schoolList);
       }
     } catch (error) {
-      // If an error occurs during fetching, log it to the console.
       console.error('Failed to fetch schools:', error);
     }
   }, []);
 
   useEffect(() => {
     fetchSchools();
-  }, []); // The empty dependency array ensures this effect runs only once after the component mounts.
+  }, []);
 
   const handleSetSchool = useCallback(
     (val: string) => {
@@ -80,13 +83,18 @@ export default function ProfileScreen() {
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteAllUsers = async () => {
     await wipeData();
   };
 
+  const handleDeleteUserAccount = useCallback(async () => {
+    await deleteUser(userInfo.id);
+    setUserInfo(null);
+  }, [userInfo]);
+
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.mainContent}>
           <View style={styles.profileContainer}>
             <Avatar
@@ -157,20 +165,24 @@ export default function ProfileScreen() {
           <TouchableOpacity style={styles.logoutButton} onPress={handleSignOut}>
             <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
-          {userInfo.isAdmin && (
-            <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+          {userInfo.isAdmin ? (
+            <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAllUsers}>
               <Text style={styles.logoutButtonText}>DELETE ALL USER DATA</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteUserAccount}>
+              <Text style={styles.logoutButtonText}>Delete Account</Text>
             </TouchableOpacity>
           )}
         </View>
-      </View>
+      </ScrollView>
     </ScreenWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'space-between',
   },
   mainContent: {
@@ -191,13 +203,6 @@ const styles = StyleSheet.create({
   },
   infoRow: {
     marginBottom: 15,
-    position: 'relative',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: '#ccc',
-    padding: 5,
   },
   subtitle: {
     fontSize: 14,
@@ -206,7 +211,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   dropdownWrapper: {
-    position: 'relative',
     zIndex: 998, // Ensure dropdown appears above other elements
   },
   dropdownContainer: {

@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
@@ -11,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Context from './Context';
 import ScreenWrapper from './ScreenWrapper';
@@ -115,6 +117,11 @@ function HomeScreen() {
   if (!userInfo.isRegistered) {
     return (
       <ScreenWrapper>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.replace('UserScreening')}>
+            <Icon name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
         <ScrollView>
           <View style={styles.messageContainer}>
             <Text style={styles.messageTitle}>**IMPORTANT**</Text>
@@ -299,6 +306,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: '#fff',
     fontSize: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
 
