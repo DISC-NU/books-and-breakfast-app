@@ -12,13 +12,13 @@ import {
   View,
 } from 'react-native';
 
+import Context from './Context';
+import ScreenWrapper from './ScreenWrapper';
 import { ResourceURLs, getResourceURLs } from '../firebase/util';
 import ClockIcon from '../icons/ClockIcon';
 import GroupMeIcon from '../icons/GroupMeIcon';
 import MapIcon from '../icons/MapIcon';
 import TipsIcon from '../icons/TipsIcon';
-import Context from './Context';
-import ScreenWrapper from './ScreenWrapper';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window'); // Get screen width and height
 

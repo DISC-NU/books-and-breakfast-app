@@ -3,10 +3,10 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
+import ScreenWrapper from './ScreenWrapper';
 import { DAYS_OF_WEEK, TRANSPORT_METHOD_SELECTION } from '../(tabs)/account';
 import Context, { TransportStatus, VolunteeringDay } from '../components/Context';
 import { SchoolKeyPair, getSchoolList, updateUserFields } from '../firebase/util';
-import ScreenWrapper from './ScreenWrapper';
 
 export default function CustomizationScreen() {
   const { userInfo, setUserInfo } = useContext(Context);
