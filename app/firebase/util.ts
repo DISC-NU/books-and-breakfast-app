@@ -320,6 +320,29 @@ export const getUserInfo = async (userInfo: UserInfo) => {
   }
 };
 
+// Function to get latest user info by subscribing to the user info node in Firebase
+export const listenToUserInfo = (userId: string, callback: (userInfo: UserInfo) => void) => {
+  const userRef = ref(database, `users/${userId}`);
+
+  const unsubscribe = onValue(
+    userRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        console.log('No user data available for user:', userId);
+        callback(null);
+      }
+    },
+    (error) => {
+      console.error('Error fetching user info:', error);
+      callback(null);
+    }
+  );
+
+  return () => off(userRef, 'value', unsubscribe);
+};
+
 // Function to update specific fields for a user
 export const updateUserFields = async (userId: string, fieldsToUpdate: any) => {
   const userRef = ref(database, `users/${userId}`);
