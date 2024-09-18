@@ -1,19 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
+import { useContext } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 
+import Context from './Context';
 import TipsDetails from './TipsDetails';
 
-const TipsScreen = ({ route, navigation }) => {
+const TipsScreen = ({ navigation }) => {
   navigation = useNavigation();
-
-  const { schoolName, canEdit } = route.params;
+  const { userInfo } = useContext(Context);
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 85 : 0}>
-      <TipsDetails schoolName={schoolName} canEdit={canEdit} />
+      <TipsDetails schoolName={userInfo.schoolName} canEdit={userInfo.isAdmin} />
     </KeyboardAvoidingView>
   );
 };
