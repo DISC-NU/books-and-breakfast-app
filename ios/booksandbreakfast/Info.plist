@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>books-and-breakfast</string>
+    <string>Books &amp; Breakfast</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -37,9 +37,58 @@
           <string>com.googleusercontent.apps.956828958362-inregq9gk1qhe2h8ar7pe8kra8opr71a</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>exp+books-and-breakfast</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>comgooglemaps</string>
+      <string>citymapper</string>
+      <string>uber</string>
+      <string>lyft</string>
+      <string>transit</string>
+      <string>truckmap</string>
+      <string>waze</string>
+      <string>yandexnavi</string>
+      <string>moovit</string>
+      <string>yandextaxi</string>
+      <string>yandexmaps</string>
+      <string>kakaomap</string>
+      <string>tmap</string>
+      <string>szn-mapy</string>
+      <string>mapsme</string>
+      <string>osmandmaps</string>
+      <string>gett</string>
+      <string>nmap</string>
+      <string>dgis</string>
+      <string>lftgpas</string>
+      <string>comgooglemaps</string>
+      <string>citymapper</string>
+      <string>uber</string>
+      <string>lyft</string>
+      <string>transit</string>
+      <string>truckmap</string>
+      <string>waze</string>
+      <string>yandexnavi</string>
+      <string>moovit</string>
+      <string>yandextaxi</string>
+      <string>yandexmaps</string>
+      <string>kakaomap</string>
+      <string>tmap</string>
+      <string>szn-mapy</string>
+      <string>mapsme</string>
+      <string>osmandmaps</string>
+      <string>gett</string>
+      <string>nmap</string>
+      <string>dgis</string>
+      <string>lftgpas</string>
+    </array>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -51,6 +100,8 @@
     </dict>
     <key>NSUserActivityTypes</key>
     <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
     <key>UILaunchStoryboardName</key>
