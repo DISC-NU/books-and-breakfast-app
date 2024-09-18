@@ -2,6 +2,7 @@ import { router } from 'expo-router';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import ScreenWrapper from './ScreenWrapper';
 import { DAYS_OF_WEEK, TRANSPORT_METHOD_SELECTION } from '../(tabs)/account';
@@ -75,6 +76,11 @@ export default function CustomizationScreen() {
 
   return (
     <ScreenWrapper>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.replace('UserScreening')}>
+          <Icon name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
       <View style={styles.container}>
         <View style={styles.mainContent}>
           <View style={styles.profileContainer}>
@@ -214,5 +220,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });

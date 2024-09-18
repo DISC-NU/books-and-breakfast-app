@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { UserInfo } from '../../components/Context';
+
 interface StatusHeaderProps {
   day: string;
   volunteerNum: number;
@@ -57,12 +59,17 @@ export const StatusScreenDetails = ({ day, groupedUsers }) => {
     { key: '0', value: 'Looking for Walking Buddy' },
     { key: '1', value: 'Looking for CTA/Shuttle Buddy' },
     { key: '2', value: 'Looking for Carpool' },
-    { key: '3', value: 'Can Drive People' },
+    { key: '3', value: 'Willing to Drive' },
   ];
+
+  const getTotalVolunteerCount = Object.values(groupedUsers).reduce<number>(
+    (sum, array) => sum + (array as UserInfo[]).length,
+    0
+  );
 
   return (
     <View style={styles.container}>
-      <StatusHeader day={day} volunteerNum={Object.keys(groupedUsers).length} />
+      <StatusHeader day={day} volunteerNum={getTotalVolunteerCount} />
       <View style={styles.section}>
         {statusSelections.map(
           (status, index) =>
@@ -89,6 +96,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     marginBottom: 20,
+    width: '100%',
   },
   headerContainer: {
     padding: 30,

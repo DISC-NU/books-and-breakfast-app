@@ -497,6 +497,47 @@ export const fetchAndGroupUsersForTransportationScreen = async (
   return { unsubscribe: () => off(q, 'value', unsubscribe) };
 };
 
+export const listenToChatMessages = (
+  schoolName: string,
+  volunteeringDay: string,
+  callback: (messages: any[]) => void
+) => {
+  const messagesRef = ref(database, `chat/${schoolName}/${volunteeringDay}`);
+
+  const unsubscribe = onValue(
+    messagesRef,
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+
+        const formattedMessages = data
+          ? Object.keys(data).map((key) => ({
+              _id: key, // Use the Firebase key as the message ID
+              text: data[key].text, // Message text
+              createdAt: new Date(data[key].createdAt), // Message creation timestamp
+              user: data[key].user, // User who sent the message
+            }))
+          : [];
+        callback(formattedMessages.reverse());
+      } else {
+        callback([]);
+      }
+    },
+    (error) => {
+      console.error('Error fetching chat messages:', error);
+      callback([]);
+    }
+  );
+
+  return () => off(messagesRef, 'value', unsubscribe);
+};
+
+// Delete single user
+export const deleteUser = async (userId: string) => {
+  const userRef = ref(database, `users/${userId}`);
+  await remove(userRef);
+};
+
 // Delete all user data except admin's data
 export const wipeData = async () => {
   try {
